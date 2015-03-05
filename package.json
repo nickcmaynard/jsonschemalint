@@ -1,0 +1,23 @@
+{
+  "name": "json-schema-lint",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:nickcmaynard/json-schema-lint.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.4.1",
+    "express": "^4.12.2",
+    "winston": "^0.9.0"
+  },
+  "devDependencies": {
+    "is-my-json-valid": "^2.9.4"
+  }
+}
