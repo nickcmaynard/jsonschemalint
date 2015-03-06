@@ -30,6 +30,28 @@ app.controller('validatorController', function ($scope, $http) {
 
   };
 
+  this.formatDocument = function() {
+    console.debug('formatDocument');
+
+    try {
+      var documentObject = JSON.parse(self.document);
+      this.document = JSON.stringify(documentObject, null, '  ');
+    } catch (e) {
+      // *shrug*
+    }
+  };
+
+  this.formatSchema = function() {
+    console.debug('formatSchema');
+
+    try {
+      var schemaObject = JSON.parse(self.schema);
+      this.schema = JSON.stringify(schemaObject, null, '  ');
+    } catch (e) {
+      // *shrug*
+    }
+  };
+
   this.validateDocument = function () {
     console.debug("document");
     self.documentErrors = [];

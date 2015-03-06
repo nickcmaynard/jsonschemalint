@@ -47,8 +47,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other versions <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                          <li><a href="/draft3">Draft 3</a>
-                          </li>
+                            <li><a href="/draft3">Draft 3</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -77,6 +77,9 @@
                 <div class="panel panel-default panel-collapse" ng-class="{'panel-danger': ctrl.schemaErrors.length, 'panel-success': !ctrl.schemaErrors.length}">
                     <div class="panel-heading">
                         JSON Schema
+                        <div class="btn-group pull-right">
+                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()"><span class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
+                        </div>
                     </div>
                     <div class="panel-body">
 
@@ -114,6 +117,9 @@
                 <div class="panel panel-default" ng-class="{'panel-danger': ctrl.documentErrors.length, 'panel-success': !ctrl.documentErrors.length}">
                     <div class="panel-heading">
                         JSON Document
+                        <div class="btn-group pull-right">
+                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()"><span class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
+                        </div>
                     </div>
                     <div class="panel-body">
 
