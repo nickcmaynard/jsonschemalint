@@ -1,4 +1,4 @@
-# JSONSchemaLint
+# JSON Schema Lint
 
 ## Setup
 ```
