@@ -2,9 +2,9 @@
 
 var app = angular.module('app', false);
 
-var validator = require('is-my-json-valid');
+app.controller('validatorController', function ($scope, $http, $window) {
 
-app.controller('validatorController', function ($scope, $http) {
+  var validator = $window['isMyJsonValid'];
 
   var self = this;
 

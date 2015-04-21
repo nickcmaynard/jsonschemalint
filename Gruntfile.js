@@ -2,9 +2,14 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     browserify: {
-      'is-my-json-valid': {
+      'dist': {
         files: {
           'draft4/js/is-my-json-valid/is-my-json-valid.js': ['node_modules/is-my-json-valid/index.js']
+        },
+        options: {
+          browserifyOptions: {
+            standalone: 'is-my-json-valid'
+          }
         }
       }
     }
