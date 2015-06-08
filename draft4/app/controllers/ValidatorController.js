@@ -31,7 +31,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
   };
 
-  this.parseThing = function(thing) {
+  this.parseMarkup = function(thing) {
     try {
       return JSON.parse(thing);
     } catch (e) {
@@ -40,7 +40,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
     }
   };
 
-  this.reformatThing = function(thing) {
+  this.reformatMarkup = function(thing) {
     try {
       return JSON.stringify(JSON.parse(thing), null, '  ');
     } catch (e) {
@@ -52,8 +52,8 @@ app.controller('validatorController', function ($scope, $http, $window) {
     console.debug('formatDocument');
 
     try {
-      var documentObject = this.parseThing(self.document);
-      this.document = this.reformatThing(self.document);
+      var documentObject = this.parseMarkup(self.document);
+      this.document = this.reformatMarkup(self.document);
     } catch (e) {
       // *shrug*
     }
@@ -63,8 +63,8 @@ app.controller('validatorController', function ($scope, $http, $window) {
     console.debug('formatSchema');
 
     try {
-      var schemaObject = this.parseThing(self.schema);
-      this.schema = this.reformatThing(self.schema);
+      var schemaObject = this.parseMarkup(self.schema);
+      this.schema = this.reformatMarkup(self.schema);
     } catch (e) {
       // *shrug*
     }
@@ -77,7 +77,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
     // Parse as JSON
     try {
-      self.documentObject = this.parseThing(self.document);
+      self.documentObject = this.parseMarkup(self.document);
 
       // Do validation
       var documentValidator = validator(this.schemaObject, {
@@ -112,7 +112,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
     // Parse as JSON
     try {
-      self.schemaObject = this.parseThing(self.schema);
+      self.schemaObject = this.parseMarkup(self.schema);
 
       // Can't be done if we don't have the meta schema yet
       if (!this.metaSchema) {
