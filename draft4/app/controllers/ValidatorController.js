@@ -5,6 +5,7 @@ var app = angular.module('app', false);
 app.controller('validatorController', function ($scope, $http, $window) {
 
   var validator = $window['isMyJsonValid'];
+  var YAML = $window['YAML'];
 
   var self = this;
 
@@ -31,11 +32,20 @@ app.controller('validatorController', function ($scope, $http, $window) {
   };
 
   this.parseThing = function(thing) {
-    return JSON.parse(thing);
+    try {
+      return JSON.parse(thing);
+    } catch (e) {
+      console.log('not json, trying yaml');
+      return YAML.parse(thing);
+    }
   };
 
   this.reformatThing = function(thing) {
-    return JSON.stringify(JSON.parse(thing), null, '  ');
+    try {
+      return JSON.stringify(JSON.parse(thing), null, '  ');
+    } catch (e) {
+      return YAML.stringify(YAML.parse(thing), 4, 2);
+    }
   };
 
   this.formatDocument = function() {
