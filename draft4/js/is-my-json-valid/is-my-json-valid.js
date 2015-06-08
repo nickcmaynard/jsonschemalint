@@ -487,64 +487,32 @@ if (typeof Object.create === 'function') {
 var process = module.exports = {};
 var queue = [];
 var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
 
 function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = setTimeout(cleanUpNextTick);
     draining = true;
-
+    var currentQueue;
     var len = queue.length;
     while(len) {
         currentQueue = queue;
         queue = [];
-        while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+        var i = -1;
+        while (++i < len) {
+            currentQueue[i]();
         }
-        queueIndex = -1;
         len = queue.length;
     }
-    currentQueue = null;
     draining = false;
-    clearTimeout(timeout);
 }
-
 process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
+    queue.push(fun);
+    if (!draining) {
         setTimeout(drainQueue, 0);
     }
 };
 
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
 process.title = 'browser';
 process.browser = true;
 process.env = {};
@@ -1213,32 +1181,14 @@ var get = function(obj, additionalSchemas, ptr) {
   try {
     return jsonpointer.get(obj, decodeURI(ptr))
   } catch (err) {
-    var end = ptr.indexOf('#')
-    var other
-    // external reference
-    if (end !== 0) {
-      // fragment doesn't exist.
-      if (end === -1) {
-        other = additionalSchemas[ptr]
-      } else {
-        var ext = ptr.slice(0, end)
-        other = additionalSchemas[ext]
-        var fragment = ptr.slice(end).replace(/^#/, '')
-        try {
-          return jsonpointer.get(other, fragment)
-        } catch (err) {}
-      }
-    } else {
-      other = additionalSchemas[ptr]
-    }
+    var other = additionalSchemas[ptr] || additionalSchemas[ptr.replace(/^#/, '')]
     return other || null
   }
 }
 
 var formatName = function(field) {
-  field = JSON.stringify(field)
-  var pattern = /\[([^\[\]"]+)\]/
-  while (pattern.test(field)) field = field.replace(pattern, '."+$1+"')
+  var pattern = /\[[^\[\]"]+\]/
+  while (pattern.test(field)) field = field.replace(pattern, '.*')
   return field
 }
 
@@ -1339,9 +1289,11 @@ var compile = function(schema, cache, root, reporter, opts) {
       if (reporter === true) {
         validate('if (validate.errors === null) validate.errors = []')
         if (verbose) {
-          validate('validate.errors.push({field:%s,message:%s,value:%s})', formatName(prop || name), JSON.stringify(msg), value || name)
+          validate('validate.errors.push({field:%s,message:%s,value:%s})', JSON.stringify(formatName(prop || name)), JSON.stringify(msg), value || name)
         } else {
-          validate('validate.errors.push({field:%s,message:%s})', formatName(prop || name), JSON.stringify(msg))
+          var n = gensym('error')
+          scope[n] = {field:formatName(prop || name), message:msg}
+          validate('validate.errors.push(%s)', n)
         }
       }
     }
@@ -1828,12 +1780,7 @@ var gen = function(obj, prop) {
 }
 
 gen.valid = isProperty
-gen.property = function (prop) {
- return isProperty(prop) ? prop : JSON.stringify(prop)
-}
-
 module.exports = gen
-
 },{"is-property":12}],12:[function(require,module,exports){
 "use strict"
 function isProperty(str) {
