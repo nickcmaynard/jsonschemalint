@@ -86,13 +86,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
       documentValidator(this.documentObject);
       console.log(documentValidator.errors)
       if (documentValidator.errors && documentValidator.errors.length) {
-        this.documentErrors = documentValidator.errors.map(function(error) {
-          return {
-            field: error.field,
-            message: error.message,
-            value: JSON.stringify(error.value),
-          };
-        });
+        this.documentErrors = documentValidator.errors;
       } else {
         this.documentMessage = "Document conforms to the JSON schema.";
       }
@@ -126,13 +120,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
       schemaValidator(this.schemaObject);
       console.log(schemaValidator.errors)
       if (schemaValidator.errors && schemaValidator.errors.length) {
-        this.schemaErrors = schemaValidator.errors.map(function(error) {
-          return {
-            field: error.field,
-            message: error.message,
-            value: JSON.stringify(error.value),
-          };
-        });
+        this.schemaErrors = schemaValidator.errors;
       } else {
         this.schemaMessage = "Schema is a valid JSON schema.";
       }

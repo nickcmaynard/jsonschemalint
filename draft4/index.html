@@ -104,7 +104,7 @@
                             <tr ng-repeat="error in ctrl.schemaErrors">
                                 <td ng-bind="error.field"></td>
                                 <td ng-bind="error.message"></td>
-                                <td><pre ng-bind="error.value"></pre></td>
+                                <td><pre ng-bind="error.value | json"></pre></td>
                             </tr>
                         </tbody>
                     </table>
@@ -144,7 +144,7 @@
                             <tr ng-repeat="error in ctrl.documentErrors">
                                 <td ng-bind="error.field"></td>
                                 <td ng-bind="error.message"></td>
-                                <td><pre ng-bind="error.value"></pre></td>
+                                <td><pre ng-bind="error.value | json"></pre></td>
                             </tr>
                         </tbody>
                     </table>
