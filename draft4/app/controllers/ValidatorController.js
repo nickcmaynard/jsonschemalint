@@ -5,6 +5,7 @@ var app = angular.module('app', false);
 app.controller('validatorController', function ($scope, $http, $window) {
 
   var validator = $window['isMyJsonValid'];
+  var YAML = $window['YAML'];
 
   var self = this;
 
@@ -30,12 +31,29 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
   };
 
+  this.parseMarkup = function(thing) {
+    try {
+      return JSON.parse(thing);
+    } catch (e) {
+      console.log('not json, trying yaml');
+      return YAML.parse(thing);
+    }
+  };
+
+  this.reformatMarkup = function(thing) {
+    try {
+      return JSON.stringify(JSON.parse(thing), null, '  ');
+    } catch (e) {
+      return YAML.stringify(YAML.parse(thing), 4, 2);
+    }
+  };
+
   this.formatDocument = function() {
     console.debug('formatDocument');
 
     try {
-      var documentObject = JSON.parse(self.document);
-      this.document = JSON.stringify(documentObject, null, '  ');
+      var documentObject = this.parseMarkup(self.document);
+      this.document = this.reformatMarkup(self.document);
     } catch (e) {
       // *shrug*
     }
@@ -45,8 +63,8 @@ app.controller('validatorController', function ($scope, $http, $window) {
     console.debug('formatSchema');
 
     try {
-      var schemaObject = JSON.parse(self.schema);
-      this.schema = JSON.stringify(schemaObject, null, '  ');
+      var schemaObject = this.parseMarkup(self.schema);
+      this.schema = this.reformatMarkup(self.schema);
     } catch (e) {
       // *shrug*
     }
@@ -59,7 +77,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
     // Parse as JSON
     try {
-      self.documentObject = JSON.parse(self.document);
+      self.documentObject = this.parseMarkup(self.document);
 
       // Do validation
       var documentValidator = validator(this.schemaObject, {
@@ -88,7 +106,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
 
     // Parse as JSON
     try {
-      self.schemaObject = JSON.parse(self.schema);
+      self.schemaObject = this.parseMarkup(self.schema);
 
       // Can't be done if we don't have the meta schema yet
       if (!this.metaSchema) {
