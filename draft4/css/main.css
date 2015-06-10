@@ -8,3 +8,8 @@ textarea.json {
   resize: none;
   height: 300px;
 }
+
+pre.error-value {
+  border: 0;
+  padding: 0;
+}
