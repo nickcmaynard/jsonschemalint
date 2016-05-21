@@ -1,0 +1,10 @@
+{
+    "foo": 12345,
+    "moreThanFoo": 12346,
+    "bar": "I love the constant keyword!",
+    "sameAsBar": "I love the constant keyword!",
+    "baz": {
+        "foo": 12345,
+        "foobaz": "Switch statements can get really complicated."
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "foo": 12345,
+    "moreThanFoo": 12344,
+    "bar": "I love the constant keyword!",
+    "sameAsBar": "I hate the constant keyword.",
+    "baz": {
+        "foo": 1234,
+        "foobaz": "This is one of many ways to incorrectly format data with this switch schema."
+    }
+}

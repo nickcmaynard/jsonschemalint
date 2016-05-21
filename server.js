@@ -22,5 +22,6 @@ app.use(compression());
 
 app.use('/draft3', express.static(__dirname + "/draft3"));
 app.use('/draft4', express.static(__dirname + "/draft4"));
+app.use('/draft5', express.static(__dirname + "/draft5"));
 
 app.listen(3001);
