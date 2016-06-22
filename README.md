@@ -25,3 +25,4 @@ grunt
 
 2016/06
 - added function fro loading JSON from file
+- added jsonlint support for validating JSON syntax errors

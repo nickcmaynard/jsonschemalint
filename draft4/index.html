@@ -128,7 +128,8 @@
                                       id="json-schema-textarea"></textarea>
                         </div>
                     </form>
-                    <p ng-show="ctrl.schemaMessage" ng-bind="ctrl.schemaMessage"></p>
+                    <pre ng-class="ctrl.schemaMessageStyle" ng-show="ctrl.schemaMessage"
+                         ng-bind="ctrl.schemaMessage"></pre>
 
                 </div>
 
@@ -175,8 +176,8 @@
                                       id="json-document-textarea"></textarea>
                         </div>
                     </form>
-                    <p ng-show="ctrl.documentMessage" ng-bind="ctrl.documentMessage"></p>
-
+                    <pre ng-class="ctrl.documentMessageStyle" ng-show="ctrl.documentMessage"
+                         ng-bind="ctrl.documentMessage"></pre>
                 </div>
 
                 <table class="table" ng-show="ctrl.documentErrors.length">
@@ -207,16 +208,17 @@
 
 <!-- load scripts -->
 <script src="js/is-my-json-valid/is-my-json-valid.min.js"></script>
+<script src="js/json2.js"></script>
+<script src="js/jsonlint.js"></script>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
-<script src="bower_components/yaml.js/dist/yaml.js"></script>
 
 <script src="app/app.js"></script>
 <script src="app/controllers/ValidatorController.js"></script>
 
-<script src="js/file.js"></script>
+<script src="js/file-loader.js"></script>
 </body>
 
 </html>

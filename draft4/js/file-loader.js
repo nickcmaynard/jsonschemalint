@@ -6,8 +6,6 @@ function readSchemaFile(e) {
     var reader = new FileReader();
     reader.onload = function (e) {
         var contents = e.target.result;
-        // var element = document.getElementById('json-schema-textarea');
-        // element.value = contents;
         // bind to AngularJS model
         var scope = angular.element(document.getElementById("mainbody")).scope();
         scope.$apply(function () {
@@ -25,8 +23,6 @@ function readDocumentFile(e) {
     var reader = new FileReader();
     reader.onload = function (e) {
         var contents = e.target.result;
-        // var element = document.getElementById('json-document-textarea');
-        // element.value = contents;
         // bind to AngularJS model
         var scope = angular.element(document.getElementById("mainbody")).scope();
         scope.$apply(function () {

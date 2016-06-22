@@ -5,7 +5,6 @@ var app = angular.module('app', false);
 app.controller('validatorController', function ($scope, $http, $window) {
 
     var validator = $window['isMyJsonValid'];
-    var YAML = $window['YAML'];
 
     var self = this;
 
@@ -34,20 +33,13 @@ app.controller('validatorController', function ($scope, $http, $window) {
     };
 
     this.parseMarkup = function (thing) {
-        try {
-            return JSON.parse(thing);
-        } catch (e) {
-            console.log('not json, trying yaml');
-            return YAML.parse(thing);
-        }
+        if (!thing) return;
+        return jsonlint.parse(thing);
     };
 
     this.reformatMarkup = function (thing) {
-        try {
-            return JSON.stringify(JSON.parse(thing), null, '  ');
-        } catch (e) {
-            return YAML.stringify(YAML.parse(thing), 4, 2);
-        }
+        if (!thing) return;
+        return JSON.stringify(JSON.parse(thing), null, '  ');
     };
 
     this.formatDocument = function () {
@@ -73,7 +65,8 @@ app.controller('validatorController', function ($scope, $http, $window) {
     };
 
     this.validateDocument = function () {
-        console.debug("document");
+        if (!self.document) return;
+        console.debug("validateDocument");
         self.documentErrors = [];
         self.documentMessage = "";
 
@@ -86,23 +79,25 @@ app.controller('validatorController', function ($scope, $http, $window) {
                 verbose: true
             });
             documentValidator(this.documentObject);
-            console.log(documentValidator.errors)
+            console.log(documentValidator.errors);
             if (documentValidator.errors && documentValidator.errors.length) {
                 this.documentErrors = documentValidator.errors;
             } else {
+                this.documentMessageStyle = "pass";
                 this.documentMessage = "Document conforms to the JSON schema.";
             }
         } catch (e) {
+            console.log(e);
             // Error parsing as JSON
-            self.documentErrors = [{message: "Document is invalid JSON. Try http://jsonlint.com to fix it."}];
+            this.documentMessageStyle = "fail";
+            this.documentMessage = e;
         }
-
-        console.log("validateDocument");
 
     };
 
     this.validateSchema = function () {
-        console.debug("schema");
+        if (!self.schema) return;
+        console.debug("validateSchema");
         self.schemaErrors = [];
         self.schemaMessage = "";
 
@@ -120,15 +115,18 @@ app.controller('validatorController', function ($scope, $http, $window) {
                 verbose: true
             });
             schemaValidator(this.schemaObject);
-            console.log(schemaValidator.errors)
+            console.log(schemaValidator.errors);
             if (schemaValidator.errors && schemaValidator.errors.length) {
                 this.schemaErrors = schemaValidator.errors;
             } else {
+                this.schemaMessageStyle = "pass";
                 this.schemaMessage = "Schema is a valid JSON schema.";
             }
         } catch (e) {
+            console.log(e);
             // Error parsing as JSON
-            self.schemaErrors = [{message: "Schema is invalid JSON. Try http://jsonlint.com to fix it."}];
+            this.schemaMessageStyle = "fail";
+            this.schemaMessage = e;
         }
 
     };
