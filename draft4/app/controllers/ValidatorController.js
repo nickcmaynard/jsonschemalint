@@ -18,6 +18,8 @@ app.controller('validatorController', function ($scope, $http, $window) {
         self.schema = "";
         self.schemaMessage = null;
         self.documentMessage = null;
+        self.schemaErrors = [];
+        self.documentErrors = [];
         document.getElementById('json-schema-input').value = null;
         document.getElementById('json-document-input').value = null;
     };
