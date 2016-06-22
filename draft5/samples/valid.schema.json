@@ -1,0 +1,72 @@
+{
+    "description": "Any validation failures are shown in the right-hand Messages pane.",
+    "type": "object",
+    "properties": {
+        "foo": {
+            "type": "number"
+        },
+        "moreThanFoo": {
+            "type": "number",
+            "minimum": {
+                "$data": "1/foo"
+            },
+            "exclusiveMinimum": true
+        },
+        "bar": {
+            "type":"string"        
+        },
+        "sameAsBar": {
+            "constant": {
+                "$data": "1/bar"
+            }
+        },
+        "baz": {
+            "type": "object",
+            "switch": [
+                {
+                    "if": {
+                        "properties": {
+                            "foo": {
+                                "constant": {
+                                    "$data": "2/foo"
+                                }
+                            }
+                        },
+                        "required": ["foo"]
+                    },
+                    "then": {
+                        "properties": {
+                            "foobaz": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["foobaz"]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "bar": {
+                                "constant": {
+                                    "$data": "2/bar"
+                                }
+                            }
+                        },
+                        "required": ["bar"]
+                    },
+                    "then": {
+                        "properties": {
+                            "barbaz": {
+                                "type": "number"
+                            }
+                        },
+                        "required": ["barbaz"]
+                    }
+                },
+                {
+                    "then": false
+                }
+            ]
+        }  
+    }
+}
