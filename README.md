@@ -1,6 +1,7 @@
 # JSON Schema Lint
 
 ## Setup
+
 ```
 npm install
 cd draft4/
@@ -19,3 +20,8 @@ Open http://localhost:3001/draft4 or http://localhost:3001/draft3.
 ```
 grunt
 ```
+
+## Change log
+
+2016/06
+- added function fro loading JSON from file
