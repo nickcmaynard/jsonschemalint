@@ -1,15 +1,27 @@
 body {
-  padding-top: 60px;
+    padding-top: 60px;
 }
 
 textarea.json {
-  font-family: Monaco, Andale Mono, monospace;
-  font-size: smaller;
-  resize: none;
-  height: 300px;
+    font-family: Monaco, Andale Mono, monospace;
+    font-size: smaller;
+    resize: none;
+    height: 300px;
 }
 
 pre.error-value {
-  border: 0;
-  padding: 0;
+    border: 0;
+    padding: 0;
+}
+
+pre.pass {
+    background-color: #efe;
+    color: #393;
+    border: 1px solid #393;
+}
+
+pre.fail {
+    background-color: #fee;
+    color: #933;
+    border: 1px solid #933;
 }

@@ -4,167 +4,221 @@
 <head>
     <title>JSON Schema Lint :: JSON Schema Validator</title>
 
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
 </head>
 
-<body ng-app="app" ng-controller="validatorController as ctrl">
+<body id='mainbody' ng-app="app" ng-controller="validatorController as ctrl">
 
-    <nav class="navbar navbar-default navbar-fixed-top navbar-collapse">
-        <div class="container-fluid">
-
-            <div class="navbar-header">
-
-                <!-- toggle button -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapsible-section">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <a class="navbar-brand" href="#">JSON Schema Lint</a>
-
-            </div>
-
-            <div class="collapse navbar-collapse" id="navbar-collapsible-section">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Samples <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#" ng-click="ctrl.sample('valid')">Sample schema and valid document</a>
-                            </li>
-                            <li><a href="#" ng-click="ctrl.sample('invalid')">Sample schema and <strong>invalid</strong> document</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#" ng-click="ctrl.reset()">Reset</a>
-                    </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other versions <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/draft3">Draft 3</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+<nav class="navbar navbar-default navbar-fixed-top navbar-collapse">
     <div class="container-fluid">
 
-        <div class="row">
+        <div class="navbar-header">
 
-            <div class="col-xs-12">
-                <p> JSON Schema Lint is a JSON schema validator to help you write and test of
-                    <a href="https://github.com/json-schema/json-schema">JSON Schemas</a> that conform with the Draft v4 specification.</p>
-                <p>The author/maintainer is <a href="https://gravatar.com/nickcmaynard">Nick Maynard</a>.  Fork <a href="https://github.com/nickcmaynard/jsonschemalint">this project on Github.</a></p>
-                <p>Under the covers, it uses <a href="https://github.com/mafintosh">Mathias Buus's</a> <a href="https://github.com/mafintosh/is-my-json-valid">is-my-json-valid</a> library, passed through <a href="http://browserify.org">Browserify</a> to make it work in the browser.</p>
-                <p>Optionally, you may use schemas and documents in the YAML format.  These documents are parsed with <a href="https://github.com/jeremyfa">J&eacute;r&eacute;my Fairve's</a> <a href="https://github.com/jeremyfa/yaml.js">yaml.js</a> library.</p>
+            <!-- toggle button -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#navbar-collapsible-section">`
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">JSON Schema Validator</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapsible-section">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Samples
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" ng-click="ctrl.sample('valid')">Sample schema and valid document</a>
+                        </li>
+                        <li><a href="#" ng-click="ctrl.sample('invalid')">Sample schema and <strong>invalid</strong>
+                            document</a>
+                        </li>
+                        <!--?<li><a href="#" ng-click="ctrl.sample('input')">Phoenix input.json schema</a>-->
+                        <!--?</li>-->
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" ng-click="ctrl.reset()">Reset</a></li>
+                <!-- <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other versions <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/draft3">Draft 3</a>
+                        </li>
+                    </ul>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-xs-12">
+            <p> JSON Schema Validator is to help you write and test of
+                <a href="https://github.com/json-schema/json-schema">JSON Schemas</a> that conform with the Draft v4
+                specification.</p>
+
+            <p>It's highly recommended to use <strong>Chrome, Firefox</strong> browser instead of IE.</p>
+
+            <div class="col-xs-12 col-md-6">
+                <p><strong>How to use</strong>
+                <ol>
+                    <li>Decide the JSON schema, you can select from "Samples" menu above, paste the content under the
+                        textarea, or choose a file from your local machine (notice that your file will not upload to the
+                        server).
+                    </li>
+                    <li>Decide the JSON document which you want to validate with, the same with JSON schema, you can
+                        paste the JSON or choose a JSON file from your local machine.
+                    </li>
+                    <li>Once the both textarea have content, the validator will automatically find whether it's a valid
+                        JSON, and output the errors under JSON document column if not.
+                    </li>
+                </ol>
+                </p>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <p>
+                    <strong>Tips</strong>
+                <ul>
+                    <li>You can click the <strong>"Format" button</strong> to format your JSON, make it beautiful.</li>
+                    <li>Again, the file you've chosen <strong>will not be uploaded onto server</strong>, so there isn't
+                        any security issue.
+                    </li>
+                    <li>Click the <strong>"Reset" button</strong> on right top to clear all your work, it's faster than
+                        refresh the page.
+                    </li>
+                </ul>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-12 col-md-6">
+
+            <div class="panel panel-default panel-collapse"
+                 ng-class="{'panel-danger': ctrl.schemaErrors.length, 'panel-success': !ctrl.schemaErrors.length}">
+                <div class="panel-heading">
+                    JSON Schema
+                    <div class="btn-group pull-right">
+                        <span class="btn btn-default btn-xs"><input type="file" id="json-schema-input"/></span>
+
+                        <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()"><span
+                                class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <form novalidate>
+                        <div class="form-group">
+                            <textarea ng-model="ctrl.schema" class="form-control json"
+                                      id="json-schema-textarea"></textarea>
+                        </div>
+                    </form>
+                    <pre ng-class="ctrl.schemaMessageStyle" ng-show="ctrl.schemaMessage"
+                         ng-bind="ctrl.schemaMessage"></pre>
+
+                </div>
+
+                <table class="table" ng-show="ctrl.schemaErrors.length">
+                    <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Error</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="error in ctrl.schemaErrors">
+                        <td ng-bind="error.field"></td>
+                        <td ng-bind="error.message"></td>
+                        <td>
+                            <pre class="error-value" ng-bind="error.value | json"></pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
 
-        <div class="row">
+        <div class="col-xs-12 col-md-6">
 
-            <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default"
+                 ng-class="{'panel-danger': ctrl.documentErrors.length, 'panel-success': !ctrl.documentErrors.length}">
+                <div class="panel-heading">
+                    JSON Document
+                    <div class="btn-group pull-right">
+                        <span class="btn btn-default btn-xs"><input type="file" id="json-document-input"/></span>
 
-                <div class="panel panel-default panel-collapse" ng-class="{'panel-danger': ctrl.schemaErrors.length, 'panel-success': !ctrl.schemaErrors.length}">
-                    <div class="panel-heading">
-                        JSON Schema
-                        <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()"><span class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
+                        <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()"><span
+                                class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <form novalidate>
+                        <div class="form-group">
+                            <textarea ng-model="ctrl.document" class="form-control json"
+                                      id="json-document-textarea"></textarea>
                         </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <form novalidate>
-                            <div class="form-group">
-                                <textarea ng-model="ctrl.schema" class="form-control json"></textarea>
-                            </div>
-                        </form>
-                        <p ng-show="ctrl.schemaMessage" ng-bind="ctrl.schemaMessage"></p>
-
-                    </div>
-
-                    <table class="table" ng-show="ctrl.schemaErrors.length">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Error</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="error in ctrl.schemaErrors">
-                                <td ng-bind="error.field"></td>
-                                <td ng-bind="error.message"></td>
-                                <td><pre class="error-value" ng-bind="error.value | json"></pre></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    </form>
+                    <pre ng-class="ctrl.documentMessageStyle" ng-show="ctrl.documentMessage"
+                         ng-bind="ctrl.documentMessage"></pre>
                 </div>
 
-            </div>
-
-            <div class="col-xs-12 col-md-6">
-
-                <div class="panel panel-default" ng-class="{'panel-danger': ctrl.documentErrors.length, 'panel-success': !ctrl.documentErrors.length}">
-                    <div class="panel-heading">
-                        JSON Document
-                        <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()"><span class="glyphicon glyphicon-align-left" aria-hidden="true">&nbsp;Format</a>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <form novalidate>
-                            <div class="form-group">
-                                <textarea ng-model="ctrl.document" class="form-control json"></textarea>
-                            </div>
-                        </form>
-                        <p ng-show="ctrl.documentMessage" ng-bind="ctrl.documentMessage"></p>
-
-                    </div>
-
-                    <table class="table" ng-show="ctrl.documentErrors.length">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Error</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="error in ctrl.documentErrors">
-                                <td ng-bind="error.field"></td>
-                                <td ng-bind="error.message"></td>
-                                <td><pre class="error-value" ng-bind="error.value | json"></pre></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
+                <table class="table" ng-show="ctrl.documentErrors.length">
+                    <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Error</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="error in ctrl.documentErrors">
+                        <td ng-bind="error.field"></td>
+                        <td ng-bind="error.message"></td>
+                        <td>
+                            <pre class="error-value" ng-bind="error.value | json"></pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
 
     </div>
 
-    <script src="js/is-my-json-valid/is-my-json-valid.min.js"></script>
+</div>
 
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/yaml.js/dist/yaml.js"></script>
+<!-- load scripts -->
+<script src="js/is-my-json-valid/is-my-json-valid.min.js"></script>
+<script src="js/json2.js"></script>
+<script src="js/jsonlint.js"></script>
 
-    <script src="app/app.js"></script>
-    <script src="app/controllers/ValidatorController.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+
+<script src="app/app.js"></script>
+<script src="app/controllers/ValidatorController.js"></script>
+
+<script src="js/file-loader.js"></script>
 </body>
 
 </html>

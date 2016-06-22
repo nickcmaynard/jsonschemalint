@@ -4,146 +4,150 @@ var app = angular.module('app', false);
 
 app.controller('validatorController', function ($scope, $http, $window) {
 
-  var validator = $window['isMyJsonValid'];
-  var YAML = $window['YAML'];
+    var validator = $window['isMyJsonValid'];
 
-  var self = this;
+    var self = this;
 
-  // Load the meta-schema
-  $http.get('meta-schema/schema.json').success(function (data) {
-    self.metaSchema = data;
-  });
-
-  this.reset = function() {
-    self.document = "";
-    self.schema = "";
-  };
-
-  this.sample = function(ref) {
-    console.debug('sample', ref);
-
-    $http.get('samples/' + ref + '.document.json').success(function(data) {
-      self.document = JSON.stringify(data, null, '  ');
-    });
-    $http.get('samples/' + ref + '.schema.json').success(function(data) {
-      self.schema = JSON.stringify(data, null, '  ');
+    // Load the meta-schema
+    $http.get('meta-schema/schema.json').success(function (data) {
+        self.metaSchema = data;
     });
 
-  };
+    this.reset = function () {
+        self.document = "";
+        self.schema = "";
+        self.schemaMessage = null;
+        self.documentMessage = null;
+        self.schemaErrors = [];
+        self.documentErrors = [];
+        document.getElementById('json-schema-input').value = null;
+        document.getElementById('json-document-input').value = null;
+    };
 
-  this.parseMarkup = function(thing) {
-    try {
-      return JSON.parse(thing);
-    } catch (e) {
-      console.log('not json, trying yaml');
-      return YAML.parse(thing);
-    }
-  };
+    this.sample = function (ref) {
+        console.debug('sample', ref);
 
-  this.reformatMarkup = function(thing) {
-    try {
-      return JSON.stringify(JSON.parse(thing), null, '  ');
-    } catch (e) {
-      return YAML.stringify(YAML.parse(thing), 4, 2);
-    }
-  };
+        $http.get('samples/' + ref + '.document.json').success(function (data) {
+            self.document = JSON.stringify(data, null, '  ');
+        });
+        $http.get('samples/' + ref + '.schema.json').success(function (data) {
+            self.schema = JSON.stringify(data, null, '  ');
+        });
 
-  this.formatDocument = function() {
-    console.debug('formatDocument');
+    };
 
-    try {
-      var documentObject = this.parseMarkup(self.document);
-      this.document = this.reformatMarkup(self.document);
-    } catch (e) {
-      // *shrug*
-    }
-  };
+    this.parseMarkup = function (thing) {
+        if (!thing) return;
+        return jsonlint.parse(thing);
+    };
 
-  this.formatSchema = function() {
-    console.debug('formatSchema');
+    this.reformatMarkup = function (thing) {
+        if (!thing) return;
+        return JSON.stringify(JSON.parse(thing), null, '  ');
+    };
 
-    try {
-      var schemaObject = this.parseMarkup(self.schema);
-      this.schema = this.reformatMarkup(self.schema);
-    } catch (e) {
-      // *shrug*
-    }
-  };
+    this.formatDocument = function () {
+        console.debug('formatDocument');
 
-  this.validateDocument = function () {
-    console.debug("document");
-    self.documentErrors = [];
-    self.documentMessage = "";
+        try {
+            var documentObject = this.parseMarkup(self.document);
+            this.document = this.reformatMarkup(self.document);
+        } catch (e) {
+            // *shrug*
+        }
+    };
 
-    // Parse as JSON
-    try {
-      self.documentObject = this.parseMarkup(self.document);
+    this.formatSchema = function () {
+        console.debug('formatSchema');
 
-      // Do validation
-      var documentValidator = validator(this.schemaObject, {
-        verbose: true
-      });
-      documentValidator(this.documentObject);
-      console.log(documentValidator.errors)
-      if (documentValidator.errors && documentValidator.errors.length) {
-        this.documentErrors = documentValidator.errors;
-      } else {
-        this.documentMessage = "Document conforms to the JSON schema.";
-      }
-    } catch (e) {
-      // Error parsing as JSON
-      self.documentErrors = [{message: "Document is invalid JSON. Try http://jsonlint.com to fix it." }];
-    }
+        try {
+            var schemaObject = this.parseMarkup(self.schema);
+            this.schema = this.reformatMarkup(self.schema);
+        } catch (e) {
+            // *shrug*
+        }
+    };
 
-    console.log("validateDocument");
+    this.validateDocument = function () {
+        if (!self.document) return;
+        console.debug("validateDocument");
+        self.documentErrors = [];
+        self.documentMessage = "";
 
-  };
+        // Parse as JSON
+        try {
+            self.documentObject = this.parseMarkup(self.document);
 
-  this.validateSchema = function () {
-    console.debug("schema");
-    self.schemaErrors = [];
-    self.schemaMessage = "";
+            // Do validation
+            var documentValidator = validator(this.schemaObject, {
+                verbose: true
+            });
+            documentValidator(this.documentObject);
+            console.log(documentValidator.errors);
+            if (documentValidator.errors && documentValidator.errors.length) {
+                this.documentErrors = documentValidator.errors;
+            } else {
+                this.documentMessageStyle = "pass";
+                this.documentMessage = "Document conforms to the JSON schema.";
+            }
+        } catch (e) {
+            console.log(e);
+            // Error parsing as JSON
+            this.documentMessageStyle = "fail";
+            this.documentMessage = e;
+        }
 
-    // Parse as JSON
-    try {
-      self.schemaObject = this.parseMarkup(self.schema);
+    };
 
-      // Can't be done if we don't have the meta schema yet
-      if (!this.metaSchema) {
-        return;
-      }
+    this.validateSchema = function () {
+        if (!self.schema) return;
+        console.debug("validateSchema");
+        self.schemaErrors = [];
+        self.schemaMessage = "";
 
-      // Do validation
-      var schemaValidator = validator(this.metaSchema, {
-        verbose: true
-      });
-      schemaValidator(this.schemaObject);
-      console.log(schemaValidator.errors)
-      if (schemaValidator.errors && schemaValidator.errors.length) {
-        this.schemaErrors = schemaValidator.errors;
-      } else {
-        this.schemaMessage = "Schema is a valid JSON schema.";
-      }
-    } catch (e) {
-      // Error parsing as JSON
-      self.schemaErrors = [{ message: "Schema is invalid JSON. Try http://jsonlint.com to fix it." }];
-    }
+        // Parse as JSON
+        try {
+            self.schemaObject = this.parseMarkup(self.schema);
 
-  };
+            // Can't be done if we don't have the meta schema yet
+            if (!this.metaSchema) {
+                return;
+            }
 
-  // Document changes
-  $scope.$watch(function () {
-    return self.document;
-  }, function (newValue, oldValue) {
-    self.validateDocument();
-  });
+            // Do validation
+            var schemaValidator = validator(this.metaSchema, {
+                verbose: true
+            });
+            schemaValidator(this.schemaObject);
+            console.log(schemaValidator.errors);
+            if (schemaValidator.errors && schemaValidator.errors.length) {
+                this.schemaErrors = schemaValidator.errors;
+            } else {
+                this.schemaMessageStyle = "pass";
+                this.schemaMessage = "Schema is a valid JSON schema.";
+            }
+        } catch (e) {
+            console.log(e);
+            // Error parsing as JSON
+            this.schemaMessageStyle = "fail";
+            this.schemaMessage = e;
+        }
 
-  // Schema changes
-  $scope.$watch(function () {
-    return self.schema;
-  }, function (newValue, oldValue) {
-    self.validateSchema();
-    self.validateDocument();
-  });
+    };
+
+    // Document changes
+    $scope.$watch(function () {
+        return self.document;
+    }, function (newValue, oldValue) {
+        self.validateDocument();
+    });
+
+    // Schema changes
+    $scope.$watch(function () {
+        return self.schema;
+    }, function (newValue, oldValue) {
+        self.validateSchema();
+        self.validateDocument();
+    });
 
 });
