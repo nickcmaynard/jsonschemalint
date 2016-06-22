@@ -3,7 +3,7 @@ Order Allow,Deny
 Deny from all
 </Files>
 
-Redirect /index.html     /draft4/
+Redirect /index.html     /draft5/
 
 RewriteEngine On
 RewriteRule ^.git/(.*)$ / [R=301,NC,L]
