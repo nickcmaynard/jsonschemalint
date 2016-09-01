@@ -7,12 +7,23 @@ app.controller('validatorController', function ($scope, $http, $window) {
   var ajv = $window['ajv'];
   var validator = ajv({v5: true, verbose:true, allErrors:true});
   var YAML = $window['YAML'];
+  var ls = $window['localStorage'];
 
   var self = this;
+  
+  if (ls.getItem('data')) {
+    self.document = ls.getItem('data');
+  }
+  
+  if (ls.getItem('schema')) {
+    self.schema = ls.getItem('schema');
+  }
 
   this.reset = function() {
     self.document = "";
     self.schema = "";
+    ls.removeItem("data");
+    ls.removeItem("schema");
   };
 
   this.sample = function(ref) {
@@ -133,4 +144,17 @@ app.controller('validatorController', function ($scope, $http, $window) {
     self.validateDocument();
   });
 
+  // Save form data before reload
+  $window['onbeforeunload'] = function () {
+    if (self.document) {
+      ls.setItem('data', self.document);
+    } else {
+      ls.removeItem("data");
+    }
+    if (self.schema) {
+      ls.setItem('schema', self.schema);
+    } else {
+      ls.removeItem("schema");
+    }
+  };
 });
