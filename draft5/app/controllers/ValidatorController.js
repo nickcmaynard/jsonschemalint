@@ -145,7 +145,7 @@ app.controller('validatorController', function ($scope, $http, $window) {
   });
 
   // Save form data before reload
-  $window['onbeforeunload'] = function () {
+  $window.addEventListener('beforeunload', function () {
     if (self.document) {
       ls.setItem('data', self.document);
     } else {
@@ -156,5 +156,5 @@ app.controller('validatorController', function ($scope, $http, $window) {
     } else {
       ls.removeItem("schema");
     }
-  };
+  });
 });
