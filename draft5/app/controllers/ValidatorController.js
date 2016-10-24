@@ -87,8 +87,8 @@ app.controller('validatorController', function ($scope, $http, $window, $q, vali
 
     // Parse as JSON
     try {
-      console.info("Document is valid JSON");
       self.documentObject = this.parseMarkup(self.document);
+      console.info("Document is valid JSON");
     } catch (e) {
       // Error parsing as JSON
       console.error("Document is NOT valid JSON");
@@ -123,8 +123,8 @@ app.controller('validatorController', function ($scope, $http, $window, $q, vali
 
     // Parse as JSON
     try {
-      console.info("Schema is valid JSON");
       self.schemaObject = this.parseMarkup(self.schema);
+      console.info("Schema is valid JSON");
     } catch (e) {
       // Error parsing as JSON
       console.error("Schema is NOT valid JSON");
