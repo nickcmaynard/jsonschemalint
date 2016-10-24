@@ -17,3 +17,7 @@ pre.error-value {
 table.table-errors {
   table-layout: fixed;
 }
+
+td.error-path {
+  word-break: break-word;
+}

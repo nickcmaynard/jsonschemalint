@@ -11,6 +11,8 @@
     <script src="/ga.js" type="text/javascript"></script>
 </head>
 
+<base href="/">
+
 <body ng-app="app" ng-controller="validatorController as ctrl">
 
     <nav class="navbar navbar-default navbar-fixed-top navbar-collapse">
@@ -33,29 +35,30 @@
             <div class="collapse navbar-collapse" id="navbar-collapsible-section">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Samples <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Samples <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#" ng-click="ctrl.sample('draft5/valid')">Sample draft-05 schema and valid document</a>
+                            <li><a ng-click="ctrl.sample('draft5/valid')">Sample draft-05 schema and valid document</a>
                             </li>
-                            <li><a href="#" ng-click="ctrl.sample('draft5/invalid')">Sample draft-05 schema and <strong>invalid</strong> document</a>
+                            <li><a ng-click="ctrl.sample('draft5/invalid')">Sample draft-05 schema and <strong>invalid</strong> document</a>
                             </li>
-                            <li><a href="#" ng-click="ctrl.sample('draft4/valid')">Sample draft-04 schema and valid document</a>
+                            <li><a ng-click="ctrl.sample('draft4/valid')">Sample draft-04 schema and valid document</a>
                             </li>
-                            <li><a href="#" ng-click="ctrl.sample('draft4/invalid')">Sample draft-04 schema and <strong>invalid</strong> document</a>
+                            <li><a ng-click="ctrl.sample('draft4/invalid')">Sample draft-04 schema and <strong>invalid</strong> document</a>
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#" ng-click="ctrl.reset()">Reset</a>
+                    <li><a ng-click="ctrl.reset()">Reset</a>
                     </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other versions <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.validators[ctrl.schemaVersion].name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="/draft3">Draft 3</a></li>
-                            <li><a href="/draft4">Draft 4</a></li>
+                            <li ng-repeat="(key, value) in ctrl.validators">
+                              <a ng-click="ctrl.setVersion(key)">{{value.name}}</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -68,11 +71,15 @@
         <div class="row">
 
             <div class="col-xs-12">
-                <p> JSON Schema Lint is a JSON schema validator to help you write and test of
-                    <a href="https://github.com/json-schema/json-schema">JSON Schemas</a> that conform with the Draft v4 specification, with <a href="http://epoberezkin.github.io/ajv/keywords.html">partial</a> <a href="http://epoberezkin.github.io/ajv/#data-reference">support</a> for the work-in-progress <a href="https://github.com/json-schema/json-schema/wiki/v5-Proposals">v5 specification</a>.</p>
-                <p>The author/maintainer is <a href="https://gravatar.com/nickcmaynard">Nick Maynard</a>.  Fork <a href="https://github.com/nickcmaynard/jsonschemalint">this project on Github.</a></p>
-                <p>Under the covers, it uses <a href="https://github.com/epoberezkin">Evgeny Poberezkin's</a> <a href="https://github.com/epoberezkin/ajv">Ajv</a> library, passed through <a href="http://browserify.org">Browserify</a> to make it work in the browser.</p>
-                <p>Optionally, you may use schemas and documents in the YAML format.  These documents are parsed with <a href="https://github.com/jeremyfa">J&eacute;r&eacute;my Fairve's</a> <a href="https://github.com/jeremyfa/yaml.js">yaml.js</a> library.</p>
+                <p> JSON Schema Lint is a JSON schema validator to help you write and test <a href="https://github.com/json-schema/json-schema">JSON Schemas</a> that conform with various specification versions.
+                    <p>The author/maintainer is <a href="https://gravatar.com/nickcmaynard">Nick Maynard</a>. Fork <a href="https://github.com/nickcmaynard/jsonschemalint">this project on Github.</a></p>
+                    <p>Libraries:
+                        <ul>
+                            <li>Gary Court's <a href="https://github.com/garycourt/JSV">JSV</a> :: draft-01, draft-02, draft-03</li>
+                            <li>Evgeny Poberezkin's <a href="https://github.com/epoberezkin/ajv">Ajv</a> :: draft-04, draft-05 (<a href="http://epoberezkin.github.io/ajv/keywords.html">partial</a>)</li>
+                        </ul>
+                    </p>
+                    <p>Optionally, you may use schemas and documents in the YAML format. These documents are parsed with <a href="https://github.com/jeremyfa">J&eacute;r&eacute;my Fairve's</a> <a href="https://github.com/jeremyfa/yaml.js">yaml.js</a> library.</p>
             </div>
 
         </div>
@@ -85,7 +92,8 @@
                     <div class="panel-heading">
                         JSON Schema
                         <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
+                            <a class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -109,9 +117,11 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="error in ctrl.schemaErrors">
-                                <td ng-bind="error.dataPath"></td>
+                                <td ng-bind="error.dataPath" class="error-path"></td>
                                 <td ng-bind="error.message"></td>
-                                <td><pre class="error-value" ng-bind="error.data | json"></pre></td>
+                                <td>
+                                    <pre class="error-value" ng-bind="error.data | json"></pre>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -125,7 +135,8 @@
                     <div class="panel-heading">
                         JSON Document
                         <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
+                            <a class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -149,9 +160,11 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="error in ctrl.documentErrors">
-                                <td ng-bind="error.dataPath"></td>
+                                <td ng-bind="error.dataPath" class="error-path"></td>
                                 <td ng-bind="error.message"></td>
-                                <td><pre class="error-value" ng-bind="error.data | json"></pre></td>
+                                <td>
+                                    <pre class="error-value" ng-bind="error.data | json"></pre>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,6 +182,7 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/yaml.js/dist/yaml.js"></script>
 
     <script src="app/app.js"></script>
