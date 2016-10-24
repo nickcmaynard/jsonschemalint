@@ -2,11 +2,14 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, validatorV4, validatorV5) {
+app.controller('validatorController', function ($scope, $http, $window, $q, validatorV1, validatorV2, validatorV3, validatorV4, validatorV5) {
 
   var self = this;
 
   var validators = {
+    v1: validatorV1,
+    v2: validatorV2,
+    v3: validatorV3,
     v4: validatorV4,
     v5: validatorV5
   };

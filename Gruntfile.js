@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     browserify: {
       'is-my-json-valid': {
         files: {
-          '.tmp/js/is-my-json-valid.js': ['node_modules/is-my-json-valid/index.js']
+          'draft4/js/is-my-json-valid/is-my-json-valid.js': ['node_modules/is-my-json-valid/index.js']
         },
         options: {
           browserifyOptions: {
@@ -14,11 +14,21 @@ module.exports = function (grunt) {
       },
       'ajv': {
         files: {
-          '.tmp/js/ajv.js': ['node_modules/ajv/lib/ajv.js']
+          'draft5/js/ajv/ajv.js': ['node_modules/ajv/lib/ajv.js']
         },
         options: {
           browserifyOptions: {
             standalone: 'ajv'
+          }
+        }
+      },
+      'jsv': {
+        files: {
+          'draft5/js/jsv/jsv.js': ['node_modules/JSV/lib/jsv.js', 'node_modules/JSV/lib/environments.js']
+        },
+        options: {
+          browserifyOptions: {
+            standalone: 'jsv'
           }
         }
       }
@@ -39,8 +49,9 @@ module.exports = function (grunt) {
           sourceMap: true
         },
         files: {
-          'draft4/js/is-my-json-valid/is-my-json-valid.min.js': ['.tmp/js/is-my-json-valid.js'],
-          'draft5/js/ajv/ajv.min.js': ['.tmp/js/ajv.js']
+          'draft4/js/is-my-json-valid/is-my-json-valid.min.js': ['draft4/js/is-my-json-valid/is-my-json-valid.js'],
+          'draft5/js/ajv/ajv.min.js': ['draft5/js/ajv/ajv.js'],
+          'draft5/js/jsv/jsv.min.js': ['draft5/js/jsv/jsv.js']
         }
       }
     }
