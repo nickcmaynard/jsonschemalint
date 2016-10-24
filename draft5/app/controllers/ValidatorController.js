@@ -2,19 +2,21 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window) {
+app.controller('validatorController', function ($scope, $http, $window, $q, validatorV5) {
 
-  var ajv = $window['ajv'];
-  var validator = ajv({v5: true, verbose:true, allErrors:true});
+  var self = this;
+
+  var validators = {
+    v5: validatorV5
+  };
+
   var YAML = $window['YAML'];
   var ls = $window['localStorage'];
 
-  var self = this;
-  
   if (ls.getItem('data')) {
     self.document = ls.getItem('data');
   }
-  
+
   if (ls.getItem('schema')) {
     self.schema = ls.getItem('schema');
   }
@@ -78,54 +80,67 @@ app.controller('validatorController', function ($scope, $http, $window) {
   };
 
   this.validateDocument = function () {
-    console.debug("document");
+    console.debug("document change");
     self.documentErrors = [];
     self.documentMessage = "";
 
     // Parse as JSON
     try {
+      console.info("Document is valid JSON");
       self.documentObject = this.parseMarkup(self.document);
-
-      // Do validation
-      if (validator.validateSchema(this.schemaObject)) {
-        if (validator.validate(this.schemaObject, this.documentObject)) {
-          this.documentMessage = "Document conforms to the JSON schema."; 
-        } else {
-          console.log(validator.errorsText(ajv.errors));
-          this.documentErrors = validator.errors;
-        }   
-      } else {
-        this.documentErrors = [{message: "Can't check data against an invalid schema."}]
-      }
     } catch (e) {
       // Error parsing as JSON
+      console.error("Document is NOT valid JSON");
       self.documentErrors = [{message: "Document is invalid JSON. Try http://jsonlint.com to fix it." }];
+      return;
     }
+
+    // Do validation
+    var validator = validators.v5;
+    return validator.validateSchema(this.schemaObject).then(angular.bind(this, function(success) {
+      return validator.validate(this.schemaObject, this.documentObject).then(angular.bind(this, function(success) {
+        console.info("Document conforms to JSON schema.");
+        this.documentMessage = "Document conforms to the JSON schema.";
+      }), angular.bind(this, function(errors) {
+        console.error("JSON object does not conform to JSON schema.");
+        this.documentErrors = errors;
+        throw "Does not conform.";
+      }));
+    }), angular.bind(this, function(errors) {
+      this.documentErrors = [{message: "Can't check data against an invalid schema."}];
+      throw "Invalid schema.";
+    }));
 
     console.log("validateDocument");
 
   };
 
   this.validateSchema = function () {
-    console.debug("schema");
+    console.debug("schema change");
     self.schemaErrors = [];
     self.schemaMessage = "";
 
     // Parse as JSON
     try {
+      console.info("Schema is valid JSON");
       self.schemaObject = this.parseMarkup(self.schema);
-
-      // Do validation
-      if (validator.validateSchema(this.schemaObject)) {
-        this.schemaMessage = "Schema is a valid JSON schema.";
-      } else {
-        console.log(validator.errorsText(ajv.errors));
-        this.schemaErrors = validator.errors;
-      }
     } catch (e) {
       // Error parsing as JSON
+      console.error("Schema is NOT valid JSON");
       self.schemaErrors = [{ message: "Schema is invalid JSON. Try http://jsonlint.com to fix it." }];
+      return;
     }
+
+    // Do validation
+    var validator = validators.v5;
+    validator.validateSchema(this.schemaObject).then(angular.bind(this, function(success) {
+      console.info("JSON schema is valid.");
+      this.schemaMessage = "Schema is a valid JSON schema.";
+    }), angular.bind(this, function(errors) {
+      console.error("JSON schema is invalid.", errors);
+      this.schemaErrors = errors;
+      throw "Invalid schema."
+    }));
 
   };
 
