@@ -82,17 +82,22 @@ app.controller('validatorController', function ($scope, $http, $window, $q, vali
 
   this.validateDocument = function () {
     console.debug("document change");
-    self.documentErrors = [];
-    self.documentMessage = "";
+    this.documentErrors = [];
+    this.documentMessage = "";
 
     // Parse as JSON
     try {
-      self.documentObject = this.parseMarkup(self.document);
+      this.documentObject = this.parseMarkup(this.document);
       console.info("Document is valid JSON");
     } catch (e) {
       // Error parsing as JSON
       console.error("Document is NOT valid JSON");
-      self.documentErrors = [{message: "Document is invalid JSON. Try http://jsonlint.com to fix it." }];
+      this.documentErrors = [{message: "Document is invalid JSON. Try http://jsonlint.com to fix it." }];
+      return;
+    }
+
+    if (!this.schemaObject || !this.documentObject) {
+      // Bomb
       return;
     }
 
@@ -118,17 +123,22 @@ app.controller('validatorController', function ($scope, $http, $window, $q, vali
 
   this.validateSchema = function () {
     console.debug("schema change");
-    self.schemaErrors = [];
-    self.schemaMessage = "";
+    this.schemaErrors = [];
+    this.schemaMessage = "";
 
     // Parse as JSON
     try {
-      self.schemaObject = this.parseMarkup(self.schema);
+      this.schemaObject = this.parseMarkup(this.schema);
       console.info("Schema is valid JSON");
     } catch (e) {
       // Error parsing as JSON
       console.error("Schema is NOT valid JSON");
-      self.schemaErrors = [{ message: "Schema is invalid JSON. Try http://jsonlint.com to fix it." }];
+      this.schemaErrors = [{ message: "Schema is invalid JSON. Try http://jsonlint.com to fix it." }];
+      return;
+    }
+
+    if (!this.schemaObject) {
+      // Bomb
       return;
     }
 
