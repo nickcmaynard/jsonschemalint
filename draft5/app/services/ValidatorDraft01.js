@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.service('validatorV1', function ($window, $q, $http) {
+app.service('validatorDraft01', function ($window, $q, $http) {
 
   // Use JSV with draft1 environment
   var jsv = $window['jsv'].JSV;

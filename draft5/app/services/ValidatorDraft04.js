@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.service('validatorV4', function ($window, $q) {
+app.service('validatorDraft04', function ($window, $q) {
 
   // Use AJV with v4 options
   var ajv = $window['ajv'];

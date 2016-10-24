@@ -2,16 +2,16 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, validatorV1, validatorV2, validatorV3, validatorV4, validatorV5) {
+app.controller('validatorController', function ($scope, $http, $window, $q, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
 
   var self = this;
 
   var validators = {
-    v1: validatorV1,
-    v2: validatorV2,
-    v3: validatorV3,
-    v4: validatorV4,
-    v5: validatorV5
+    v1: validatorDraft01,
+    v2: validatorDraft02,
+    v3: validatorDraft03,
+    v4: validatorDraft04,
+    v5: validatorDraft05
   };
 
   var YAML = $window['YAML'];

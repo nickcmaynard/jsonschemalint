@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.service('validatorV5', function ($window, $q) {
+app.service('validatorDraft05', function ($window, $q) {
 
   // Use AJV with v5 options
   var ajv = $window['ajv'];
