@@ -7,7 +7,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, vali
   var self = this;
 
   var validators = {
-    v4, validatorV4,
+    v4: validatorV4,
     v5: validatorV5
   };
 
