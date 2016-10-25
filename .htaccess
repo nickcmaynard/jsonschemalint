@@ -3,7 +3,13 @@ Order Allow,Deny
 Deny from all
 </Files>
 
-Redirect /index.html     /draft5/
+Redirect /draft3/ /
+Redirect /draft4/ /
+Redirect /draft5/ /
 
+# Serve up everything in www/
 RewriteEngine On
-RewriteRule ^.git/(.*)$ / [R=301,NC,L]
+RewriteRule ^(/|$) www%{REQUEST_URI} [L]
+
+ExpiresActive On
+ExpiresDefault "access plus 1 day"
