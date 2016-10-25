@@ -3,9 +3,8 @@ Order Allow,Deny
 Deny from all
 </Files>
 
-Redirect 301 /draft3/ /
-Redirect 301 /draft4/ /
-Redirect 301 /draft5/ /
+# Old /draftX should go to root
+RedirectMatch 301 "^/draft\d[\/]{0,1}$" /
 
 # Serve up everything in www/
 RewriteEngine On
