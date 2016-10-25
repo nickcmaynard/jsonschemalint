@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute']).config(function ($routeProvider) {
+angular.module('app', ['ngRoute', 'angulartics', 'angulartics.google.analytics']).config(function ($routeProvider) {
 
   $routeProvider.when('/version/:specVersion/markup/:markupLanguage', {
     controller: "ValidatorController"
