@@ -17,6 +17,7 @@
     "angular": "~1.5.8",
     "angular-route": "~1.5.8",
     "bootstrap": "~3.3.7",
-    "yaml.js": "~0.2.8"
+    "yaml.js": "~0.2.8",
+    "angulartics-google-analytics": "^0.3.0"
   }
 }
