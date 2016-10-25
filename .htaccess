@@ -9,7 +9,7 @@ Redirect /draft5/ /
 
 # Serve up everything in www/
 RewriteEngine On
-RewriteRule ^!www(/|$) www%{REQUEST_URI} [L]
+RewriteRule !^www(/|$) www%{REQUEST_URI} [L]
 
 ExpiresActive On
 ExpiresDefault "access plus 1 day"
