@@ -14,7 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.7",
-    "angulartics-google-analytics": "^0.3.0"
+    "bootstrap": "~3.3.7"
   }
 }
