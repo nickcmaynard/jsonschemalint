@@ -1,5 +1,5 @@
 {
-  "name": "json-schema-lint-draft4",
+  "name": "json-schema-lint",
   "version": "0.0.0",
   "authors": [
     "Nick Maynard <nick.maynard@uk.ibm.com>"
@@ -14,10 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.5.8",
-    "angular-route": "~1.5.8",
     "bootstrap": "~3.3.7",
-    "yaml.js": "~0.2.8",
     "angulartics-google-analytics": "^0.3.0"
   }
 }

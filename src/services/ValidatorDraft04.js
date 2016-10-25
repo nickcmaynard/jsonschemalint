@@ -2,14 +2,13 @@
 
 var app = angular.module('app', false);
 
-app.service('validatorDraft05', function ($window, $q) {
+app.service('validatorDraft04', function ($window, $q) {
 
-  // Use AJV with v5 options
-  var ajv = $window['ajv'];
+  // Use AJV with v4 options
+  var ajv = require('ajv');
   var validator = ajv({
     verbose: true,
-    allErrors: true,
-    v5: true
+    allErrors: true
   });
 
   this.validateSchema = function (schemaObject) {

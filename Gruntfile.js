@@ -2,24 +2,29 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     browserify: {
-      'ajv': {
+      'bundle': {
         files: {
-          'www/js/ajv/ajv.js': ['node_modules/ajv/lib/ajv.js']
-        },
-        options: {
-          browserifyOptions: {
-            standalone: 'ajv'
-          }
+          '.tmp/bundle.js': ['src/app.js']
         }
-      },
-      'jsv': {
-        files: {
-          'www/js/jsv/jsv.js': ['node_modules/JSV/lib/jsv.js', 'node_modules/JSV/lib/environments.js']
-        },
+      }
+    },
+    clean: {
+      tmp: ['.tmp']
+    },
+    mkdir: {
+      tmp: {
         options: {
-          browserifyOptions: {
-            standalone: 'jsv'
-          }
+          create: ['.tmp/']
+        }
+      }
+    },
+    ngAnnotate: {
+      options: {
+        singleQuotes: true
+      },
+      bundle: {
+        files: {
+          'www/js/bundle.js': ['.tmp/bundle.js']
         }
       }
     },
@@ -29,16 +34,18 @@ module.exports = function (grunt) {
           sourceMap: true
         },
         files: {
-          'www/js/ajv/ajv.min.js': ['www/js/ajv/ajv.js'],
-          'www/js/jsv/jsv.min.js': ['www/js/jsv/jsv.js']
+          'www/js/bundle.min.js': ['www/js/bundle.js']
         }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-mkdir');
+  grunt.loadNpmTasks('grunt-ng-annotate');
 
-  grunt.registerTask('default', ['browserify', 'uglify']);
+  grunt.registerTask('default', ['clean', 'mkdir', 'browserify', 'ngAnnotate', 'uglify']);
 
 };

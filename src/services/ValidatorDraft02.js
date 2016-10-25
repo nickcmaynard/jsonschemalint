@@ -2,11 +2,11 @@
 
 var app = angular.module('app', false);
 
-app.service('validatorDraft03', function ($window, $q, $http) {
+app.service('validatorDraft02', function ($window, $q, $http) {
 
-  // Use JSV with draft3 environment
-  var jsv = $window['jsv'].JSV;
-  var validator = JSV.createEnvironment("json-schema-draft-03");
+  // Use JSV with draft2 environment
+  var jsv = require('JSV');
+  var validator = JSV.createEnvironment("json-schema-draft-02");
 
   var schemaSchema = validator.getDefaultSchema();
 

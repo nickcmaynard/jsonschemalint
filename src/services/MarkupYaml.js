@@ -4,7 +4,7 @@ var app = angular.module('app', false);
 
 app.service('markupYaml', function ($window, $q, $http) {
 
-  var YAML = $window['YAML'];
+  var YAML = require('yamljs');
 
   this.parse = function (text) {
     return $q(angular.bind(this, function (resolve, reject) {
