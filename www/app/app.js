@@ -1,10 +1,10 @@
 angular.module('app', ['ngRoute']).config(function ($routeProvider) {
 
-  $routeProvider.when('/version/:version', {
+  $routeProvider.when('/version/:specVersion/markup/:markupLanguage', {
     controller: "ValidatorController"
   });
   $routeProvider.otherwise({
-    redirectTo: '/version/draft-05'
+    redirectTo: '/version/draft-05/markup/json'
   });
 
 });

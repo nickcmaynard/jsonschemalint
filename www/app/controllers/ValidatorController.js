@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
+app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
 
   var self = this;
 
@@ -29,7 +29,17 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     }
   };
 
-  var YAML = $window['YAML'];
+  this.markupLanguages = {
+    "json": {
+      service: markupJson,
+      name: "JSON"
+    },
+    "yaml": {
+      service: markupYaml,
+      name: "YAML"
+    }
+  };
+
   var ls = $window['localStorage'];
 
   if (ls.getItem('data')) {
@@ -50,57 +60,51 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
   this.sample = function (ref) {
     console.debug('sample', ref);
 
-    $http.get('samples/' + ref + '.document.json').success(function (data) {
-      self.document = JSON.stringify(data, null, '  ');
-    });
-    $http.get('samples/' + ref + '.schema.json').success(function (data) {
-      self.schema = JSON.stringify(data, null, '  ');
-    });
+    $http.get('samples/' + ref + '.document.json').success(angular.bind(this, function (data) {
+      self.document = this.markupLanguages[this.markupLanguage].service.prettyPrint(data);
+    }));
+    $http.get('samples/' + ref + '.schema.json').success(angular.bind(this, function (data) {
+      self.schema = this.markupLanguages[this.markupLanguage].service.prettyPrint(data);
+    }));
 
   };
 
   this.parseMarkup = function (thing) {
-    try {
-      return JSON.parse(thing);
-    } catch (e) {
-      console.log('not json, trying yaml');
-      return YAML.parse(thing);
+    if (!this.markupLanguages[this.markupLanguage]) {
+      return $q.reject([{
+        message: "Invalid markup language reference " + this.markupLanguage
+      }]);
     }
-  };
-
-  this.reformatMarkup = function (thing) {
-    try {
-      return JSON.stringify(JSON.parse(thing), null, '  ');
-    } catch (e) {
-      return YAML.stringify(YAML.parse(thing), 4, 2);
-    }
+    return this.markupLanguages[this.markupLanguage].service.parse(thing);
   };
 
   this.formatDocument = function () {
     console.debug('formatDocument');
 
-    try {
-      var documentObject = this.parseMarkup(self.document);
-      this.document = this.reformatMarkup(self.document);
-    } catch (e) {
-      // *shrug*
-    }
+    this.parseMarkup(this.document).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function(text) {
+      this.document = text;
+    }));
+
   };
 
   this.formatSchema = function () {
     console.debug('formatSchema');
 
-    try {
-      var schemaObject = this.parseMarkup(self.schema);
-      this.schema = this.reformatMarkup(self.schema);
-    } catch (e) {
-      // *shrug*
-    }
+    this.parseMarkup(this.schema).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function(text) {
+      this.schema = text;
+    }));
+
   };
 
-  this.setVersion = function (version) {
+  this.setSpecVersion = function (specVersion) {
     $route.updateParams({
-      version: version
+      specVersion: specVersion
+    });
+  };
+
+  this.setMarkupLanguage = function (markupLanguage) {
+    $route.updateParams({
+      markupLanguage: markupLanguage
     });
   };
 
@@ -110,50 +114,41 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     this.documentErrors = [];
     this.documentMessage = "";
 
-    if (!this.validators[this.schemaVersion]) {
+    if (!this.validators[this.specVersion]) {
       // Abort
       return this.documentErrors = [{
-        message: "Invalid JSON schema version \"" + this.schemaVersion + "\""
+        message: "Invalid JSON schema spec version \"" + this.specVersion + "\""
       }];
     }
 
-    // Parse as JSON
-    try {
-      this.documentObject = this.parseMarkup(this.document);
-      console.info("Document is valid JSON");
-    } catch (e) {
-      // Error parsing as JSON
-      console.error("Document is NOT valid JSON");
-      this.documentErrors = [{
-        message: "Document is invalid JSON. Try http://jsonlint.com to fix it."
-      }];
-      return;
-    }
+    this.parseMarkup(this.document).then(angular.bind(this, function (obj) {
+      this.documentObject = obj;
+    })).then(angular.bind(this, function () {
+      if (!this.schemaObject || !this.documentObject) {
+        // Bomb
+        return;
+      }
 
-    if (!this.schemaObject || !this.documentObject) {
-      // Bomb
-      return;
-    }
-
-    // Do validation
-    var validator = this.validators[this.schemaVersion].service;
-    return validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
-      return validator.validate(this.schemaObject, this.documentObject).then(angular.bind(this, function (success) {
-        console.info("Document conforms to JSON schema.");
-        this.documentMessage = "Document conforms to the JSON schema.";
+      // Do validation
+      var validator = this.validators[this.specVersion].service;
+      return validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
+        return validator.validate(this.schemaObject, this.documentObject).then(angular.bind(this, function (success) {
+          console.info("Document conforms to schema.");
+          this.documentMessage = "Document conforms to the schema.";
+        }), angular.bind(this, function (errors) {
+          console.error("Document does not conform to schema.", errors);
+          throw errors;
+        }));
       }), angular.bind(this, function (errors) {
-        console.error("JSON object does not conform to JSON schema.");
-        this.documentErrors = errors;
-        throw "Does not conform.";
+        throw [{
+          message: "Can't check document against an invalid schema."
+        }];
       }));
-    }), angular.bind(this, function (errors) {
-      this.documentErrors = [{
-        message: "Can't check data against an invalid schema."
-      }];
-      throw "Invalid schema.";
-    }));
 
-    console.log("validateDocument");
+    })).catch(angular.bind(this, function (err) {
+      console.error("Document errors", err);
+      this.documentErrors = err;
+    }));
 
   };
 
@@ -162,40 +157,34 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     this.schemaErrors = [];
     this.schemaMessage = "";
 
-    if (!this.validators[this.schemaVersion]) {
+    if (!this.validators[this.specVersion]) {
       // Abort
       return this.schemaErrors = [{
-        message: "Invalid JSON schema version \"" + this.schemaVersion + "\""
+        message: "Invalid JSON schema spec version \"" + this.specVersion + "\""
       }];
     }
 
-    // Parse as JSON
-    try {
-      this.schemaObject = this.parseMarkup(this.schema);
-      console.info("Schema is valid JSON");
-    } catch (e) {
-      // Error parsing as JSON
-      console.error("Schema is NOT valid JSON");
-      this.schemaErrors = [{
-        message: "Schema is invalid JSON. Try http://jsonlint.com to fix it."
-      }];
-      return;
-    }
+    this.parseMarkup(this.schema).then(angular.bind(this, function (obj) {
+      this.schemaObject = obj;
+    })).then(angular.bind(this, function () {
 
-    if (!this.schemaObject) {
-      // Bomb
-      return;
-    }
+      if (!this.schemaObject) {
+        // Bomb
+        return;
+      }
 
-    // Do validation
-    var validator = this.validators[this.schemaVersion].service;
-    validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
-      console.info("JSON schema is valid.");
-      this.schemaMessage = "Schema is a valid JSON schema.";
-    }), angular.bind(this, function (errors) {
-      console.error("JSON schema is invalid.", errors);
-      this.schemaErrors = errors;
-      throw "Invalid schema."
+      // Do validation
+      var validator = this.validators[this.specVersion].service;
+      return validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
+        console.info("Schema is valid.");
+        this.schemaMessage = "Schema is a valid schema.";
+      }), angular.bind(this, function (errors) {
+        console.error("Schema is invalid.", errors);
+        throw errors;
+      }));
+    })).catch(angular.bind(this, function (err) {
+      console.error("Schema errors", err);
+      this.schemaErrors = err;
     }));
 
   };
@@ -231,8 +220,11 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
   // When the route changes, register the new versions
   $scope.$on('$routeChangeSuccess', angular.bind(this, function () {
-    console.info("Selected JSON Schema version :: " + $route.current.params.version);
-    this.schemaVersion = $route.current.params.version;
+    console.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
+    this.specVersion = $route.current.params.specVersion;
+
+    console.info("Selected markup language :: " + $route.current.params.markupLanguage);
+    this.markupLanguage = $route.current.params.markupLanguage;
 
     // Re-check
     this.validateSchema();

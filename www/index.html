@@ -53,11 +53,20 @@
 
                 <ul class="nav navbar-nav navbar-right">
 
+                  <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.markupLanguages[ctrl.markupLanguage].name }} <span class="caret"></span></a>
+                      <ul class="dropdown-menu" role="menu">
+                          <li ng-repeat="(key, value) in ctrl.markupLanguages" ng-class="{disabled: ctrl.markupLanguage==key}">
+                            <a ng-click="ctrl.setMarkupLanguage(key)">{{value.name}}</a>
+                          </li>
+                      </ul>
+                  </li>
+
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.validators[ctrl.schemaVersion].name }} <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.validators[ctrl.specVersion].name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="(key, value) in ctrl.validators">
-                              <a ng-click="ctrl.setVersion(key)">{{value.name}}</a>
+                            <li ng-repeat="(key, value) in ctrl.validators" ng-class="{disabled: ctrl.specVersion==key}">
+                              <a ng-click="ctrl.setSpecVersion(key)">{{value.name}}</a>
                             </li>
                         </ul>
                     </li>
@@ -90,7 +99,7 @@
 
                 <div class="panel panel-default panel-collapse" ng-class="{'panel-danger': ctrl.schemaErrors.length, 'panel-success': !ctrl.schemaErrors.length}">
                     <div class="panel-heading">
-                        JSON Schema
+                        Schema ({{ctrl.markupLanguages[ctrl.markupLanguage].name}}, {{ctrl.validators[ctrl.specVersion].name}})
                         <div class="btn-group pull-right">
                             <a class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()">
                                 <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
@@ -133,7 +142,7 @@
 
                 <div class="panel panel-default" ng-class="{'panel-danger': ctrl.documentErrors.length, 'panel-success': !ctrl.documentErrors.length}">
                     <div class="panel-heading">
-                        JSON Document
+                        Document ({{ctrl.markupLanguages[ctrl.markupLanguage].name}})
                         <div class="btn-group pull-right">
                             <a class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()">
                                 <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;Format</a>
@@ -186,6 +195,8 @@
     <script src="bower_components/yaml.js/dist/yaml.js"></script>
 
     <script src="app/app.js"></script>
+    <script src="app/services/MarkupJson.js"></script>
+    <script src="app/services/MarkupYaml.js"></script>
     <script src="app/services/ValidatorDraft01.js"></script>
     <script src="app/services/ValidatorDraft02.js"></script>
     <script src="app/services/ValidatorDraft03.js"></script>
