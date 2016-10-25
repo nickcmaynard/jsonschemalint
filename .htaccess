@@ -3,9 +3,9 @@ Order Allow,Deny
 Deny from all
 </Files>
 
-Redirect /draft3/ /
-Redirect /draft4/ /
-Redirect /draft5/ /
+Redirect 301 /draft3/ /
+Redirect 301 /draft4/ /
+Redirect 301 /draft5/ /
 
 # Serve up everything in www/
 RewriteEngine On
