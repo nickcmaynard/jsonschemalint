@@ -4,12 +4,12 @@ var app = angular.module('app', false);
 
 app.service('markupYaml', function ($window, $q, $http) {
 
-  var YAML = require('yamljs');
+  var yaml = require('yamljs');
 
   this.parse = function (text) {
     return $q(angular.bind(this, function (resolve, reject) {
       try {
-        var obj = YAML.parse(text);
+        var obj = yaml.parse(text);
         resolve(obj);
       } catch (err) {
         reject([{
@@ -20,7 +20,7 @@ app.service('markupYaml', function ($window, $q, $http) {
   };
 
   this.prettyPrint = function(obj) {
-    return YAML.stringify(obj, 4, 2);
+    return yaml.stringify(obj, 4, 2);
   }
 
 });

@@ -5,8 +5,8 @@ var app = angular.module('app', false);
 app.service('validatorDraft03', function ($window, $q, $http) {
 
   // Use JSV with draft3 environment
-  var jsv = require('JSV');
-  var validator = JSV.createEnvironment("json-schema-draft-03");
+  var jsv = require('JSV').JSV;
+  var validator = jsv.createEnvironment("json-schema-draft-03");
 
   var schemaSchema = validator.getDefaultSchema();
 
