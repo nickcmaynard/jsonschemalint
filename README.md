@@ -17,14 +17,14 @@ npm install -g webpack webpack-dev-server
 node server.js
 ```
 
-Open http://localhost:3001/.
+Open [http://localhost:3001/](http://localhost:3001/).
 
 ### "live reload" webpack dev server
 
 ```sh
 webpack-dev-server --content-base www/ -d
 ```
-Open http://localhost:8080/webpack-dev-server.
+Open [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server).
 
 ## Building
 
