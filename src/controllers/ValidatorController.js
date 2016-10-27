@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
+app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, gist, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
 
   var self = this;
 
@@ -51,8 +51,12 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
   }
 
   this.reset = function () {
-    self.document = "";
-    self.schema = "";
+    delete self.document ;
+    delete self.documentErrors;
+    delete self.documentObject;
+    delete self.schema;
+    delete self.schemaErrors;
+    delete self.schemaObject;
     ls.removeItem("data");
     ls.removeItem("schema");
   };
@@ -121,6 +125,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       }];
     }
 
+    delete this.documentObject;
     this.parseMarkup(this.document).then(angular.bind(this, function (obj) {
       this.documentObject = obj;
     })).then(angular.bind(this, function () {
@@ -164,6 +169,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       }];
     }
 
+    delete this.schemaObject;
     this.parseMarkup(this.schema).then(angular.bind(this, function (obj) {
       this.schemaObject = obj;
     })).then(angular.bind(this, function () {
@@ -187,6 +193,65 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       this.schemaErrors = err;
     }));
 
+  };
+
+  this.loadGist = function(gistId) {
+    this.loadedGistId = gistId;
+
+    gist.retrieve(gistId).then(angular.bind(this, function(gist) {
+      console.info("Retrieved gist", gistId, gist);
+
+      this.loadedGist = gist;
+
+      this.schema = gist.schema;
+      this.document = gist.document;
+
+      // Register a once-off listener - if schema or document change, clobber the gist param
+      var canceller, documentListener, schemaListener;
+      canceller = angular.bind(this, function() {
+        console.info("Content changed from loaded gist, altering state to allow for this");
+        // Don't show the gist ID in the URL
+        $route.updateParams({
+          gist: null
+        });
+        // Clear the watch
+        schemaListener && schemaListener();
+        documentListener && documentListener();
+        // Clobber the local "we're looking at a gist" variables
+        delete this.loadedGist;
+        delete this.loadedGistId;
+      });
+      schemaListener = $scope.$watch(function () {
+        return self.schema;
+      }, angular.bind(this, function(newValue) {
+        if (this.loadedGist && newValue !== this.loadedGist.schema) {
+          canceller();
+        }
+      }));
+      documentListener = $scope.$watch(function () {
+        return self.document;
+      }, angular.bind(this, function(newValue) {
+        if (this.loadedGist && newValue !== this.loadedGist.document) {
+          canceller();
+        }
+      }));
+
+    }), function(error) {
+      console.error(error);
+      alert(error);
+    });
+  };
+
+  this.saveGist = function() {
+    gist.save(this.schema, this.document).then(angular.bind(this, function(gistId) {
+      $route.updateParams({
+        gist: gistId
+      });
+      alert("Saved - see new URL");
+    }), function(error) {
+      console.error(error);
+      alert(error);
+    });
   };
 
   // Document changes
@@ -225,6 +290,11 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
     console.info("Selected markup language :: " + $route.current.params.markupLanguage);
     this.markupLanguage = $route.current.params.markupLanguage;
+
+    if ($route.current.params.gist && this.loadedGistId != $route.current.params.gist) {
+      console.info("Loading gist :: " + $route.current.params.gist);
+      this.loadGist($route.current.params.gist);
+    }
 
     // Re-check
     this.validateSchema();
