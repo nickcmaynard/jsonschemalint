@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css" />
-    
+
 </head>
 
 <base href="/">
@@ -32,42 +32,60 @@
 
             <div class="collapse navbar-collapse" id="navbar-collapsible-section">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Samples <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a ng-click="ctrl.sample('draft5/valid')">Sample draft-05 schema and valid document</a>
-                            </li>
-                            <li><a ng-click="ctrl.sample('draft5/invalid')">Sample draft-05 schema and <strong>invalid</strong> document</a>
-                            </li>
-                            <li><a ng-click="ctrl.sample('draft4/valid')">Sample draft-04 schema and valid document</a>
-                            </li>
-                            <li><a ng-click="ctrl.sample('draft4/invalid')">Sample draft-04 schema and <strong>invalid</strong> document</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a ng-click="ctrl.reset()">Reset</a>
-                    </li>
+
+                    <button class="btn btn-default dropdown-toggle navbar-btn" type="button" id="sampleDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="glyphicon glyphicon-book"></span>&nbsp;Samples
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sampleDropdown">
+                        <li class="dropdown-header">draft-05</li>
+                        <li><a ng-click="ctrl.sample('draft5/valid')">Sample draft-05 schema and valid document</a>
+                        </li>
+                        <li><a ng-click="ctrl.sample('draft5/invalid')">Sample draft-05 schema and <strong>invalid</strong> document</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">draft-04</li>
+                        <li><a ng-click="ctrl.sample('draft4/valid')">Sample draft-04 schema and valid document</a>
+                        </li>
+                        <li><a ng-click="ctrl.sample('draft4/invalid')">Sample draft-04 schema and <strong>invalid</strong> document</a>
+                        </li>
+                    </ul>
+
+                    <div class="btn-group navbar-btn" role="group" aria-label="Actions">
+                        <button class="btn btn-default btn-danger" ng-click="ctrl.reset()">
+                            <span class="glyphicon glyphicon-trash"></span> Reset</button>
+                        <button class="btn btn-default" ng-click="ctrl.saveGist()" ng-disabled="ctrl.loadedGist || !ctrl.schemaObject || !ctrl.documentObject">
+                            <span ng-class="{'glyphicon-save': !ctrl.loadedGist, 'glyphicon-saved': ctrl.loadedGist}" class="glyphicon"></span> Save as Gist</button>
+                    </div>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.markupLanguages[ctrl.markupLanguage].name }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="(key, value) in ctrl.markupLanguages" ng-class="{disabled: ctrl.markupLanguage==key}">
-                                <a ng-click="ctrl.setMarkupLanguage(key)">{{value.name}}</a>
-                            </li>
-                        </ul>
-                    </li>
+                    <div class="btn-group navbar-btn" role="group" aria-label="Mode selection">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">&nbsp;{{ ctrl.markupLanguages[ctrl.markupLanguage].name }}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <li class="dropdown-header">Markup language</li>
+                                <li ng-repeat="(key, value) in ctrl.markupLanguages" ng-class="{disabled: ctrl.markupLanguage==key}">
+                                    <a ng-click="ctrl.setMarkupLanguage(key)">{{value.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ ctrl.validators[ctrl.specVersion].name }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="(key, value) in ctrl.validators" ng-class="{disabled: ctrl.specVersion==key}">
-                                <a ng-click="ctrl.setSpecVersion(key)">{{value.name}}</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="specVersionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">&nbsp;{{ ctrl.validators[ctrl.specVersion].name }}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="specVersionDropdown">
+                                <li class="dropdown-header">Spec version</li>
+                                <li ng-repeat="(key, value) in ctrl.validators" ng-class="{disabled: ctrl.specVersion==key}">
+                                    <a ng-click="ctrl.setSpecVersion(key)">{{value.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -172,13 +190,14 @@
 
                 <p> JSON Schema Lint is a JSON schema validator to help you write and test <a href="https://github.com/json-schema/json-schema">JSON Schemas</a> that conform with various specification versions.
                     <p>The author/maintainer is <a href="https://gravatar.com/nickcmaynard">Nick Maynard</a>. Fork <a href="https://github.com/nickcmaynard/jsonschemalint">this project on Github.</a></p>
-                    <p>Libraries:
+                    <p>Thanks
                         <ul>
-                            <li>Gary Court's <a href="https://github.com/garycourt/JSV">JSV</a> :: draft-01, draft-02, draft-03</li>
-                            <li>Evgeny Poberezkin's <a href="https://github.com/epoberezkin/ajv">Ajv</a> :: draft-04, draft-05 (<a href="http://epoberezkin.github.io/ajv/keywords.html">partial</a>)</li>
+                            <li><a href="https://gist.github.com">Github Gists</a> for saving schemas/documents</li>
+                            <li>Gary Court's <a href="https://github.com/garycourt/JSV">JSV</a> for validating draft-01, draft-02, draft-03</li>
+                            <li>Evgeny Poberezkin's <a href="https://github.com/epoberezkin/ajv">Ajv</a> for validating draft-04, draft-05 (<a href="http://epoberezkin.github.io/ajv/keywords.html">partial</a>)</li>
+                            <li>J&eacute;r&eacute;my Fairve's <a href="https://github.com/jeremyfa/yaml.js">yaml.js</a></li>
                         </ul>
                     </p>
-                    <p>Optionally, you may use schemas and documents in the YAML format. These documents are parsed with <a href="https://github.com/jeremyfa">J&eacute;r&eacute;my Fairve's</a> <a href="https://github.com/jeremyfa/yaml.js">yaml.js</a> library.</p>
             </div>
 
         </div>

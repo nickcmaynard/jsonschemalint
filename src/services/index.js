@@ -1,3 +1,4 @@
+require('./Gist');
 require('./MarkupJson');
 require('./MarkupYaml');
 require('./ValidatorDraft01');
