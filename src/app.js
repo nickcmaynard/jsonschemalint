@@ -1,6 +1,6 @@
 var angular = require('angular');
 
-angular.module('app', [require('angular-route')]).config(function ($routeProvider) {
+angular.module('app', [require('angular-route'), require('angular-ui-bootstrap')]).config(function ($routeProvider) {
 
   $routeProvider.when('/version/:specVersion/markup/:markupLanguage', {
     controller: "ValidatorController"
