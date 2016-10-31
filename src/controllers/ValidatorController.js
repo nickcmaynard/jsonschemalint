@@ -269,7 +269,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       var url = $location.absUrl();
       this.alert({
         title: "Saved as Gist",
-        message: "<a href='" + url + "'>Visit saved schema/document pair</a>"
+        message: "<a target='_blank' href='" + url + "'>Visit saved schema/document pair</a>"
       });
     }), angular.bind(this, function (error) {
       console.error(error);
