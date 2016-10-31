@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, gist, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
+app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
 
   var self = this;
 
@@ -50,8 +50,21 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     self.schema = ls.getItem('schema');
   }
 
+  this.alert = function (message, btnClass) {
+    btnClass = btnClass || "btn-primary";
+    return $uibModal.open({
+      animation: true,
+      template: '<div class="modal-body" id="modal-body">' + message + '</div><div class="modal-footer"><button class="btn ' + btnClass + '" type="button" ng-click="$close()">OK</button></div>',
+      ariaLabelledBy: 'modal-title-top',
+      ariaDescribedBy: 'modal-body-top',
+      controller: function ($scope) {},
+      ariaDescribedBy: 'modal-body',
+      size: "sm"
+    }).result;
+  };
+
   this.reset = function () {
-    delete self.document ;
+    delete self.document;
     delete self.documentErrors;
     delete self.documentObject;
     delete self.schema;
@@ -85,7 +98,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
   this.formatDocument = function () {
     console.debug('formatDocument');
 
-    this.parseMarkup(this.document).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function(text) {
+    this.parseMarkup(this.document).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function (text) {
       this.document = text;
     }));
 
@@ -94,7 +107,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
   this.formatSchema = function () {
     console.debug('formatSchema');
 
-    this.parseMarkup(this.schema).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function(text) {
+    this.parseMarkup(this.schema).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function (text) {
       this.schema = text;
     }));
 
@@ -195,10 +208,10 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
   };
 
-  this.loadGist = function(gistId) {
+  this.loadGist = function (gistId) {
     this.loadedGistId = gistId;
 
-    gist.retrieve(gistId).then(angular.bind(this, function(gist) {
+    gist.retrieve(gistId).then(angular.bind(this, function (gist) {
       console.info("Retrieved gist", gistId, gist);
 
       this.loadedGist = gist;
@@ -208,7 +221,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
       // Register a once-off listener - if schema or document change, clobber the gist param
       var canceller, documentListener, schemaListener;
-      canceller = angular.bind(this, function() {
+      canceller = angular.bind(this, function () {
         console.info("Content changed from loaded gist, altering state to allow for this");
         // Don't show the gist ID in the URL
         $route.updateParams({
@@ -223,35 +236,36 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       });
       schemaListener = $scope.$watch(function () {
         return self.schema;
-      }, angular.bind(this, function(newValue) {
+      }, angular.bind(this, function (newValue) {
         if (this.loadedGist && newValue !== this.loadedGist.schema) {
           canceller();
         }
       }));
       documentListener = $scope.$watch(function () {
         return self.document;
-      }, angular.bind(this, function(newValue) {
+      }, angular.bind(this, function (newValue) {
         if (this.loadedGist && newValue !== this.loadedGist.document) {
           canceller();
         }
       }));
 
-    }), function(error) {
+    }), angular.bind(this, function (error) {
       console.error(error);
-      alert(error);
-    });
+      this.alert(error);
+    }));
   };
 
-  this.saveGist = function() {
-    gist.save(this.schema, this.document).then(angular.bind(this, function(gistId) {
+  this.saveGist = function () {
+    gist.save(this.schema, this.document).then(angular.bind(this, function (gistId) {
       $route.updateParams({
         gist: gistId
       });
-      alert("Saved - see new URL");
-    }), function(error) {
+      var url = $location.absUrl();
+      this.alert("Saved to Gist.  <a href='" + url + "'>URL</a>");
+    }), angular.bind(this, function (error) {
       console.error(error);
-      alert(error);
-    });
+      this.alert(error);
+    }));
   };
 
   // Document changes
