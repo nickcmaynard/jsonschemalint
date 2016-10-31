@@ -50,11 +50,13 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     self.schema = ls.getItem('schema');
   }
 
-  this.alert = function (message, btnClass) {
-    btnClass = btnClass || "btn-primary";
+  this.alert = function (params) {
+    if (!params) {
+      return $q.reject("params required");
+    }
     return $uibModal.open({
-      animation: true,
-      template: '<div class="modal-body" id="modal-body">' + message + '</div><div class="modal-footer"><button class="btn ' + btnClass + '" type="button" ng-click="$close()">OK</button></div>',
+      animation: false,
+      template: '<div class="modal-header"><h3 class="modal-title" id="modal-title">' + params.title + '</h3></div><div class="modal-body" id="modal-body">' + params.message + '</div><div class="modal-footer"><button class="btn ' + (params.btnClass || "btn-primary") + '" type="button" ng-click="$close()">OK</button></div>',
       ariaLabelledBy: 'modal-title-top',
       ariaDescribedBy: 'modal-body-top',
       controller: function ($scope) {},
@@ -251,7 +253,11 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
     }), angular.bind(this, function (error) {
       console.error(error);
-      this.alert(error);
+      this.alert({
+        title: "Error loading from Gist",
+        message: error,
+        btnClass: "btn-danger"
+      });
     }));
   };
 
@@ -261,10 +267,17 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
         gist: gistId
       });
       var url = $location.absUrl();
-      this.alert("Saved to Gist.  <a href='" + url + "'>URL</a>");
+      this.alert({
+        title: "Saved as Gist",
+        message: "<a href='" + url + "'>Visit saved schema/document pair</a>"
+      });
     }), angular.bind(this, function (error) {
       console.error(error);
-      this.alert(error);
+      this.alert({
+        title: "Error saving as Gist",
+        message: error,
+        btnClass: "btn-danger"
+      });
     }));
   };
 

@@ -28,7 +28,7 @@ app.service('gist', function ($q, $http) {
       return result.data.id;
     }, function(error) {
       console.error("Could not save gist", error);
-      throw error;
+      throw error.statusText;
     });
   };
 
@@ -48,7 +48,7 @@ app.service('gist', function ($q, $http) {
       };
     }, function(error) {
       console.error("Could not retrieve gist", error);
-      throw error;
+      throw error.statusText;
     });
   };
 
