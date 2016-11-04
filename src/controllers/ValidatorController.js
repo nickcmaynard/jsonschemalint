@@ -2,29 +2,29 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorDraft01, validatorDraft02, validatorDraft03, validatorDraft04, validatorDraft05) {
+app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV) {
 
   var self = this;
 
   this.validators = {
     "draft-01": {
-      service: validatorDraft01,
+      service: validatorFactoryJSV("draft-01"),
       name: "draft-01"
     },
     "draft-02": {
-      service: validatorDraft02,
+      service: validatorFactoryJSV("draft-02"),
       name: "draft-02"
     },
     "draft-03": {
-      service: validatorDraft03,
+      service: validatorFactoryJSV("draft-03"),
       name: "draft-03"
     },
     "draft-04": {
-      service: validatorDraft04,
+      service: validatorFactoryAJV("draft-04"),
       name: "draft-04"
     },
     "draft-05": {
-      service: validatorDraft05,
+      service: validatorFactoryAJV("draft-05"),
       name: "draft-05"
     }
   };
