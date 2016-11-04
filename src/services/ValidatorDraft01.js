@@ -4,14 +4,12 @@ var app = angular.module('app', false);
 
 app.service('validatorDraft01', function ($window, $q, $http) {
 
-  // Use JSV with draft1 environment
-  var jsv = require('JSV').JSV;
-  var validator = jsv.createEnvironment("json-schema-draft-01");
-
-  var schemaSchema = validator.getDefaultSchema();
+  // Initially unset for lazy-loading
+  var validator;
+  var schemaSchema;
 
   this.validateSchema = function (schemaObject) {
-    return $q(angular.bind(this, function (resolve, reject) {
+    return this._setup().then(angular.bind(this, $q, function (resolve, reject) {
       var results = validator.validate(schemaObject, schemaSchema);
       if (!results.errors || !results.errors.length) {
         resolve(true);
@@ -22,12 +20,29 @@ app.service('validatorDraft01', function ($window, $q, $http) {
   };
 
   this.validate = function (schemaObject, documentObject) {
-    return $q(angular.bind(this, function (resolve, reject) {
+    return this._setup().then(angular.bind(this, $q, function (resolve, reject) {
       var results = validator.validate(documentObject, schemaObject);;
       if (!results.errors || !results.errors.length) {
         resolve(true);
       } else {
         reject(results.errors.map(this._mapError));
+      }
+    }));
+  };
+
+  this._setup = function() {
+    return $q(angular.bind(this, function(resolve, reject) {
+      if (validator) {
+        // Already set up
+        resolve(true);
+      } else {
+        // Go ahead and set up the validator
+        require.ensure(['JSV'], function(require) {
+          var jsv = require('JSV').JSV;
+          validator = jsv.createEnvironment("json-schema-draft-01");
+          schemaSchema = validator.getDefaultSchema();
+          resolve(true);
+        });
       }
     }));
   };

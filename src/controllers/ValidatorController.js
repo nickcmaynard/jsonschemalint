@@ -80,10 +80,14 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     console.debug('sample', ref);
 
     $http.get('samples/' + ref + '.document.json').success(angular.bind(this, function (data) {
-      self.document = this.markupLanguages[this.markupLanguage].service.prettyPrint(data);
+      $q.when(this.markupLanguages[this.markupLanguage].service.prettyPrint(data)).then(function(text) {
+        self.document = text;
+      });
     }));
     $http.get('samples/' + ref + '.schema.json').success(angular.bind(this, function (data) {
-      self.schema = this.markupLanguages[this.markupLanguage].service.prettyPrint(data);
+      $q.when(this.markupLanguages[this.markupLanguage].service.prettyPrint(data)).then(function(text) {
+        self.schema = text;
+      });
     }));
 
   };
