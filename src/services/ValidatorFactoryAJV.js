@@ -52,7 +52,7 @@ app.factory('validatorFactoryAJV', function ($window, $q) {
     };
   };
 
-  // Factory for JSV validators
+  // Factory for AJV validators
   return function (version) {
     return new Validator(version);
   };
