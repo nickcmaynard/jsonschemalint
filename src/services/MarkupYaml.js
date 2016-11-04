@@ -4,35 +4,27 @@ var app = angular.module('app', false);
 
 app.service('markupYaml', function ($window, $q, $http) {
 
-  var yaml;
+  var loadYaml = require('es6-promise!yamljs');
 
   this.parse = function (text) {
-    return this._setup().then(angular.bind(this, $q, function (resolve, reject) {
+    // We wrap this in $q otherwise the digest doesn't fire correctly
+    return $q.when(loadYaml()).then(function (yaml) {
       try {
         var obj = yaml.parse(text);
-        resolve(obj);
+        return obj;
       } catch (err) {
-        reject([{
+        throw [{
           message: "Document is invalid YAML."
-        }]);
+        }];
       }
-    }));
+    });
   };
 
-  this.prettyPrint = function(obj) {
-    return this._setup().then(function() {
+  this.prettyPrint = function (obj) {
+    // We wrap this in $q otherwise the digest doesn't fire correctly
+    return $q.when(loadYaml()).then(function (yaml) {
       return yaml.stringify(obj, 4, 2);
     });
-  }
-
-  this._setup = function() {
-    return $q(function(resolve, reject) {
-      // Lazy-load YAML via chunking
-      require.ensure(['yamljs'], function(require) {
-        yaml = require('yamljs');
-        resolve(true);
-      });
-    });
-  }
+  };
 
 });

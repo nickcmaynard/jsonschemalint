@@ -8,8 +8,23 @@ app.service('validatorDraft02', function ($window, $q, $http) {
   var validator;
   var schemaSchema;
 
+  var setup = function () {
+    if (validator) {
+      return $q.when(true);
+    } else {
+      var loadJSV = require('es6-promise!JSV');
+      // We wrap this in $q otherwise the digest doesn't fire correctly
+      return $q.when(loadJSV()).then(function(JSV) {
+        var jsv = JSV.JSV;
+        validator = jsv.createEnvironment("json-schema-draft-02");
+        schemaSchema = validator.getDefaultSchema();
+        return true;
+      });
+    }
+  };
+
   this.validateSchema = function (schemaObject) {
-    return this._setup().then(angular.bind(this, $q, function (resolve, reject) {
+    return setup().then(angular.bind(this, function() {
       var results = validator.validate(schemaObject, schemaSchema);
       if (!results.errors || !results.errors.length) {
         resolve(true);
@@ -20,7 +35,7 @@ app.service('validatorDraft02', function ($window, $q, $http) {
   };
 
   this.validate = function (schemaObject, documentObject) {
-    return this._setup().then(angular.bind(this, $q, function (resolve, reject) {
+    return setup().then(angular.bind(this, function() {
       var results = validator.validate(documentObject, schemaObject);;
       if (!results.errors || !results.errors.length) {
         resolve(true);
@@ -30,25 +45,8 @@ app.service('validatorDraft02', function ($window, $q, $http) {
     }));
   };
 
-  this._setup = function() {
-    return $q(angular.bind(this, function(resolve, reject) {
-      if (validator) {
-        // Already set up
-        resolve(true);
-      } else {
-        // Go ahead and set up the validator
-        require.ensure(['JSV'], function(require) {
-          var jsv = require('JSV').JSV;
-          validator = jsv.createEnvironment("json-schema-draft-02");
-          schemaSchema = validator.getDefaultSchema();
-          resolve(true);
-        });
-      }
-    }));
-  };
-
   // Convert JSV errors into something the tables understand
-  this._mapError = function(e) {
+  this._mapError = function (e) {
     var field = e.uri.substring(e.uri.indexOf('#') + 1);
     return {
       dataPath: field,
