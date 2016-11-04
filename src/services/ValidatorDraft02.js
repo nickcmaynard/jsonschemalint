@@ -27,9 +27,9 @@ app.service('validatorDraft02', function ($window, $q, $http) {
     return setup().then(angular.bind(this, function() {
       var results = validator.validate(schemaObject, schemaSchema);
       if (!results.errors || !results.errors.length) {
-        resolve(true);
+        return true;
       } else {
-        reject(results.errors.map(this._mapError));
+        throw results.errors.map(this._mapError);
       }
     }));
   };
@@ -38,9 +38,9 @@ app.service('validatorDraft02', function ($window, $q, $http) {
     return setup().then(angular.bind(this, function() {
       var results = validator.validate(documentObject, schemaObject);
       if (!results.errors || !results.errors.length) {
-        resolve(true);
+        return true;
       } else {
-        reject(results.errors.map(this._mapError));
+        throw results.errors.map(this._mapError);
       }
     }));
   };
