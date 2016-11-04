@@ -36,7 +36,7 @@ app.service('validatorDraft03', function ($window, $q, $http) {
 
   this.validate = function (schemaObject, documentObject) {
     return setup().then(angular.bind(this, function() {
-      var results = validator.validate(documentObject, schemaObject);;
+      var results = validator.validate(documentObject, schemaObject);
       if (!results.errors || !results.errors.length) {
         return true;
       } else {
@@ -52,7 +52,7 @@ app.service('validatorDraft03', function ($window, $q, $http) {
       dataPath: field,
       message: e.message,
       data: e.details.length ? e.details[0] : ""
-    }
+    };
   };
 
 });

@@ -15,7 +15,7 @@ app.service('markupJson', function ($q) {
         }]);
       }
     });
-  }
+  };
 
   this.prettyPrint = function(obj) {
     return JSON.stringify(obj, null, '  ');

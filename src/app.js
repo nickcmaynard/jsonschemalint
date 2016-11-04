@@ -14,7 +14,7 @@ angular.module('app', [require('angular-route'), require('angular-ui-bootstrap')
     console.info("Hash change, informing GA");
     $window.ga('send', 'pageview', $location.path());
   });
-});;;
+});
 
 require('./services');
 require('./controllers');

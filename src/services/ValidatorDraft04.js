@@ -18,7 +18,7 @@ app.service('validatorDraft04', function ($window, $q) {
           verbose: true,
           allErrors: true
         });
-        return true
+        return true;
       });
     }
   };
