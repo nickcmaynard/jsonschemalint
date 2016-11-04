@@ -12,6 +12,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-webpack');
 
-  grunt.registerTask('default', ['clean', 'webpack']);
+  grunt.registerTask('default', ['webpack']);
 
 };
