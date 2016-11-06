@@ -15,9 +15,9 @@
     "angular": "~1.5.8",
     "angular-route": "~1.5.8",
     "angular-ui-bootstrap": "^2.2.0",
+    "async-module-loader": "^2.1.0",
     "compression": "^1.4.1",
     "es6-promise": "^4.0.5",
-    "es6-promise-loader": "^1.0.2",
     "express": "^4.12.2",
     "winston": "^0.9.0",
     "yamljs": "^0.2.8"

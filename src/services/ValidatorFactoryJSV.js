@@ -3,29 +3,32 @@
 var app = angular.module('app', false);
 
 // Handles draft-01, draft-02, draft-03
-app.factory('validatorFactoryJSV', function ($window, $q) {
+app.factory('validatorFactoryJSV', function ($window, $q, alertService) {
 
   var Validator = function (version) {
     // Initially unset for lazy-loading
     var validator;
     var schemaSchema;
 
+    var _setupPromise;
     var setup = function () {
-      if (validator) {
-        return $q.when(true);
-      } else {
-        var loadJSV = require('es6-promise!JSV');
-        // We wrap this in $q otherwise the digest doesn't fire correctly
-        return $q.when(loadJSV()).then(function (JSV) {
-          var jsv = JSV.JSV;
-          //
-          // VERSION DETERMINATION LOGIC
-          //
-          validator = jsv.createEnvironment("json-schema-" + version);
-          schemaSchema = validator.getDefaultSchema();
-          return true;
+      // We wrap this in $q otherwise the digest doesn't fire correctly
+      return _setupPromise || (_setupPromise = $q.when(require('async-module?promise!JSV')).then(function (JSV) {
+        var jsv = JSV.JSV;
+        //
+        // VERSION DETERMINATION LOGIC
+        //
+        validator = jsv.createEnvironment("json-schema-" + version);
+        schemaSchema = validator.getDefaultSchema();
+        return true;
+      }).catch(function (error) {
+        console.error("Could not load JSV", error);
+        alertService.alert({
+          title: "Could not load module",
+          message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
         });
-      }
+        throw error;
+      }));
     };
 
     // Convert JSV errors into something the tables understand

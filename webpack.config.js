@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+var AsyncModulePlugin = require('async-module-loader/plugin');
 
 module.exports = {
   entry: {
@@ -18,6 +19,7 @@ module.exports = {
     reasons: true
   },
   plugins: [
+    new AsyncModulePlugin(),
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise', // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
     }),
