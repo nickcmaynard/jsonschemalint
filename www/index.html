@@ -67,7 +67,7 @@
 
                     <div class="btn-group navbar-btn" role="group" aria-label="Mode selection">
                         <div uib-dropdown class="btn-group" role="group">
-                            <button uib-dropdown-toggle class="btn btn-default dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">&nbsp;{{ ctrl.markupLanguages[ctrl.markupLanguage].name }}
+                            <button uib-dropdown-toggle class="btn btn-default dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{ ctrl.markupLanguages[ctrl.markupLanguage].name }}
                                 <span class="caret"></span>
                             </button>
                             <ul uib-dropdown-menu class="dropdown-menu" aria-labelledby="languageDropdown">
@@ -79,7 +79,7 @@
                         </div>
 
                         <div uib-dropdown class="btn-group" role="group">
-                            <button uib-dropdown-toggle class="btn btn-default dropdown-toggle" type="button" id="specVersionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">&nbsp;{{ ctrl.validators[ctrl.specVersion].name }}
+                            <button uib-dropdown-toggle class="btn btn-default dropdown-toggle" type="button" id="specVersionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="glyphicon glyphicon-road"></span>&nbsp;{{ ctrl.validators[ctrl.specVersion].name }}
                                 <span class="caret"></span>
                             </button>
                             <ul uib-dropdown-menu class="dropdown-menu" aria-labelledby="specVersionDropdown">
