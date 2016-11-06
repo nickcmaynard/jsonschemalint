@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV) {
+app.controller('validatorController', function ($scope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
 
   var self = this;
 
@@ -50,19 +50,6 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
     self.schema = ls.getItem('schema');
   }
 
-  this.alert = function (params) {
-    if (!params) {
-      return $q.reject("params required");
-    }
-    return $uibModal.open({
-      animation: false,
-      template: '<div class="modal-header"><h3 class="modal-title" id="modal-title">' + params.title + '</h3></div><div class="modal-body" id="modal-body">' + params.message + '</div><div class="modal-footer"><button class="btn ' + (params.btnClass || "btn-primary") + '" type="button" ng-click="$close()">OK</button></div>',
-      ariaLabelledBy: 'modal-title-top',
-      ariaDescribedBy: 'modal-body',
-      controller: function ($scope) {},
-      size: "sm"
-    }).result;
-  };
 
   this.reset = function () {
     delete self.document;
@@ -256,7 +243,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
     }), angular.bind(this, function (error) {
       console.error(error);
-      this.alert({
+      alertService.alert({
         title: "Error loading from Gist",
         message: error,
         btnClass: "btn-danger"
@@ -270,13 +257,13 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
         gist: gistId
       });
       var url = $location.absUrl();
-      this.alert({
+      alertService.alert({
         title: "Saved as Gist",
         message: "<a target='_blank' href='" + url + "'>Visit saved schema/document pair</a>"
       });
     }), angular.bind(this, function (error) {
       console.error(error);
-      this.alert({
+      alertService.alert({
         title: "Error saving as Gist",
         message: error,
         btnClass: "btn-danger"
