@@ -1,4 +1,4 @@
-<table class="table validation-messages-table table-striped" ng-class="{ 'validation-messages-table--simple': $ctrl.simpleMessages($ctrl.messages).length, 'validation-messages-table--error': $ctrl.errorMessages($ctrl.messages).length }">
+<table class="table validation-messages-table table-striped" ng-if="$ctrl.messages.length" ng-class="{ 'validation-messages-table--simple': $ctrl.simpleMessages($ctrl.messages).length, 'validation-messages-table--error': $ctrl.errorMessages($ctrl.messages).length }">
     <thead>
         <tr ng-if="$ctrl.simpleMessages($ctrl.messages).length">
             <th>Message</th>
