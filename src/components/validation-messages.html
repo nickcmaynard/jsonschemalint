@@ -1,0 +1,19 @@
+<table class="table table-errors" ng-show="$ctrl.messages && $ctrl.messages.length">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Error</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="message in $ctrl.messages">
+            <td ng-bind="message.dataPath" class="error-path"></td>
+            <td ng-bind="message.message"></td>
+            <td>
+                <pre class="error-value" ng-bind="message.data | json"></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -120,24 +120,8 @@
 
                     </div>
 
-                    <table class="table table-errors" ng-show="ctrl.schemaErrors.length">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Error</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="error in ctrl.schemaErrors">
-                                <td ng-bind="error.dataPath" class="error-path"></td>
-                                <td ng-bind="error.message"></td>
-                                <td>
-                                    <pre class="error-value" ng-bind="error.data | json"></pre>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <validation-messages messages="ctrl.schemaErrors"></validation-messages>
+
                 </div>
 
             </div>
@@ -163,24 +147,8 @@
 
                     </div>
 
-                    <table class="table table-errors" ng-show="ctrl.documentErrors.length">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Error</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="error in ctrl.documentErrors">
-                                <td ng-bind="error.dataPath" class="error-path"></td>
-                                <td ng-bind="error.message"></td>
-                                <td>
-                                    <pre class="error-value" ng-bind="error.data | json"></pre>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <validation-messages messages="ctrl.documentErrors"></validation-messages>
+                    
                 </div>
 
             </div>
