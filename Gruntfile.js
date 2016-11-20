@@ -5,7 +5,7 @@ module.exports = function (grunt) {
       bundle: ['www/js/']
     },
     webpack: {
-      all: require('./webpack.config.js')
+      all: require('./webpack.prod.config.js')
     }
   });
 

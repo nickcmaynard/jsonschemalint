@@ -22,7 +22,7 @@ Open [http://localhost:3001/](http://localhost:3001/).
 ### "live reload" webpack dev server
 
 ```sh
-webpack-dev-server --content-base www/ -d
+webpack-dev-server --content-base www/ --config webpack.dev.config.js
 ```
 Open [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server).
 
@@ -36,5 +36,5 @@ grunt
 
 ### Development (with sourcemap)
 ```sh
-webpack --progress --display-modules -d -v
+webpack --progress --display-modules -v --config webpack.dev.config.js
 ```
