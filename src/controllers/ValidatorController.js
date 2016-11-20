@@ -121,7 +121,6 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
 
     console.debug("document change");
     this.documentErrors = [];
-    this.documentMessage = "";
 
     if (!this.validators[this.specVersion]) {
       // Abort
@@ -144,7 +143,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       return validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
         return validator.validate(this.schemaObject, this.documentObject).then(angular.bind(this, function (success) {
           console.info("Document conforms to schema.");
-          this.documentMessage = "Document conforms to the schema.";
+          this.documentErrors = [{message:"Document conforms to the schema."}];
         }), angular.bind(this, function (errors) {
           console.error("Document does not conform to schema.", errors);
           throw errors;
@@ -165,7 +164,6 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
   this.validateSchema = function () {
     console.debug("schema change");
     this.schemaErrors = [];
-    this.schemaMessage = "";
 
     if (!this.validators[this.specVersion]) {
       // Abort
@@ -188,7 +186,7 @@ app.controller('validatorController', function ($scope, $http, $window, $q, $rou
       var validator = this.validators[this.specVersion].service;
       return validator.validateSchema(this.schemaObject).then(angular.bind(this, function (success) {
         console.info("Schema is valid.");
-        this.schemaMessage = "Schema is a valid schema.";
+        this.schemaErrors = [{ message: "Schema is a valid schema." }];
       }), angular.bind(this, function (errors) {
         console.error("Schema is invalid.", errors);
         throw errors;

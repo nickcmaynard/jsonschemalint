@@ -18,10 +18,14 @@ pre.error-value {
   padding: 0;
 }
 
-table.table-errors {
+table.validation-messages-table {
   table-layout: fixed;
 }
 
 td.error-path {
   word-break: break-word;
+}
+
+validation-messages .table {
+  margin-bottom: 0;
 }

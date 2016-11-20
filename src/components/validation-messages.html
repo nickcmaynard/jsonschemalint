@@ -1,6 +1,9 @@
-<table class="table table-errors" ng-show="$ctrl.messages && $ctrl.messages.length">
+<table class="table validation-messages-table table-striped" ng-class="{ 'validation-messages-table--simple': $ctrl.simpleMessages($ctrl.messages).length, 'validation-messages-table--error': $ctrl.errorMessages($ctrl.messages).length }">
     <thead>
-        <tr>
+        <tr ng-if="$ctrl.simpleMessages($ctrl.messages).length">
+            <th>Message</th>
+        </tr>
+        <tr ng-if="$ctrl.errorMessages($ctrl.messages).length">
             <th>Field</th>
             <th>Error</th>
             <th>Value</th>
@@ -8,7 +11,10 @@
     </thead>
 
     <tbody>
-        <tr ng-repeat="message in $ctrl.messages">
+        <tr ng-repeat="message in $ctrl.simpleMessages($ctrl.messages)">
+            <td ng-bind="message.message"></td>
+        </tr>
+        <tr ng-repeat="message in $ctrl.errorMessages($ctrl.messages)">
             <td ng-bind="message.dataPath" class="error-path"></td>
             <td ng-bind="message.message"></td>
             <td>
@@ -16,4 +22,5 @@
             </td>
         </tr>
     </tbody>
+
 </table>

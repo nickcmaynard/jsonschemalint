@@ -111,15 +111,13 @@
                                 <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>&nbsp;Format</a>
                         </div>
                     </div>
-                    <div class="panel-body">
 
+                    <div class="panel-body">
                         <form novalidate>
                             <div class="form-group">
                                 <textarea ng-model="ctrl.schema" class="form-control json"></textarea>
                             </div>
                         </form>
-                        <p ng-show="ctrl.schemaMessage" ng-bind="ctrl.schemaMessage"></p>
-
                     </div>
 
                     <validation-messages messages="ctrl.schemaErrors"></validation-messages>
@@ -138,15 +136,13 @@
                                 <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>&nbsp;Format</a>
                         </div>
                     </div>
+                    
                     <div class="panel-body">
-
                         <form novalidate>
                             <div class="form-group">
                                 <textarea ng-model="ctrl.document" class="form-control json"></textarea>
                             </div>
                         </form>
-                        <p ng-show="ctrl.documentMessage" ng-bind="ctrl.documentMessage"></p>
-
                     </div>
 
                     <validation-messages messages="ctrl.documentErrors"></validation-messages>
