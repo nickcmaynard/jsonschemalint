@@ -6,11 +6,15 @@ body {
   padding-top: 60px;
 }
 
-textarea.json {
+textarea.document-text {
   font-family: Monaco, Andale Mono, monospace;
   font-size: smaller;
   resize: none;
   height: 300px;
+
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
 }
 
 pre.error-value {
@@ -27,5 +31,5 @@ td.error-path {
 }
 
 validation-messages .table {
-  margin-bottom: 0;
+  margin: 1em 0 0;
 }
