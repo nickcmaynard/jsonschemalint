@@ -6,7 +6,7 @@ module.exports = {
   cache: true,
   entry: {
     app: "./src/app.js",
-    vendor: ["angular", "angular-route", "angular-ui-bootstrap"]
+    vendor: "./src/vendor.js"
   },
   output: {
     path: "www/js/",
@@ -21,9 +21,6 @@ module.exports = {
     reasons: true
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ["app", "vendor"]
-    }),
     new AsyncModulePlugin(),
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise' // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
