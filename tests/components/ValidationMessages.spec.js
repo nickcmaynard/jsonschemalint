@@ -27,8 +27,6 @@ describe('ValidationMessages', function() {
     var element = $compile("<validation-messages></validation-messages>")($scope);
     $rootScope.$digest();
 
-    // Must have compiled and inserted a scope properly - check that $scope has a child scope
     expect(element.find("*")).to.have.length(0);
-
   });
 });

@@ -20,6 +20,16 @@ module.exports = {
     modules: true,
     reasons: true
   },
+  module: {
+    loaders: [{
+      test: /\.js?$/,
+      loader: 'babel',
+      exclude: /node_modules/,
+      query: {
+        presets: ['es2015']
+      }
+    }]
+  },
   plugins: [
     new AsyncModulePlugin(),
     new webpack.ProvidePlugin({
