@@ -1,6 +1,7 @@
 describe('ValidationMessages', function() {
   var $compile,
-      $rootScope;
+      $rootScope,
+      $scope;
 
   // Load the app module, which contains the component
   beforeEach(module('app'));
@@ -11,10 +12,10 @@ describe('ValidationMessages', function() {
     // The injector unwraps the underscores (_) from around the parameter names when matching
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $scope = $rootScope.$new();
   }));
 
   it('mounts the component', function() {
-    var $scope = $rootScope.$new();
     var element = $compile("<validation-messages></validation-messages>")($scope);
     $rootScope.$digest();
 
@@ -23,7 +24,6 @@ describe('ValidationMessages', function() {
   });
 
   it('doesn\'t mount a misnamed component', function() {
-    var $scope = $rootScope.$new();
     var element = $compile("<validation-messages-are-us></validation-messages-are-us>")($scope);
     $rootScope.$digest();
 
@@ -32,10 +32,9 @@ describe('ValidationMessages', function() {
   });
 
   it('is empty when given no data', function() {
-    var $scope = $rootScope.$new();
     var element = $compile("<validation-messages></validation-messages>")($scope);
     $rootScope.$digest();
 
-    expect(element.find("*")).to.have.length(0);
+    expect(element[0].querySelectorAll("*")).to.have.length(0);
   });
 });
