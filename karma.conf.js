@@ -14,14 +14,17 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    frameworks: [
+      'mocha', 'chai'
+    ],
 
     // list of files / patterns to load in the browser
     files: [
       // The app
       './src/app.js',
       // The tests
-      'node_modules/angular-mocks/angular-mocks.js', './tests/**/*.spec.js'
+      'node_modules/angular-mocks/angular-mocks.js',
+      './tests/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -30,7 +33,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './src/app.js': 'webpack',
+      './src/app.js': 'webpack'
     },
 
     webpack: webpackConfig,
@@ -44,7 +47,18 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: [
+      'spec'
+    ],
+
+    specReporter: {
+      maxLogLines: 5, // limit number of lines logged per test
+      suppressErrorSummary: true, // do not print error summary
+      suppressFailed: false, // do not print information about failed tests
+      suppressPassed: false, // do not print information about passed tests
+      suppressSkipped: false, // do not print information about skipped tests
+      showSpecTiming: false // print the time elapsed for each spec
+    },
 
     // web server port
     port: 9876,

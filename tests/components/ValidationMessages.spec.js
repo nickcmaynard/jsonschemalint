@@ -19,7 +19,16 @@ describe('ValidationMessages', function() {
     $rootScope.$digest();
 
     // Must have compiled and inserted a scope properly - check that $scope has a child scope
-    expect($scope.$$childHead).to.be.not.null;
+    expect($scope.$$childHead.$ctrl).to.be.not.null;
+  });
+
+  it('doesn\'t mount a misnamed component', function() {
+    var $scope = $rootScope.$new();
+    var element = $compile("<validation-messages-are-us></validation-messages-are-us>")($scope);
+    $rootScope.$digest();
+
+    // Must have compiled and inserted a scope properly - check that $scope has a child scope
+    expect($scope.$$childHead).to.be.null;
   });
 
   it('is empty when given no data', function() {
