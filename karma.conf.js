@@ -2,6 +2,10 @@
 // Generated on Sat May 23 2015 16:11:32 GMT+0200 (CEST)
 var webpackConfig = require('./webpack.dev.config');
 
+// Remove CommonsChunkPlugin because it's incompatible with karma
+var commonsChunkPluginIndex = webpackConfig.plugins.findIndex(plugin => plugin.chunkNames);
+webpackConfig.plugins.splice(commonsChunkPluginIndex, 1);
+
 module.exports = function(config) {
   config.set({
 
@@ -26,7 +30,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './src/app.js': 'webpack'
+      './src/app.js': 'webpack',
     },
 
     webpack: webpackConfig,

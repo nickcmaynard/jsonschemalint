@@ -21,16 +21,21 @@ module.exports = {
     reasons: true
   },
   module: {
-    loaders: [{
-      test: /\.js?$/,
-      loader: 'babel',
-      exclude: /node_modules/,
-      query: {
-        presets: ['es2015']
+    loaders: [
+      {
+        test: /\.js?$/,
+        loader: 'babel',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015']
+        }
       }
-    }]
+    ]
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ["app", "vendor"]
+    }),
     new AsyncModulePlugin(),
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise' // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
