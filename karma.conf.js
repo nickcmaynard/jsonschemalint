@@ -21,10 +21,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // The app
-      './src/app.js',
+      'src/app.js',
       // The tests
       'node_modules/angular-mocks/angular-mocks.js',
-      './tests/**/*.spec.js'
+      'tests/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -33,7 +33,14 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './src/app.js': 'webpack'
+      'src/app.js': ['webpack'],
+      'tests/**/*.spec.js': ['babel']
+    },
+
+    babelPreprocessor: {
+      options: {
+        presets: ['es2015']
+      }
     },
 
     webpack: webpackConfig,
@@ -47,9 +54,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: [
-      'spec'
-    ],
+    reporters: ['spec'],
 
     specReporter: {
       maxLogLines: 5, // limit number of lines logged per test
