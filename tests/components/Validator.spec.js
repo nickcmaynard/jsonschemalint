@@ -23,19 +23,19 @@ describe('Validator', function() {
     expect($scope.$$childHead.$ctrl).to.be.ok;
   });
 
-  it('accepts a validation function', function() {
+  it('accepts a validate function', function() {
     $scope.echo = function(a) {
       return a;
     };
 
-    var element = $compile("<validator validator=\"echo\"></validator>")($scope);
+    var element = $compile("<validator validate=\"echo\"></validator>")($scope);
     $rootScope.$digest();
 
     var $ctrl = $scope.$$childHead.$ctrl;
 
     expect($ctrl).to.be.ok;
-    expect($ctrl.validator).to.be.a.function;
-    expect($ctrl.validator("foo")).to.eql("foo");
+    expect($ctrl.validate).to.be.a.function;
+    expect($ctrl.validate("foo")).to.eql("foo");
   });
 
   it('accepts a parse function', function() {
@@ -43,14 +43,14 @@ describe('Validator', function() {
       return a;
     };
 
-    var element = $compile("<validator parser=\"echo\"></validator>")($scope);
+    var element = $compile("<validator parse=\"echo\"></validator>")($scope);
     $rootScope.$digest();
 
     var $ctrl = $scope.$$childHead.$ctrl;
 
     expect($ctrl).to.be.ok;
-    expect($ctrl.parser).to.be.a.function;
-    expect($ctrl.parser("foo")).to.eql("foo");
+    expect($ctrl.parse).to.be.a.function;
+    expect($ctrl.parse("foo")).to.eql("foo");
   });
 
   it('contains a form with a document text area', function() {
@@ -61,11 +61,11 @@ describe('Validator', function() {
   });
 
   it('binds its document textarea to its document model', function() {
-    var element = $compile("<validator></validator>")($scope);
+    var element = $compile("<validator doc='scopeProp'></validator>")($scope);
     $rootScope.$digest();
 
     var $ctrl = $scope.$$childHead.$ctrl;
-    $ctrl.document = "foo";
+    $scope.scopeProp = "foo";
     $rootScope.$digest();
 
     var textarea = element[0].querySelector("form textarea.validator-document");

@@ -1,3 +1,7 @@
-<form novalidate>
-    <textarea ng-model="$ctrl.document" class="form-control validator-document document-text"></textarea>
-</form>
+<div class="validator">
+
+  <form novalidate>
+      <textarea ng-model="$ctrl.doc" ng-change="$ctrl.changeDoc($ctrl.doc)" class="form-control validator-document document-text"></textarea>
+  </form>
+
+<div>
