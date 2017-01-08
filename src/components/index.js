@@ -1,1 +1,2 @@
 require('./ValidationMessages');
+require('./Validator');
