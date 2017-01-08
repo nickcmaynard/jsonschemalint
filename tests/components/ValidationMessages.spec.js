@@ -37,4 +37,24 @@ describe('ValidationMessages', function() {
 
     expect(element[0].querySelectorAll("*")).to.have.length(0);
   });
+
+  it('has a row for each message', function() {
+    var element = $compile("<validation-messages messages='scopeProp'></validation-messages>")($scope);
+    $rootScope.$digest();
+
+    var $ctrl = $scope.$$childHead.$ctrl;
+
+    // Simple messages
+    $scope.scopeProp = [ { "message":"foo" }, { "message":"foo" } ];
+    $rootScope.$digest();
+
+    expect(element[0].querySelectorAll("tbody tr")).to.have.length(2);
+
+    // Complex messages
+    $scope.scopeProp = [ { "message":"foo", "dataPath": "bar" }, { "message":"foo", "dataPath": "bar2" }, { "message":"foo", "dataPath": "bar3" } ];
+    $rootScope.$digest();
+
+    expect(element[0].querySelectorAll("tbody tr")).to.have.length(3);
+
+  });
 });
