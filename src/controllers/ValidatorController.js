@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.controller('validatorController', function($scope, $rootScope, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
+app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
 
   var self = this;
 
@@ -168,6 +168,7 @@ app.controller('validatorController', function($scope, $rootScope, $http, $windo
     return this.markupLanguages[this.markupLanguage].service.prettyPrint(obj);
   };
   this._validateSchema = function(obj) {
+    $log.debug("_validateSchema", obj);
     if (!this.validators[this.specVersion]) {
       // Abort
       return $q.reject([
@@ -178,9 +179,10 @@ app.controller('validatorController', function($scope, $rootScope, $http, $windo
     }
 
     var validator = this.validators[this.specVersion].service;
-    return validator.validateSchema[obj];
+    return validator.validateSchema(obj);
   };
   this._validateDocument = function(schemaObj, obj) {
+    $log.debug("_validateDocument", schemaObj, obj);
     if (!this.validators[this.specVersion]) {
       // Abort
       return $q.reject([

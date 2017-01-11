@@ -23,7 +23,7 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         });
         return true;
       }).catch(function (error) {
-        console.error("Could not load AJV", error);
+        $log.error("ValidatorFactoryAJV.setup()", "Could not load AJV", error);
         alertService.alert({
           title: "Could not load module",
           message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
@@ -33,23 +33,26 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
     };
 
     this.validateSchema = function (schemaObject) {
+      $log.debug("ValidatorFactoryAJV.validateSchema()");
       return setup().then(function () {
         if (validator.validateSchema(schemaObject)) {
-          $log.info("validatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
+          $log.debug("ValidatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
           return true;
         } else {
-          $log.error("validatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
+          $log.debug("ValidatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
           throw validator.errors;
         }
       });
     };
 
     this.validate = function (schemaObject, documentObject) {
+      $log.debug("ValidatorFactoryAJV.validate()");
       return setup().then(function () {
         if (validator.validate(schemaObject, documentObject)) {
+          $log.debug("ValidatorFactoryAJV.validate()", "success");
           return true;
         } else {
-          console.error(validator.errorsText(validator.errors));
+          $log.error("ValidatorFactoryAJV.validate()", validator.errorsText(validator.errors));
           throw validator.errors;
         }
       });
