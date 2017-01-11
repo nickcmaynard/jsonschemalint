@@ -103,35 +103,13 @@
 
             <div class="col-xs-12 col-md-6">
 
-                <div class="panel panel-default panel-collapse" ng-class="{'panel-danger': !ctrl.schemaValid, 'panel-success': ctrl.schemaValid}">
-                    <div class="panel-heading">
-                        Schema ({{ctrl.markupLanguages[ctrl.markupLanguage].name}}, {{ctrl.validators[ctrl.specVersion].name}})
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-default btn-xs" ng-click="ctrl.formatSchema()">
-                                <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>&nbsp;Format</a>
-                        </div>
-                    </div>
-
-                    <validator doc="ctrl.schema" obj="ctrl.schemaObject" validate="ctrl.validateSchema" parse="ctrl.parseMarkup" success-message="'Schema is valid according to ' + ctrl.specVersion + '.'" on-update-doc="ctrl.onUpdateSchemaString(value)" on-update-obj="ctrl.onUpdateSchemaObj(value)" on-update-validity="ctrl.onUpdateSchemaValidity(value)"></validator>
-
-                </div>
+                <validator title="Schema ({{ctrl.markupLanguages[ctrl.markupLanguage].name}}, {{ctrl.validators[ctrl.specVersion].name}})" doc="ctrl.schema" obj="ctrl.schemaObject" validate="ctrl.validateSchema" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Schema is valid according to ' + ctrl.specVersion + '.'" on-update-doc="ctrl.onUpdateSchemaString(value)" on-update-obj="ctrl.onUpdateSchemaObj(value)"></validator>
 
             </div>
 
             <div class="col-xs-12 col-md-6">
 
-                <div class="panel panel-default" ng-class="{'panel-danger': !ctrl.documentValid, 'panel-success': ctrl.documentValid}">
-                    <div class="panel-heading">
-                        Document ({{ctrl.markupLanguages[ctrl.markupLanguage].name}})
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-default btn-xs" ng-click="ctrl.formatDocument()">
-                                <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>&nbsp;Format</a>
-                        </div>
-                    </div>
-
-                    <validator doc="ctrl.document" obj="ctrl.documentObject" validate="ctrl.validateDocument" parse="ctrl.parseMarkup" success-message="'Document validates against the schema, spec version ' + ctrl.specVersion" on-update-doc="ctrl.onUpdateDocumentString(value)" on-update-validity="ctrl.onUpdateDocumentValidity(value)"></validator>
-
-                </div>
+                <validator title="Document ({{ctrl.markupLanguages[ctrl.markupLanguage].name}})" doc="ctrl.document" obj="ctrl.documentObject" validate="ctrl.validateDocument" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Document validates against the schema, spec version ' + ctrl.specVersion" on-update-doc="ctrl.onUpdateDocumentString(value)" on-update-validity="ctrl.onUpdateDocumentValidity(value)"></validator>
 
             </div>
 

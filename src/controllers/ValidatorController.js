@@ -87,24 +87,8 @@ app.controller('validatorController', function ($scope, $rootScope, $http, $wind
     return this.markupLanguages[this.markupLanguage].service.parse(thing);
   };
 
-  // Doesn't work
-  this.formatDocument = function () {
-    console.debug('formatDocument');
-
-    this._parseMarkup(this.document).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function (text) {
-      this.document = text;
-    }));
-
-  };
-
-  this.formatSchema = function () {
-    console.debug('formatSchema');
-
-    this._parseMarkup(this.schema).then(this.markupLanguages[this.markupLanguage].service.prettyPrint).then(angular.bind(this, function (text) {
-      console.debug('formatSchema', text, this);
-      this.schema = text;
-    }));
-
+  this._prettyPrint = function(obj) {
+    return this.markupLanguages[this.markupLanguage].service.prettyPrint(obj);
   };
 
   this.setSpecVersion = function (specVersion) {
@@ -244,6 +228,7 @@ app.controller('validatorController', function ($scope, $rootScope, $http, $wind
     console.info("Selected markup language :: " + $route.current.params.markupLanguage);
     this.markupLanguage = $route.current.params.markupLanguage;
     this.parseMarkup = angular.bind(this, this._parseMarkup);
+    this.prettyPrint = angular.bind(this, this._prettyPrint);
 
     if ($route.current.params.gist && this.loadedGistId != $route.current.params.gist) {
       console.info("Loading gist :: " + $route.current.params.gist);
@@ -266,17 +251,5 @@ app.controller('validatorController', function ($scope, $rootScope, $http, $wind
     console.debug("Schema string changed");
     this.schema = doc;
   };
-
-  this.onUpdateDocumentValidity = function(valid) {
-    console.debug("Document validity changed", valid);
-    this.documentValid = valid;
-  };
-
-  this.onUpdateSchemaValidity = function(valid) {
-    console.debug("Schema validity changed", valid);
-    this.schemaValid = valid;
-  };
-
-
 
 });

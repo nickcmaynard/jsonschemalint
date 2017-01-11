@@ -30,17 +30,24 @@ function ValidatorController($scope, $element, $attrs, $log) {
     })).then(angular.bind(this, this.validate)).then(angular.bind(this, function(success) {
       // Successful validation
       $log.info("Successful validation");
-      this.onUpdateValidity({value: true});
+      this.isValid = true;
       return this.messages = [{
         message: this.successMessage
       }];
     }), angular.bind(this, function(errors) {
       // Something went wrong failures
       $log.error("Errors parsing/validating document", errors);
-      this.onUpdateValidity({value: false});
+      this.isValid = false;
       return this.messages = errors;
     }));
-  }
+  };
+
+  this.format = function (doc) {
+    console.debug('Format');
+    this.parse(doc).then(this.prettyPrint).then(angular.bind(this, function (text) {
+      this.doc = text;
+    }));
+  };
 
 }
 
@@ -48,12 +55,13 @@ angular.module('app').component('validator', {
   templateUrl: templateUrl,
   controller: ValidatorController,
   bindings: {
+    "title": "@",
     "doc": "<",
     "validate": "<",
     "parse": "<",
+    "prettyPrint": "<",
     "successMessage": "<",
     "onUpdateDoc": "&",
     "onUpdateObj": "&",
-    "onUpdateValidity": "&"
   }
 });
