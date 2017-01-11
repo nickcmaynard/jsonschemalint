@@ -58,7 +58,7 @@
                     <div class="btn-group navbar-btn" role="group" aria-label="Actions">
                         <button class="btn btn-default btn-danger" ng-click="ctrl.reset()">
                             <span class="glyphicon glyphicon-trash"></span> Reset</button>
-                        <button class="btn btn-default" ng-click="ctrl.saveGist()" ng-disabled="ctrl.loadedGist || !ctrl.schemaObject || !ctrl.documentObject">
+                        <button class="btn btn-default" ng-click="ctrl.saveGist()" ng-disabled="ctrl.loadedGist || !ctrl.schema || !ctrl.document">
                             <span ng-class="{'glyphicon-save': !ctrl.loadedGist, 'glyphicon-saved': ctrl.loadedGist}" class="glyphicon"></span> Save as Gist</button>
                     </div>
                 </ul>
