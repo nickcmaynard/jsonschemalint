@@ -3,7 +3,7 @@
 var app = angular.module('app', false);
 
 // Handles draft-04, draft-05
-app.factory('validatorFactoryAJV', function ($window, $q, alertService) {
+app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
 
   var Validator = function (version) {
     // Initially unset for lazy-loading
@@ -35,9 +35,10 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService) {
     this.validateSchema = function (schemaObject) {
       return setup().then(function () {
         if (validator.validateSchema(schemaObject)) {
+          $log.info("validatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
           return true;
         } else {
-          console.error(validator.errorsText(validator.errors));
+          $log.error("validatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
           throw validator.errors;
         }
       });
