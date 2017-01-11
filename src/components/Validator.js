@@ -69,6 +69,7 @@ function ValidatorController($scope, $element, $attrs, $log) {
     $log.debug(this.identifier + ".format()");
     this.parse(doc).then(this.prettyPrint).then(angular.bind(this, function (text) {
       this.myDoc = text;
+      this.update(this.myDoc);
     }));
   };
 
