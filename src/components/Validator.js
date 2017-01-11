@@ -5,11 +5,20 @@ function ValidatorController($scope, $element, $attrs, $log) {
   this.$onChanges = function(changesObj) {
     // If any bound properties, such as validate, parse, doc, etc. change, rerun validation
     $log.log("onChanges", changesObj);
-    this.update(this.doc);
+
+    // We need to be a bit careful - we can't trust this "changesObj" entirely, as it actually represents the projected current & previous values of the *external* model, not our internal model
+    if ((changesObj.hasOwnProperty('doc') && changesObj.doc.currentValue !== this.doc) || changesObj.hasOwnProperty('validate') || changesObj.hasOwnProperty('parse')) {
+      this.update(this.doc);
+    }
   };
 
+  let previousDoc = undefined;
   this.update = function(doc) {
-    this.onUpdateDoc({value: doc});
+    console.info("update");
+    if (previousDoc !== doc) {
+      this.onUpdateDoc({value: doc});
+    }
+    previousDoc = doc;
 
     if (!this.validate || !this.parse) {
       // Abort
