@@ -65,38 +65,37 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
   // Load a sample
   this.sample = function(ref) {
-    console.debug('sample', ref);
+    $log.debug('sample', ref);
 
-    $http.get('samples/' + ref + '.document.json').success(angular.bind(this, function(data) {
-      $q.when(this.markupLanguages[this.markupLanguage].service.prettyPrint(data)).then(function(text) {
-        self.document = text;
+    this.getCurrentMarkupService().then(function(markupService) {
+      $http.get('samples/' + ref + '.document.json').success(function(data) {
+        self.document = markupService.prettyPrint(data);
       });
-    }));
-    $http.get('samples/' + ref + '.schema.json').success(angular.bind(this, function(data) {
-      $q.when(this.markupLanguages[this.markupLanguage].service.prettyPrint(data)).then(function(text) {
-        self.schema = text;
+      $http.get('samples/' + ref + '.schema.json').success(function(data) {
+        self.schema = markupService.prettyPrint(data);
       });
-    }));
-
+    }, function(errors) {
+      alertService.alert({title: "Error loading sample", message: errors[0].message, btnClass: "btn-danger"});
+    });
   };
 
   // Load a Gist by ID
   this.loadGist = function(gistId) {
     this.loadedGistId = gistId;
 
-    gist.retrieve(gistId).then(angular.bind(this, function(gist) {
-      console.info("Retrieved gist", gistId, gist);
+    gist.retrieve(gistId).then(function(gist) {
+      $log.info("Retrieved gist", gistId, gist);
 
-      this.loadedGist = gist;
+      self.loadedGist = gist;
 
-      this.schema = gist.schema;
-      this.document = gist.document;
+      self.schema = gist.schema;
+      self.document = gist.document;
 
       // Register a once-off listener - if schema or document change, clobber the gist param
       var canceller,
         documentListener,
         schemaListener;
-      canceller = angular.bind(this, function() {
+      canceller = function() {
         $log.info("Content changed from loaded gist, altering state to allow for this");
         // Don't show the gist ID in the URL
         $route.updateParams({gist: null});
@@ -104,39 +103,39 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         schemaListener && schemaListener();
         documentListener && documentListener();
         // Clobber the local "we're looking at a gist" variables
-        delete this.loadedGist;
-        delete this.loadedGistId;
+        delete self.loadedGist;
+        delete self.loadedGistId;
+      };
+      schemaListener = $scope.$watch('ctrl.schema', function(newValue) {
+        if (self.loadedGist && newValue !== self.loadedGist.schema) {
+          canceller();
+        }
       });
-      schemaListener = $scope.$watch('ctrl.schema', angular.bind(this, function(newValue) {
-        if (this.loadedGist && newValue !== this.loadedGist.schema) {
+      documentListener = $scope.$watch('ctrl.document', function(newValue) {
+        if (self.loadedGist && newValue !== self.loadedGist.document) {
           canceller();
         }
-      }));
-      documentListener = $scope.$watch('ctrl.document', angular.bind(this, function(newValue) {
-        if (this.loadedGist && newValue !== this.loadedGist.document) {
-          canceller();
-        }
-      }));
+      });
 
-    }), angular.bind(this, function(error) {
+    }, function(error) {
       $log.error(error);
       alertService.alert({title: "Error loading from Gist", message: error, btnClass: "btn-danger"});
-    }));
+    });
   };
 
   // Save a Gist and inform of success
   this.saveGist = function() {
-    gist.save(this.schema, this.document).then(angular.bind(this, function(gistId) {
+    gist.save(this.schema, this.document).then(function(gistId) {
       $route.updateParams({gist: gistId});
       var url = $location.absUrl();
       alertService.alert({
         title: "Saved as Gist",
         message: "<a target='_blank' href='" + url + "'>Visit saved schema/document pair</a>"
       });
-    }), angular.bind(this, function(error) {
+    }, function(error) {
       $log.error(error);
       alertService.alert({title: "Error saving as Gist", message: error, btnClass: "btn-danger"});
-    }));
+    });
   };
 
   // Change the selected spec version
@@ -152,19 +151,19 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   // Wrapper functions to be bound to the Validator inputs
   this._parseMarkup = function(text) {
     $log.debug("_parseMarkup");
-    return $q.when(this.getCurrentMarkupService()).then(function(service) {
+    return this.getCurrentMarkupService().then(function(service) {
       return service.parse(text);
     });
   };
   this._prettyPrint = function(obj) {
     $log.debug("_prettyPrint", obj);
-    return $q.when(this.getCurrentMarkupService()).then(function(service) {
+    return this.getCurrentMarkupService().then(function(service) {
       return service.prettyPrint(obj);
     });
   };
   this._validateSchema = function(obj) {
     $log.debug("_validateSchema", obj);
-    return $q.when(this.getCurrentValidationService()).then(function(service) {
+    return this.getCurrentValidationService().then(function(service) {
       return service.validateSchema(obj);
     });
   };
@@ -177,7 +176,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         }
       ]);
     }
-    return $q.when(this.getCurrentValidationService()).then(function(service) {
+    return this.getCurrentValidationService().then(function(service) {
       return service.validate(schemaObj, obj);
     });
   };
@@ -193,7 +192,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         }
       ]);
     }
-    return this.validators[this.specVersion].service;
+    return $q.when(this.validators[this.specVersion].service);
   }
 
   // Get currently referred-to markup service object
@@ -206,7 +205,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         }
       ]);
     }
-    return this.markupLanguages[this.markupLanguage].service;
+    return $q.when(this.markupLanguages[this.markupLanguage].service);
   }
 
   // Save form data to localstorage before unload
@@ -225,42 +224,42 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
   // When the route changes, register the new versions
   this.currentParams = {};
-  $scope.$on('$routeChangeSuccess', angular.bind(this, function() {
-    if (this.currentParams.specVersion !== $route.current.params.specVersion) {
-      console.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
-      this.specVersion = $route.current.params.specVersion;
-      this.validateSchema = angular.bind(this, this._validateSchema);
-      this.validateDocument = angular.bind(this, this._validateDocument, null);
+  $scope.$on('$routeChangeSuccess', function() {
+    if (self.currentParams.specVersion !== $route.current.params.specVersion) {
+      $log.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
+      self.specVersion = $route.current.params.specVersion;
+      self.validateSchema = angular.bind(self, self._validateSchema);
+      self.validateDocument = angular.bind(self, self._validateDocument, null);
     }
 
-    if (this.currentParams.markupLanguage !== $route.current.params.markupLanguage) {
-      console.info("Selected markup language :: " + $route.current.params.markupLanguage);
-      this.markupLanguage = $route.current.params.markupLanguage;
-      this.parseMarkup = angular.bind(this, this._parseMarkup);
-      this.prettyPrint = angular.bind(this, this._prettyPrint);
+    if (self.currentParams.markupLanguage !== $route.current.params.markupLanguage) {
+      $log.info("Selected markup language :: " + $route.current.params.markupLanguage);
+      self.markupLanguage = $route.current.params.markupLanguage;
+      self.parseMarkup = angular.bind(self, self._parseMarkup);
+      self.prettyPrint = angular.bind(self, self._prettyPrint);
     }
 
-    if ($route.current.params.gist && this.loadedGistId != $route.current.params.gist) {
-      console.info("Loading gist :: " + $route.current.params.gist);
-      this.loadGist($route.current.params.gist);
+    if ($route.current.params.gist && self.loadedGistId != $route.current.params.gist) {
+      $log.info("Loading gist :: " + $route.current.params.gist);
+      self.loadGist($route.current.params.gist);
     }
 
     // Save current params for change detection
-    this.currentParams = $route.current.params;
-  }));
+    self.currentParams = $route.current.params;
+  });
 
   // Notice when Validator components tell us things have changed
   this.onUpdateSchemaObj = function(obj) {
     // Re-bind validateDocument so an update happens
-    console.debug("Schema object changed");
+    $log.debug("Schema object changed");
     this.validateDocument = angular.bind(this, this._validateDocument, obj);
   };
   this.onUpdateDocumentString = function(doc) {
-    console.debug("Document string changed");
+    $log.debug("Document string changed");
     this.document = doc;
   };
   this.onUpdateSchemaString = function(doc) {
-    console.debug("Schema string changed");
+    $log.debug("Schema string changed");
     this.schema = doc;
   };
 
