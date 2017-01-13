@@ -97,7 +97,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         documentListener,
         schemaListener;
       canceller = angular.bind(this, function() {
-        console.info("Content changed from loaded gist, altering state to allow for this");
+        $log.info("Content changed from loaded gist, altering state to allow for this");
         // Don't show the gist ID in the URL
         $route.updateParams({gist: null});
         // Clear the watch
@@ -119,7 +119,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
       }));
 
     }), angular.bind(this, function(error) {
-      console.error(error);
+      $log.error(error);
       alertService.alert({title: "Error loading from Gist", message: error, btnClass: "btn-danger"});
     }));
   };
@@ -134,7 +134,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         message: "<a target='_blank' href='" + url + "'>Visit saved schema/document pair</a>"
       });
     }), angular.bind(this, function(error) {
-      console.error(error);
+      $log.error(error);
       alertService.alert({title: "Error saving as Gist", message: error, btnClass: "btn-danger"});
     }));
   };
@@ -150,44 +150,26 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   };
 
   // Wrapper functions to be bound to the Validator inputs
-  this._parseMarkup = function(thing) {
-    if (!this.markupLanguages[this.markupLanguage]) {
-      return $q.reject([
-        {
-          message: "Invalid markup language reference " + this.markupLanguage + "."
-        }
-      ]);
-    }
-    return this.markupLanguages[this.markupLanguage].service.parse(thing);
+  this._parseMarkup = function(text) {
+    $log.debug("_parseMarkup");
+    return $q.when(this.getCurrentMarkupService()).then(function(service) {
+      return service.parse(text);
+    });
   };
   this._prettyPrint = function(obj) {
-    return this.markupLanguages[this.markupLanguage].service.prettyPrint(obj);
+    $log.debug("_prettyPrint", obj);
+    return $q.when(this.getCurrentMarkupService()).then(function(service) {
+      return service.prettyPrint(obj);
+    });
   };
   this._validateSchema = function(obj) {
     $log.debug("_validateSchema", obj);
-    if (!this.validators[this.specVersion]) {
-      // Abort
-      return $q.reject([
-        {
-          message: "Invalid JSON schema spec version \"" + this.specVersion + "\"."
-        }
-      ]);
-    }
-
-    var validator = this.validators[this.specVersion].service;
-    return validator.validateSchema(obj);
+    return $q.when(this.getCurrentValidationService()).then(function(service) {
+      return service.validateSchema(obj);
+    });
   };
   this._validateDocument = function(schemaObj, obj) {
     $log.debug("_validateDocument", schemaObj, obj);
-    if (!this.validators[this.specVersion]) {
-      // Abort
-      return $q.reject([
-        {
-          message: "Invalid JSON schema spec version \"" + this.specVersion + "\"."
-        }
-      ]);
-    }
-
     if (!schemaObj) {
       return $q.reject([
         {
@@ -195,10 +177,37 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         }
       ]);
     }
-
-    var validator = this.validators[this.specVersion].service;
-    return validator.validate(schemaObj, obj);
+    return $q.when(this.getCurrentValidationService()).then(function(service) {
+      return service.validate(schemaObj, obj);
+    });
   };
+
+  // Get currently referred-to validation service object
+  this.getCurrentValidationService = function() {
+    $log.debug("getValidatigetCurrentValidationServiceonService");
+    if (!this.validators[this.specVersion]) {
+      // Abort
+      return $q.reject([
+        {
+          message: "Invalid JSON schema spec version \"" + this.specVersion + "\"."
+        }
+      ]);
+    }
+    return this.validators[this.specVersion].service;
+  }
+
+  // Get currently referred-to markup service object
+  this.getCurrentMarkupService = function() {
+    $log.debug("getCurrentMarkupService");
+    if (!this.markupLanguages[this.markupLanguage]) {
+      return $q.reject([
+        {
+          message: "Invalid markup language reference " + this.markupLanguage + "."
+        }
+      ]);
+    }
+    return this.markupLanguages[this.markupLanguage].service;
+  }
 
   // Save form data to localstorage before unload
   $window.addEventListener('beforeunload', function() {
