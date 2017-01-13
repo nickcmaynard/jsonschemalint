@@ -69,10 +69,14 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
     this.getCurrentMarkupService().then(function(markupService) {
       $http.get('samples/' + ref + '.document.json').success(function(data) {
-        self.document = markupService.prettyPrint(data);
+        markupService.prettyPrint(data).then(function(text) {
+          self.document = text;
+        });
       });
       $http.get('samples/' + ref + '.schema.json').success(function(data) {
-        self.schema = markupService.prettyPrint(data);
+        markupService.prettyPrint(data).then(function(text) {
+          self.schema = text;
+        });
       });
     }, function(errors) {
       alertService.alert({title: "Error loading sample", message: errors[0].message, btnClass: "btn-danger"});
