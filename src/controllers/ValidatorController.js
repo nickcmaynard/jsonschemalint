@@ -107,16 +107,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         delete this.loadedGist;
         delete this.loadedGistId;
       });
-      schemaListener = $scope.$watch(function() {
-        return self.schema;
-      }, angular.bind(this, function(newValue) {
+      schemaListener = $scope.$watch('ctrl.schema', angular.bind(this, function(newValue) {
         if (this.loadedGist && newValue !== this.loadedGist.schema) {
           canceller();
         }
       }));
-      documentListener = $scope.$watch(function() {
-        return self.document;
-      }, angular.bind(this, function(newValue) {
+      documentListener = $scope.$watch('ctrl.document', angular.bind(this, function(newValue) {
         if (this.loadedGist && newValue !== this.loadedGist.document) {
           canceller();
         }
