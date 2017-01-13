@@ -72,4 +72,36 @@ describe('Validator', function() {
     expect(textarea.value).to.eql("foo");
   });
 
+  it('calls update when the validate function is changed', function() {
+    var element = $compile("<validator validate='fn'></validator>")($scope);
+    $rootScope.$digest();
+
+    var $ctrl = $scope.$$childHead.$ctrl;
+    var spy = chai.spy.on($ctrl, "update");
+
+    // Change the function
+    $scope.fn = function() {
+      // blah
+    };
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+  });
+
+  it('calls update when the parse function is changed', function() {
+    var element = $compile("<validator parse='fn'></validator>")($scope);
+    $rootScope.$digest();
+
+    var $ctrl = $scope.$$childHead.$ctrl;
+    var spy = chai.spy.on($ctrl, "update");
+
+    // Change the function
+    $scope.fn = function() {
+      // blah
+    };
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+  });
+
 });
