@@ -2,6 +2,8 @@ var templateUrl = require("ngtemplate!html!./validator.html")
 
 function ValidatorController($scope, $element, $attrs, $log) {
 
+  var self = this;
+
   // Make a *copy* so we don't accidentally effect the parent's version
   this.$onInit = function() {
     this.myDoc = this.doc;
@@ -43,34 +45,34 @@ function ValidatorController($scope, $element, $attrs, $log) {
       }];
     }
 
-    this.parse(doc).then(angular.bind(this, function(obj) {
+    this.parse(doc).then(function(obj) {
       // Save the object
-      this.onUpdateObj({value: obj});
+      self.onUpdateObj({value: obj});
       return obj;
-    }), angular.bind(this, function(errors) {
-      this.onUpdateObj(null);
+    }, function(errors) {
+      self.onUpdateObj(null);
       throw errors;
-    })).then(angular.bind(this, this.validate)).then(angular.bind(this, function(success) {
+    }).then(angular.bind(this, this.validate)).then(function(success) {
       // Successful validation
-      $log.debug(this.identifier + ".update()", "Successful validation");
-      this.isValid = true;
-      return this.messages = [{
-        message: this.successMessage
+      $log.debug(self.identifier + ".update()", "Successful validation");
+      self.isValid = true;
+      return self.messages = [{
+        message: self.successMessage
       }];
-    }), angular.bind(this, function(errors) {
+    }, function(errors) {
       // Something went wrong failures
-      $log.debug(this.identifier + ".update()", "Errors parsing/validating document", errors);
-      this.isValid = false;
-      return this.messages = errors;
-    }));
+      $log.debug(self.identifier + ".update()", "Errors parsing/validating document", errors);
+      self.isValid = false;
+      return self.messages = errors;
+    });
   };
 
   this.format = function (doc) {
     $log.debug(this.identifier + ".format()");
-    this.parse(doc).then(this.prettyPrint).then(angular.bind(this, function (text) {
-      this.myDoc = text;
-      this.update(this.myDoc);
-    }));
+    this.parse(doc).then(angular.bind(this, this.prettyPrint)).then(function (text) {
+      self.myDoc = text;
+      self.update(self.myDoc);
+    });
   };
 
 }
