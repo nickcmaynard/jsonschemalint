@@ -1,0 +1,20 @@
+<div class="panel panel-default panel-collapse" ng-class="{'panel-danger': !$ctrl.isValid, 'panel-success': $ctrl.isValid}">
+    <div class="panel-heading">
+        {{$ctrl.title}}
+        <div class="btn-group pull-right">
+            <a class="btn btn-default btn-xs" ng-click="$ctrl.format($ctrl.myDoc)">
+                <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>&nbsp;Format</a>
+        </div>
+    </div>
+
+    <div class="validator">
+
+      <form novalidate>
+          <textarea ng-model="$ctrl.myDoc" ng-change="$ctrl.update($ctrl.myDoc)" class="form-control validator-document document-text"></textarea>
+      </form>
+
+      <validation-messages messages="$ctrl.messages"></validation-messages>
+
+    <div>
+
+</div>

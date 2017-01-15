@@ -18,3 +18,4 @@ angular.module('app', [require('angular-route'), require('angular-ui-bootstrap')
 
 require('./services');
 require('./controllers');
+require('./components');

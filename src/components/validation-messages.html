@@ -1,0 +1,26 @@
+<table class="table validation-messages-table table-striped" ng-if="$ctrl.messages.length" ng-class="{ 'validation-messages-table--simple': $ctrl.simpleMessages($ctrl.messages).length, 'validation-messages-table--error': $ctrl.errorMessages($ctrl.messages).length }">
+    <thead>
+        <tr ng-if="$ctrl.simpleMessages($ctrl.messages).length">
+            <th>Message</th>
+        </tr>
+        <tr ng-if="$ctrl.errorMessages($ctrl.messages).length">
+            <th>Field</th>
+            <th>Error</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="message in $ctrl.simpleMessages($ctrl.messages)">
+            <td ng-bind="message.message"></td>
+        </tr>
+        <tr ng-repeat="message in $ctrl.errorMessages($ctrl.messages)">
+            <td ng-bind="message.dataPath" class="error-path"></td>
+            <td ng-bind="message.message"></td>
+            <td>
+                <pre class="error-value" ng-bind="message.data | json"></pre>
+            </td>
+        </tr>
+    </tbody>
+
+</table>

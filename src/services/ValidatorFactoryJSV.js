@@ -3,7 +3,7 @@
 var app = angular.module('app', false);
 
 // Handles draft-01, draft-02, draft-03
-app.factory('validatorFactoryJSV', function ($window, $q, alertService) {
+app.factory('validatorFactoryJSV', function ($window, $q, alertService, $log) {
 
   var Validator = function (version) {
     // Initially unset for lazy-loading
@@ -22,7 +22,7 @@ app.factory('validatorFactoryJSV', function ($window, $q, alertService) {
         schemaSchema = validator.getDefaultSchema();
         return true;
       }).catch(function (error) {
-        console.error("Could not load JSV", error);
+        $log.error("ValidatorFactoryJSV.setup()", "Could not load JSV", error);
         alertService.alert({
           title: "Could not load module",
           message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
@@ -42,22 +42,28 @@ app.factory('validatorFactoryJSV', function ($window, $q, alertService) {
     };
 
     this.validateSchema = function (schemaObject) {
+      $log.debug("ValidatorFactoryJSV.validateSchema()");
       return setup().then(angular.bind(this, function () {
         var results = validator.validate(schemaObject, schemaSchema);
         if (!results.errors || !results.errors.length) {
+          $log.debug("ValidatorFactoryJSV.validateSchema()", "success");
           return true;
         } else {
+          $log.debug("ValidatorFactoryJSV.validateSchema()", "failure", results.errors);
           throw results.errors.map(mapError);
         }
       }));
     };
 
     this.validate = function (schemaObject, documentObject) {
+      $log.debug("ValidatorFactoryJSV.validate()");
       return setup().then(angular.bind(this, function () {
         var results = validator.validate(documentObject, schemaObject);
         if (!results.errors || !results.errors.length) {
+          $log.debug("ValidatorFactoryJSV.validate()", "success");
           return true;
         } else {
+          $log.debug("ValidatorFactoryJSV.validate()", "failure", results.errors);
           throw results.errors.map(mapError);
         }
       }));

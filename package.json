@@ -14,7 +14,7 @@
     "ajv": "^4.6.0",
     "angular": "~1.5.8",
     "angular-route": "~1.5.8",
-    "angular-ui-bootstrap": "^2.2.0",
+    "angular-ui-bootstrap": "^2.4.0",
     "async-module-loader": "^2.1.0",
     "compression": "^1.4.1",
     "es6-promise": "^4.0.5",
@@ -23,11 +23,31 @@
     "yamljs": "^0.2.8"
   },
   "devDependencies": {
+    "angular-mocks": "^1.5.8",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "chai-spies": "^0.7.1",
+    "chunk-manifest-webpack-plugin": "^0.1.0",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-webpack": "^1.0.18",
+    "html-loader": "^0.4.4",
+    "karma": "^1.3.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chai-spies": "^0.1.4",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-spec-reporter": "0.0.26",
+    "karma-webpack": "^1.8.0",
+    "mocha": "^3.1.2",
     "ng-annotate-webpack-plugin": "^0.1.3",
-    "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.2"
+    "ngtemplate-loader": "^1.3.1",
+    "phantomjs": "^2.1.7",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-merge": "^0.17.0"
   }
 }
