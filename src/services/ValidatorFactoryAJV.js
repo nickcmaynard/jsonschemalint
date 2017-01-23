@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-// Handles draft-04, draft-05
+// Handles draft-04, v5-unofficial
 app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
 
   var Validator = function (version) {
@@ -19,7 +19,7 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
           //
           // VERSION DETERMINATION LOGIC
           //
-          v5: version === "draft-05"
+          v5: version === "v5-unofficial"
         });
         return true;
       }).catch(function (error) {

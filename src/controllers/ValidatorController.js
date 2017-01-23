@@ -26,11 +26,15 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     },
     "draft-04": {
       service: validatorFactoryAJV("draft-04"),
-      name: "draft-04"
+      name: "draft-04 (latest)"
     },
-    "draft-05": {
-      service: validatorFactoryAJV("draft-05"),
-      name: "draft-05"
+    "v5-unofficial": {
+      service: validatorFactoryAJV("v5-unofficial"),
+      name: "v5-unofficial",
+      alerts: [{
+        className: "alert-warning",
+        content: "The v5-unofficial schema version, provided by Ajv to try experimental features, was previously erroneously named \"draft-05\".<br />This is, and will not be,  an official JSON Schema version and <em>should not be used</em>.  Please see the schema dropdown for the latest official version."
+      }]
     }
   };
 
@@ -188,28 +192,28 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   // Get currently referred-to validation service object
   this.getCurrentValidationService = function() {
     $log.debug("getValidatigetCurrentValidationServiceonService");
-    if (!this.validators[this.specVersion]) {
+    if (!this.currentValidator) {
       // Abort
       return $q.reject([
         {
-          message: "Invalid JSON schema spec version \"" + this.specVersion + "\"."
+          message: "Invalid JSON schema spec version \"" + this.currentValidator.name + "\"."
         }
       ]);
     }
-    return $q.when(this.validators[this.specVersion].service);
+    return $q.when(this.currentValidator.service);
   }
 
   // Get currently referred-to markup service object
   this.getCurrentMarkupService = function() {
     $log.debug("getCurrentMarkupService");
-    if (!this.markupLanguages[this.markupLanguage]) {
+    if (!this.currentMarkup) {
       return $q.reject([
         {
-          message: "Invalid markup language reference " + this.markupLanguage + "."
+          message: "Invalid markup language reference " + this.currentMarkup.name + "."
         }
       ]);
     }
-    return $q.when(this.markupLanguages[this.markupLanguage].service);
+    return $q.when(this.currentMarkup.service);
   }
 
   // Save form data to localstorage before unload
@@ -231,14 +235,14 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   $scope.$on('$routeChangeSuccess', function() {
     if (self.currentParams.specVersion !== $route.current.params.specVersion) {
       $log.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
-      self.specVersion = $route.current.params.specVersion;
+      self.currentValidator = self.validators[$route.current.params.specVersion];
       self.validateSchema = angular.bind(self, self._validateSchema);
       self.validateDocument = angular.bind(self, self._validateDocument, null);
     }
 
     if (self.currentParams.markupLanguage !== $route.current.params.markupLanguage) {
       $log.info("Selected markup language :: " + $route.current.params.markupLanguage);
-      self.markupLanguage = $route.current.params.markupLanguage;
+      self.currentMarkup = self.markupLanguages[$route.current.params.markupLanguage];
       self.parseMarkup = angular.bind(self, self._parseMarkup);
       self.prettyPrint = angular.bind(self, self._prettyPrint);
     }
