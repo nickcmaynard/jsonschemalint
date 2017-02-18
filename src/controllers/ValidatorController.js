@@ -1,8 +1,9 @@
 'use strict';
 
 var app = angular.module('app', false);
+var aboutDialogTemplateUrl = require("ngtemplate!html!../dialogs/About.html");
 
-app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
+app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
 
   var self = this;
 
@@ -58,6 +59,11 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   if (ls.getItem('schema')) {
     self.schema = ls.getItem('schema');
   }
+
+  this.about = function() {
+    alertService.alert({title: "About", message: $templateCache.get(aboutDialogTemplateUrl), btnClass: "btn-primary", size: "lg"});
+    return false;
+  };
 
   // Reset everything
   this.reset = function() {

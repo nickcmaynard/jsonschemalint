@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-   "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "dependencies": {
     "JSV": "git://github.com/nickcmaynard/JSV.git#master",
