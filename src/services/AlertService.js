@@ -14,7 +14,7 @@ app.service('alertService', function ($q, $uibModal) {
       ariaLabelledBy: 'modal-title-top',
       ariaDescribedBy: 'modal-body',
       controller: function ($scope) {},
-      size: "sm"
+      size: params.size || "sm"
     }).result;
   };
 
