@@ -2,7 +2,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     clean: {
-      bundle: ['www/js/']
+      bundle: ['dist/']
     },
     webpack: {
       all: require('./webpack.prod.config.js')
