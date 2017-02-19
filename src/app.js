@@ -1,3 +1,5 @@
+require('./css/main.css');
+
 var angular = require('angular');
 var validationViewTemplateUrl = require("ngtemplate!html!./views/Validation.html");
 

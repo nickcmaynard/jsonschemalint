@@ -20,6 +20,6 @@ app.use(function(req, res, next) {
 
 app.use(compression());
 
-app.use('/', express.static(__dirname + "/www"));
+app.use('/', express.static(__dirname + "/dist"));
 
 app.listen(3001);

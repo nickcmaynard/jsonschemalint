@@ -2,9 +2,8 @@
 
 ## Setup
 ```sh
-npm install -g bower grunt-cli
+npm install -g grunt-cli
 npm install
-bower install
 
 # For "live reload" webpack dev server only
 npm install -g webpack webpack-dev-server
@@ -22,7 +21,7 @@ Open [http://localhost:3001/](http://localhost:3001/).
 ### "live reload" webpack dev server
 
 ```sh
-webpack-dev-server --content-base www/ --config webpack.dev.config.js
+webpack-dev-server --content-base dist/ --config webpack.dev.config.js
 ```
 Open [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server).
 

@@ -6,11 +6,11 @@ Deny from all
 # Old /draftX should go to root
 RedirectMatch 301 "^/draft\d[\/]{0,1}$" /
 
-# Serve up everything in www/
+# Serve up everything in dist/
 RewriteEngine On
 # But not letsencrypt challenge responses!
 RewriteCond %{REQUEST_URI} !^/\.well-known
-RewriteRule !^www(/|$) www%{REQUEST_URI} [L]
+RewriteRule !^dist(/|$) www%{REQUEST_URI} [L]
 
 ExpiresActive On
 ExpiresDefault "access plus 1 day"
