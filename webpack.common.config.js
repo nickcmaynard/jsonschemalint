@@ -1,6 +1,5 @@
 var webpack = require("webpack");
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
-var AsyncModulePlugin = require('async-module-loader/plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -12,7 +11,7 @@ module.exports = {
     vendor: "./src/vendor.js",
   },
   output: {
-    path: "/dist",
+    path: "./dist",
     publicPath: "",
     filename: "[name].[hash].js",
     chunkFilename: "[id].[hash].js"
@@ -48,7 +47,6 @@ module.exports = {
       template: 'html-loader!./www/index.html',
     }),
     new ExtractTextPlugin("[name].[hash].css"),
-    new AsyncModulePlugin(),
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise' // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
     }),
