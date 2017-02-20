@@ -2,39 +2,35 @@
 
 ## Setup
 ```sh
-npm install -g bower grunt-cli
+npm install -g grunt-cli
 npm install
-bower install
-
-# For "live reload" webpack dev server only
-npm install -g webpack webpack-dev-server
 ```
 
 ## Preview
 
-### Static express preview
+### "live reload" webpack dev server
+
 ```sh
-node server.js
+npm run dev-server
+```
+Open [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server).
+
+### Static express preview (of dist/)
+```sh
+npm run preview
 ```
 
 Open [http://localhost:3001/](http://localhost:3001/).
 
-### "live reload" webpack dev server
-
-```sh
-webpack-dev-server --content-base www/ --config webpack.dev.config.js
-```
-Open [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server).
-
-## Building
+## Building dist/
 
 ### Production
 
 ```sh
-grunt
+grunt build:production
 ```
 
 ### Development (with sourcemap)
 ```sh
-webpack --progress --display-modules -v --config webpack.dev.config.js
+grunt build:dev
 ```
