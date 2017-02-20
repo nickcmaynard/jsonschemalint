@@ -1,7 +1,7 @@
 require('./css/main.css');
 
 var angular = require('angular');
-var validationViewTemplateUrl = require("ngtemplate!html!./views/Validation.html");
+var validationViewTemplateUrl = require("ngtemplate-loader!html-loader!./views/Validation.html");
 
 angular.module('app', [require('angular-sanitize'), require('angular-route'), require('angular-ui-bootstrap')]).config(function($routeProvider) {
 

@@ -13,7 +13,7 @@ app.factory('validatorFactoryJSV', function ($window, $q, alertService, $log) {
     var _setupPromise;
     var setup = function () {
       // We wrap this in $q otherwise the digest doesn't fire correctly
-      return _setupPromise || (_setupPromise = $q.when(require('async-module?promise!JSV')).then(function (JSV) {
+      return _setupPromise || (_setupPromise = $q.when(require('async-module-loader?promise!JSV')).then(function (JSV) {
         var jsv = JSV.JSV;
         //
         // VERSION DETERMINATION LOGIC

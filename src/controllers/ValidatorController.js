@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('app', false);
-var aboutDialogTemplateUrl = require("ngtemplate!html!../dialogs/About.html");
+var aboutDialogTemplateUrl = require("ngtemplate-loader!html-loader!../dialogs/About.html");
 
 app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
 

@@ -1,4 +1,4 @@
-var templateUrl = require("ngtemplate!html!./validation-messages.html")
+var templateUrl = require("ngtemplate-loader!html-loader!./validation-messages.html")
 
 //TODO: split this into two separate validation messages and validation errors component
 

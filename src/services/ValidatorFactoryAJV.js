@@ -12,7 +12,7 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
     var _setupPromise;
     var setup = function () {
       // We wrap this in $q otherwise the digest doesn't fire correctly
-      return _setupPromise || (_setupPromise = $q.when(require('async-module?promise!ajv')).then(function (ajv) {
+      return _setupPromise || (_setupPromise = $q.when(require('async-module-loader?promise!ajv')).then(function (ajv) {
         validator = ajv({
           verbose: true,
           allErrors: true,

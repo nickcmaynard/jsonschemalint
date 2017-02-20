@@ -9,7 +9,7 @@ app.service('markupYaml', function ($window, $q, alertService) {
   var _setupPromise;
   var setup = function() {
     // We wrap this in $q otherwise the digest doesn't fire correctly
-    return _setupPromise || (_setupPromise = $q.when(require('async-module?promise!yamljs')).then(function(_yaml) {
+    return _setupPromise || (_setupPromise = $q.when(require('async-module-loader?promise!yamljs')).then(function(_yaml) {
       yaml = _yaml;
       return yaml;
     }).catch(function(error) {
