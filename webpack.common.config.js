@@ -12,7 +12,7 @@ module.exports = {
     vendor: "./src/vendor.js",
   },
   output: {
-    path: "dist",
+    path: "/dist",
     publicPath: "",
     filename: "[name].[hash].js",
     chunkFilename: "[id].[hash].js"

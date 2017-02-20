@@ -2,23 +2,26 @@
 
 var app = angular.module('app', false);
 
-app.service('markupYaml', function ($window, $q, alertService) {
+app.service('markupYaml', function ($window, $q, alertService, $log) {
 
   var yaml;
 
   var _setupPromise;
   var setup = function() {
-    // We wrap this in $q otherwise the digest doesn't fire correctly
-    return _setupPromise || (_setupPromise = $q.when(require('async-module-loader?promise!yamljs')).then(function(_yaml) {
-      yaml = _yaml;
-      return yaml;
-    }).catch(function(error) {
-      console.error("Could not load yamljs", error);
-      alertService.alert({
-        title: "Could not load module",
-        message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
-      });
-      throw error;
+    return _setupPromise || (_setupPromise = $q(function(resolve, reject) {
+      try {
+        require.ensure([], function(require) {
+          yaml = require('yamljs');
+          resolve(true);
+        });
+      } catch (error) {
+        $log.error("Could not load yamljs", error);
+        alertService.alert({
+          title: "Could not load module",
+          message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
+        });
+        reject(error);
+      }
     }));
   };
 
