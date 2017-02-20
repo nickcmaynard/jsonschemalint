@@ -10,7 +10,7 @@ RedirectMatch 301 "^/draft\d[\/]{0,1}$" /
 RewriteEngine On
 # But not letsencrypt challenge responses!
 RewriteCond %{REQUEST_URI} !^/\.well-known
-RewriteRule !^dist(/|$) www%{REQUEST_URI} [L]
+RewriteRule !^dist(/|$) dist%{REQUEST_URI} [L]
 
 ExpiresActive On
 ExpiresDefault "access plus 1 day"
