@@ -8,6 +8,12 @@ npm install -g grunt-cli
 npm install
 ```
 
+## Run tests
+
+```sh
+npm run test
+```
+
 ## Preview
 
 ### "live reload" webpack dev server
