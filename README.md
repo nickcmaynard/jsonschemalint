@@ -11,7 +11,12 @@ npm install
 ## Run tests
 
 ```sh
+# Unit tests
 npm run test
+
+# End-to-end tests (build:dev is faster, but Travis uses build:production)
+npm run build:production
+npm run e2e
 ```
 
 ## Preview
@@ -35,10 +40,10 @@ Open [http://localhost:3001/](http://localhost:3001/).
 ### Production
 
 ```sh
-grunt build:production
+npm run build:production
 ```
 
 ### Development (with sourcemap)
 ```sh
-grunt build:dev
+npm run build:dev
 ```
