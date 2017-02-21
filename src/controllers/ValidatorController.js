@@ -202,7 +202,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
   // Get currently referred-to validation service object
   this.getCurrentValidationService = function() {
-    $log.debug("getValidatigetCurrentValidationServiceonService");
+    $log.debug("getCurrentValidationService");
     if (!this.currentValidator) {
       // Abort
       return $q.reject([
