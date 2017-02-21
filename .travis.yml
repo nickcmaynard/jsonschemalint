@@ -1,5 +1,11 @@
+sudo: required
+dist: trusty
 addons:
-  firefox: "51.0"
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 language: node_js
 node_js:
   - 6
