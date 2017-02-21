@@ -3,6 +3,7 @@ var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require('path');
 
 module.exports = {
   cache: true,
@@ -11,7 +12,7 @@ module.exports = {
     vendor: "./src/vendor.js",
   },
   output: {
-    path: "./dist",
+    path: path.resolve(__dirname, 'dist'),
     publicPath: "",
     filename: "[name].[hash].js",
     chunkFilename: "[id].[hash].js"

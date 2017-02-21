@@ -60,8 +60,13 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     self.schema = ls.getItem('schema');
   }
 
-  this.about = function() {
+  this.about = function(event) {
+    // Stop the link redirecting us to #
+    event.preventDefault();
+    event.stopPropagation();
+
     alertService.alert({title: "About", message: $templateCache.get(aboutDialogTemplateUrl), btnClass: "btn-primary", size: "lg"});
+
     return false;
   };
 
