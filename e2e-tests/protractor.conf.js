@@ -7,11 +7,9 @@ exports.config = {
 
   specs: ['*.spec.js'],
 
-  multiCapabilities: [{
-    browserName: 'chrome'
-  }, {
+  capabilities: {
     browserName: 'firefox'
-  }],
+  },
 
   baseUrl: 'http://localhost:3001/',
 
