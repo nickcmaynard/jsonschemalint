@@ -19,17 +19,17 @@ describe('jsonschemalint', function() {
 
   var sampleTestMatrix = [
     // Validating in draft-03 mode should force JSV to get loaded - the draft-04 samples (because they're simple) should be OK
-    { mode: 'draft-03', sample: 'Sample draft-04 schema and valid document', schemaState: 'panel-success', documentState: 'panel-success' },
-    { mode: 'draft-03', sample: 'Sample draft-04 schema and invalid document', schemaState: 'panel-success', documentState: 'panel-danger' },
+    { mode: 'draft-03', sample: 'Sample draft-04 schema and valid document', schemaValid: true, documentValid: true },
+    { mode: 'draft-03', sample: 'Sample draft-04 schema and invalid document', schemaValid: true, documentValid: false },
     // Validating in draft-04 mode should force Ajv to get loaded
-    { mode: 'draft-04', sample: 'Sample draft-04 schema and valid document', schemaState: 'panel-success', documentState: 'panel-success' },
-    { mode: 'draft-04', sample: 'Sample draft-04 schema and invalid document', schemaState: 'panel-success', documentState: 'panel-danger' },
+    { mode: 'draft-04', sample: 'Sample draft-04 schema and valid document', schemaValid: true, documentValid: true },
+    { mode: 'draft-04', sample: 'Sample draft-04 schema and invalid document', schemaValid: true, documentValid: false },
     // v5-unofficial because we can
-    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and valid document', schemaState: 'panel-success', documentState: 'panel-success' },
-    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and invalid document', schemaState: 'panel-success', documentState: 'panel-danger' }
+    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and valid document', schemaValid: true, documentValid: true },
+    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and invalid document', schemaValid: true, documentValid: false }
   ];
   var markupSampleTests = function(markup) {
-    sampleTestMatrix.forEach(({mode, sample, schemaState, documentState}) => {
+    sampleTestMatrix.forEach(({mode, sample, schemaValid, documentValid}) => {
       it('in ' + mode + ' mode, should correctly validate the ' + sample, function() {
         browser.get('#/version/' + mode + '/markup/' + markup);
 
@@ -39,9 +39,9 @@ describe('jsonschemalint', function() {
         element(by.linkText(sample)).click();
 
         // Schema is valid/invalid
-        expect(element(by.css("validator[identifier=schema] .panel." + schemaState)).isDisplayed()).toBeTruthy();
+        expect(element(by.css("validator[identifier=schema] .panel.panel-" + (schemaValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
         // Document is valid/invalid
-        expect(element(by.css("validator[identifier=document] .panel." + documentState)).isDisplayed()).toBeTruthy();
+        expect(element(by.css("validator[identifier=document] .panel.panel-" + (documentValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
       });
     });
   };
