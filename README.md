@@ -1,5 +1,7 @@
 # JSON Schema Lint
 
+[![Build Status](https://travis-ci.org/nickcmaynard/jsonschemalint.svg?branch=master)](https://travis-ci.org/nickcmaynard/jsonschemalint)
+
 ## Setup
 ```sh
 npm install -g grunt-cli
