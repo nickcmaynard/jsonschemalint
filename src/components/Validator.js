@@ -45,6 +45,9 @@ function ValidatorController($scope, $element, $attrs, $log) {
       }];
     }
 
+    // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
+    this.working = true;
+
     this.parse(doc).then(function(obj) {
       // Save the object
       self.onUpdateObj({value: obj});
@@ -64,6 +67,9 @@ function ValidatorController($scope, $element, $attrs, $log) {
       $log.debug(self.identifier + ".update()", "Errors parsing/validating document", errors);
       self.isValid = false;
       return self.messages = errors;
+    }).finally(function() {
+      // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
+      self.working = false;
     });
   };
 
