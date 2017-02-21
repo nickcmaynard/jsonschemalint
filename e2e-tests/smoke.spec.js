@@ -1,5 +1,7 @@
 'use strict';
 
+var EC = protractor.ExpectedConditions;
+
 describe('jsonschemalint', function() {
 
   it('should automatically redirect to a default version & markup when location hash/fragment is empty', function() {
@@ -35,8 +37,17 @@ describe('jsonschemalint', function() {
 
         // Open the samples menu
         element(by.buttonText("Samples")).click();
-        // Click the sample
+        // SUSPICION - the samples menu displays outside angular's digest cycle.  So protractor doesn't really know if it's there
+        browser.wait(EC.visibilityOf(element(by.css("ul[aria-labelledby=sampleDropdown]"))), 250);
+
+        // Click the sample to load it
         element(by.linkText(sample)).click();
+        // Wait for the validation processes to finish (samples to be loaded, any chunks to come in, etc.)
+        browser.wait(function() {
+          return element.all(by.css('validator > div')).evaluate('$ctrl.working').then(function(workingArr) {
+            return workingArr.indexOf(true) === -1;
+          });
+        }, 2500);
 
         // Schema is valid/invalid
         expect(element(by.css("validator[identifier=schema] .panel.panel-" + (schemaValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();

@@ -6,16 +6,17 @@ require('babel-register');
 var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 
 //jshint strict: false
-exports.config = {
+var config = {
 
   allScriptsTimeout: 11000,
 
   specs: ['*.spec.js'],
 
-  capabilities: {
-    // We probably want to connect up Sauce Labs at some point
+  multiCapabilities: [{
     browserName: 'chrome'
-  },
+  }, {
+    browserName: 'firefox'
+  }],
 
   baseUrl: 'http://localhost:3001/',
 
@@ -35,3 +36,19 @@ exports.config = {
   }
 
 };
+
+if (process.env.TRAVIS) {
+  config.sauceUser = process.env.SAUCE_USERNAME;
+  config.sauceKey = process.env.SAUCE_ACCESS_KEY;
+  config.multiCapabilities = [{
+    'browserName': 'chrome',
+    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+    'build': process.env.TRAVIS_BUILD_NUMBER
+  },{
+    'browserName': 'firefox',
+    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+    'build': process.env.TRAVIS_BUILD_NUMBER
+  }];
+}
+
+exports.config = config;
