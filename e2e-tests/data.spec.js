@@ -39,7 +39,7 @@ describe('data management', function() {
 
   });
 
-  it('should persist data across page reloads', function() {
+  it('should preserve schema and document across page reloads', function() {
     browser.get('#/version/draft-04/markup/json');
 
     var randomSchema = Math.random().toString(36).replace(/[^a-z]+/g, '');
@@ -67,16 +67,6 @@ describe('data management', function() {
     expect(schemaElement.getAttribute('value')).toEqual(randomSchema);
     expect(documentElement.getAttribute('value')).toEqual(randomDocument);
 
-  });
-
-  describe('about dialog', function() {
-    it('should display when the button is clicked', function() {
-      browser.get('index.html');
-
-      element(by.linkText("About")).click();
-
-      expect(element(by.cssContainingText('h3', 'About')).isDisplayed()).toBeTruthy();
-    });
   });
 
 });
