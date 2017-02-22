@@ -13,4 +13,4 @@ RewriteCond %{REQUEST_URI} !^/\.well-known
 RewriteRule !^dist(/|$) dist%{REQUEST_URI} [L]
 
 ExpiresActive On
-ExpiresDefault "access plus 1 day"
+ExpiresDefault "access plus 1 week"
