@@ -14,8 +14,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: "",
-    filename: "[name].[hash].js",
-    chunkFilename: "[id].[hash].js"
+    filename: "[name].[chunkhash].js",
+    chunkFilename: "[id].[chunkhash].js"
   },
   stats: {
     // Configure the console output
@@ -47,7 +47,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'html-loader!./www/index.html',
     }),
-    new ExtractTextPlugin("[name].[hash].css"),
+    new ExtractTextPlugin("[name].[chunkhash].css"),
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise' // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
     }),
