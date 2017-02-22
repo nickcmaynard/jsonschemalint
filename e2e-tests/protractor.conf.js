@@ -4,18 +4,13 @@
 require('babel-register');
 
 var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-var _ = require('lodash');
 
-// use --params.browsers='chrome,firefox' or --params.browsers='chrome' to select specific browsers
-var browsers = (this.params && this.params.browsers && this.params.browsers.split(',')) || ['chrome', 'firefox'];
-var localCapabilities = {
-  chrome: {
-    browserName: 'chrome'
-  },
-  firefox: {
-    browserName: 'firefox'
-  }
-};
+// Standard capabilities to select
+var defaultCapabilities = [{
+  browserName: 'chrome'
+},{
+  browserName: 'firefox'
+}];
 
 //jshint strict: false
 var config = {
@@ -25,9 +20,11 @@ var config = {
   specs: ['*.spec.js'],
 
   getMultiCapabilities: function() {
-    // Using lodash to select the keys in `capabilities` corresponding
-    // to the browsers param.
-    return _(localCapabilities).pick(browsers).values().value();
+    // use --params.browsers='chrome,firefox' or --params.browsers='chrome' to select specific browsers
+    var browsers = (this.params && this.params.browsers && this.params.browsers.split(',')) || defaultCapabilities.map((cap) => cap.browserName);
+    return defaultCapabilities.filter(function(cap) {
+      return browsers.indexOf(cap.browserName) != -1;
+    });
   },
 
   baseUrl: 'http://localhost:3001/',
