@@ -19,8 +19,7 @@
     "clean:dist": "npm run rimraf -- dist",
     "build:dev": "./node_modules/.bin/webpack --progress --config webpack.dev.config.js",
     "build:production": "./node_modules/.bin/webpack --progress --config webpack.prod.config.js",
-    "ci:travis": "npm run clean:dist && npm run test && npm run build:production && npm run e2e:travis",
-    "e2e:travis": "npm-run-all -p -r preview protractor",
+    "ci:travis": "npm run clean:dist && npm run test && npm run build:production && npm run e2e",
     "e2e": "npm-run-all -p -r preview protractor",
     "rimraf": "rimraf"
   },
