@@ -16,6 +16,11 @@ npm run test
 # End-to-end tests (build:dev is faster, but Travis uses build:production)
 npm run build:production
 npm run e2e
+
+# Run limited set of end-to-end tests on Chrome only - 2 terminals required
+npm run preview # terminal 1
+npm run build:dev # terminal 2
+npm run protractor -- --specs e2e-tests/smoke.spec.js --params.browsers="chrome" # terminal 2
 ```
 
 ## Preview

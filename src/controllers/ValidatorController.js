@@ -3,7 +3,7 @@
 var app = angular.module('app', false);
 var aboutDialogTemplateUrl = require("ngtemplate-loader!html-loader!../dialogs/About.html");
 
-app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService) {
+app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService, textService) {
 
   var self = this;
 
@@ -51,15 +51,6 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     }
   };
 
-  // Load document & schema from localstorage
-  var ls = $window['localStorage'];
-  if (ls.getItem('data')) {
-    self.document = ls.getItem('data');
-  }
-  if (ls.getItem('schema')) {
-    self.schema = ls.getItem('schema');
-  }
-
   this.about = function(event) {
     // Stop the link redirecting us to #
     event.preventDefault();
@@ -70,13 +61,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     return false;
   };
 
+  // Getters
+  this.getDocument = textService.getDocument;
+  this.getSchema = textService.getSchema;
+
   // Reset everything
-  this.reset = function() {
-    delete self.document;
-    delete self.schema;
-    ls.removeItem("data");
-    ls.removeItem("schema");
-  };
+  this.reset = textService.reset;
 
   // Load a sample
   this.sample = function(ref) {
@@ -85,12 +75,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     this.getCurrentMarkupService().then(function(markupService) {
       $http.get('samples/' + ref + '.document.json').success(function(data) {
         markupService.prettyPrint(data).then(function(text) {
-          self.document = text;
+          textService.setDocument(text);
         });
       });
       $http.get('samples/' + ref + '.schema.json').success(function(data) {
         markupService.prettyPrint(data).then(function(text) {
-          self.schema = text;
+          textService.setSchema(text);
         });
       });
     }, function(errors) {
@@ -107,8 +97,8 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
       self.loadedGist = gist;
 
-      self.schema = gist.schema;
-      self.document = gist.document;
+      textService.setSchema(gist.schema);
+      textService.setDocument(gist.document);
 
       // Register a once-off listener - if schema or document change, clobber the gist param
       var canceller,
@@ -125,12 +115,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         delete self.loadedGist;
         delete self.loadedGistId;
       };
-      schemaListener = $scope.$watch('ctrl.schema', function(newValue) {
+      schemaListener = $scope.$watch('ctrl.getSchema()', function(newValue) {
         if (self.loadedGist && newValue !== self.loadedGist.schema) {
           canceller();
         }
       });
-      documentListener = $scope.$watch('ctrl.document', function(newValue) {
+      documentListener = $scope.$watch('ctrl.getDocument()', function(newValue) {
         if (self.loadedGist && newValue !== self.loadedGist.document) {
           canceller();
         }
@@ -144,7 +134,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
   // Save a Gist and inform of success
   this.saveGist = function() {
-    gist.save(this.schema, this.document).then(function(gistId) {
+    gist.save(textService.getSchema(), textService.getDocument()).then(function(gistId) {
       $route.updateParams({gist: gistId});
       var url = $location.absUrl();
       alertService.alert({
@@ -227,20 +217,6 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     return $q.when(this.currentMarkup.service);
   }
 
-  // Save form data to localstorage before unload
-  $window.addEventListener('beforeunload', function() {
-    if (self.document) {
-      ls.setItem('data', self.document);
-    } else {
-      ls.removeItem("data");
-    }
-    if (self.schema) {
-      ls.setItem('schema', self.schema);
-    } else {
-      ls.removeItem("schema");
-    }
-  });
-
   // When the route changes, register the new versions
   this.currentParams = {};
   $scope.$on('$routeChangeSuccess', function() {
@@ -275,11 +251,13 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   };
   this.onUpdateDocumentString = function(doc) {
     $log.debug("Document string changed");
-    this.document = doc;
+    textService.setDocument(doc);
+    // this.document = doc;
   };
   this.onUpdateSchemaString = function(doc) {
     $log.debug("Schema string changed");
-    this.schema = doc;
+    textService.setSchema(doc);
+    // this.schema = doc;
   };
 
 });

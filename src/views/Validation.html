@@ -1,4 +1,4 @@
-<div ng-controller="validatorController as ctrl">
+<div>
 
     <nav class="navbar navbar-default navbar-fixed-top navbar-collapse">
         <div class="container-fluid">
@@ -45,7 +45,7 @@
                     <div class="btn-group navbar-btn" role="group" aria-label="Actions">
                         <button class="btn btn-default btn-danger" ng-click="ctrl.reset()">
                             <span class="glyphicon glyphicon-trash"></span> Reset</button>
-                        <button class="btn btn-default" ng-click="ctrl.saveGist()" ng-disabled="ctrl.loadedGist || !ctrl.schema || !ctrl.document">
+                        <button class="btn btn-default" ng-click="ctrl.saveGist()" ng-disabled="ctrl.loadedGist || !ctrl.getSchema() || !ctrl.getDocument()">
                             <span ng-class="{'glyphicon-save': !ctrl.loadedGist, 'glyphicon-saved': ctrl.loadedGist}" class="glyphicon"></span> Save as Gist</button>
                     </div>
                 </ul>
@@ -95,13 +95,13 @@
 
             <div class="col-xs-12 col-md-6">
 
-                <validator identifier="schema" title="Schema :: {{ctrl.currentMarkup.name}}, {{ctrl.currentValidator.name}}" doc="ctrl.schema" validate="ctrl.validateSchema" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Schema is valid according to ' + ctrl.currentValidator.name + '.'" on-update-doc="ctrl.onUpdateSchemaString(value)" on-update-obj="ctrl.onUpdateSchemaObj(value)"></validator>
+                <validator identifier="schema" title="Schema :: {{ctrl.currentMarkup.name}}, {{ctrl.currentValidator.name}}" doc="ctrl.getSchema()" validate="ctrl.validateSchema" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Schema is valid according to ' + ctrl.currentValidator.name + '.'" on-update-doc="ctrl.onUpdateSchemaString(value)" on-update-obj="ctrl.onUpdateSchemaObj(value)"></validator>
 
             </div>
 
             <div class="col-xs-12 col-md-6">
 
-                <validator identifier="document" title="Document :: {{ctrl.currentMarkup.name}}" doc="ctrl.document" validate="ctrl.validateDocument" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Document validates against the schema, spec version ' + ctrl.currentValidator.name" on-update-doc="ctrl.onUpdateDocumentString(value)" on-update-validity="ctrl.onUpdateDocumentValidity(value)"></validator>
+                <validator identifier="document" title="Document :: {{ctrl.currentMarkup.name}}" doc="ctrl.getDocument()" validate="ctrl.validateDocument" parse="ctrl.parseMarkup" pretty-print="ctrl.prettyPrint" success-message="'Document validates against the schema, spec version ' + ctrl.currentValidator.name" on-update-doc="ctrl.onUpdateDocumentString(value)" on-update-validity="ctrl.onUpdateDocumentValidity(value)"></validator>
 
             </div>
 

@@ -11,7 +11,8 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
     }
   });
   $routeProvider.when('/version/:specVersion/markup/:markupLanguage', {
-    templateUrl: validationViewTemplateUrl
+    templateUrl: validationViewTemplateUrl,
+    controller: 'validatorController'
   });
   $routeProvider.otherwise({
     redirectTo: '/version/draft-04/markup/json'

@@ -4,6 +4,18 @@
 require('babel-register');
 
 var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+var _ = require('lodash');
+
+// use --params.browsers='chrome,firefox' or --params.browsers='chrome' to select specific browsers
+var browsers = (this.params && this.params.browsers && this.params.browsers.split(',')) || ['chrome', 'firefox'];
+var localCapabilities = {
+  chrome: {
+    browserName: 'chrome'
+  },
+  firefox: {
+    browserName: 'firefox'
+  }
+};
 
 //jshint strict: false
 var config = {
@@ -12,11 +24,11 @@ var config = {
 
   specs: ['*.spec.js'],
 
-  multiCapabilities: [{
-    browserName: 'chrome'
-  }, {
-    browserName: 'firefox'
-  }],
+  getMultiCapabilities: function() {
+    // Using lodash to select the keys in `capabilities` corresponding
+    // to the browsers param.
+    return _(localCapabilities).pick(browsers).values().value();
+  },
 
   baseUrl: 'http://localhost:3001/',
 
@@ -24,10 +36,10 @@ var config = {
 
   jasmineNodeOpts: {
     defaultTimeoutInterval: 30000,
-    print: function () {}
+    print: function() {}
   },
 
-  onPrepare: function () {
+  onPrepare: function() {
     jasmine.getEnv().addReporter(new SpecReporter({
       spec: {
         displayStacktrace: true
@@ -40,15 +52,19 @@ var config = {
 if (process.env.TRAVIS) {
   config.sauceUser = process.env.SAUCE_USERNAME;
   config.sauceKey = process.env.SAUCE_ACCESS_KEY;
-  config.multiCapabilities = [{
-    'browserName': 'chrome',
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    'build': process.env.TRAVIS_BUILD_NUMBER
-  },{
-    'browserName': 'firefox',
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    'build': process.env.TRAVIS_BUILD_NUMBER
-  }];
+  // In Travis, we test everything
+  delete config.getMultiCapabilities;
+  config.multiCapabilities = [
+    {
+      'browserName': 'chrome',
+      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+      'build': process.env.TRAVIS_BUILD_NUMBER
+    }, {
+      'browserName': 'firefox',
+      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+      'build': process.env.TRAVIS_BUILD_NUMBER
+    }
+  ];
 }
 
 exports.config = config;
