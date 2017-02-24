@@ -1,0 +1,16 @@
+<Files .htaccess>
+Order Allow,Deny
+Deny from all
+</Files>
+
+RewriteEngine On
+
+# Assumes this directory is deployed at the *root* of the domain
+# We need this in case it's being served from a subdirectory (like dist/)
+# and the root .htaccess is locally rewriting to it.
+RewriteBase /
+# Old draftX should be stripped out
+RewriteRule "^draft\d[\/]{0,1}$"  ""  [R]
+
+ExpiresActive On
+ExpiresDefault "access plus 1 week"
