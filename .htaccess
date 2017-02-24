@@ -3,14 +3,9 @@ Order Allow,Deny
 Deny from all
 </Files>
 
-# Old /draftX should go to root
-RedirectMatch 301 "^/draft\d[\/]{0,1}$" /
-
-# Serve up everything in dist/
 RewriteEngine On
-# But not letsencrypt challenge responses!
-RewriteCond %{REQUEST_URI} !^/\.well-known
-RewriteRule !^dist(/|$) dist%{REQUEST_URI} [L]
 
-ExpiresActive On
-ExpiresDefault "access plus 1 week"
+# Not letsencrypt challenge responses!
+RewriteCond %{REQUEST_URI} !^/\.well-known
+# Serve up everything in dist/
+RewriteRule !^dist(/|$) dist%{REQUEST_URI} [L]
