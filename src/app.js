@@ -6,6 +6,9 @@ var validationViewTemplateUrl = require("ngtemplate-loader!html-loader!./views/V
 angular.module('app', [require('angular-sanitize'), require('angular-route'), require('angular-ui-bootstrap'), require('angular-translate'), require('angular-translate-loader-static-files')]).config(function($routeProvider, $translateProvider) {
 
   $translateProvider.useSanitizeValueStrategy('sanitize');
+  // Bake in 'en' using webpack
+  $translateProvider.translations('en', require('json-loader!../www/translations/locale-en.json'));
+  // For everything else, go to the static files loader
   $translateProvider.useStaticFilesLoader({
     prefix: 'translations/locale-',
     suffix: '.json'
