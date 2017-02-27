@@ -3,7 +3,14 @@ require('./css/main.css');
 var angular = require('angular');
 var validationViewTemplateUrl = require("ngtemplate-loader!html-loader!./views/Validation.html");
 
-angular.module('app', [require('angular-sanitize'), require('angular-route'), require('angular-ui-bootstrap')]).config(function($routeProvider) {
+angular.module('app', [require('angular-sanitize'), require('angular-route'), require('angular-ui-bootstrap'), require('angular-translate'), require('angular-translate-loader-static-files')]).config(function($routeProvider, $translateProvider) {
+
+  $translateProvider.useSanitizeValueStrategy('sanitize');
+  $translateProvider.useStaticFilesLoader({
+    prefix: 'translations/locale-',
+    suffix: '.json'
+  });
+  $translateProvider.preferredLanguage('en');
 
   $routeProvider.when('/version/draft-05/markup/:markupLanguage', {
     redirectTo: function(params) {

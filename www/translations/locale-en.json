@@ -1,0 +1,55 @@
+{
+  "FORMAT": "Format",
+  "SAMPLES": "Samples",
+  "RESET": "Reset",
+  "SAVE_AS_GIST": "Save as Gist",
+  "MARKUP_LANGUAGE": "Markup language",
+  "SPEC_VERSION": "Spec version",
+  "SCHEMA": "Schema",
+  "DOCUMENT": "Document",
+  "MESSAGE": "Message",
+  "FIELD": "Field",
+  "ERROR": "Error",
+  "VALUE": "Value",
+  "TOGGLE_NAVIGATION": "Toggle navigation",
+  "ABOUT": "About",
+
+  "OK": "OK",
+
+  "GIST_SAVED": "Saved as Gist",
+  "GIST_VISIT": "Visit saved schema/document pair",
+
+  "sample_titles": {
+    "v5-unofficial-valid": "Sample draft-05 schema and valid document",
+    "v5-unofficial-invalid": "Sample draft-05 schema and <strong>invalid</strong> document",
+    "draft-04-valid": "Sample draft-04 schema and valid document",
+    "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document"
+  },
+
+  "WARNING_V5_UNOFFICIAL": "The v5-unofficial schema version, provided by Ajv to try experimental features, was previously erroneously named \"draft-05\".<br />This is, and will not be,  an official JSON Schema version and <em>should not be used</em>.  Please see the schema dropdown for the latest official version.",
+
+  "SCHEMA_VALID_MESSAGE": "Schema is valid according to {{name}}.",
+  "DOCUMENT_VALID_MESSAGE": "Document validates against the schema, spec version {{name}}.",
+
+  "ERROR_GIST_SAVING": "Error saving Gist",
+  "ERROR_GIST_LOADING": "Error loading Gist",
+
+  "ERROR_GIST_FORMAT": "Gist is not in JSON Schema Lint format",
+
+  "ERROR_SAMPLE_LOADING": "Error loading sample",
+
+  "ERROR_INVALID_JSON": "Document is invalid JSON. Try http://jsonlint.com to fix it.",
+  "ERROR_INVALID_YAML": "Document is invalid YAML. Try http://codebeautify.org/yaml-validator to fix it.",
+
+  "ERROR_INVALID_MARKUP": "Invalid markup language '{{markupLanguage}}'.",
+  "ERROR_INVALID_VERSION": "Invalid schema version '{{specVersion}}'.",
+
+  "ERROR_INVALID_SCHEMA": "Invalid schema.",
+
+  "ERROR_INVALID_MARKUP_BUTTON": "???",
+  "ERROR_INVALID_VERSION_BUTTON": "???",
+
+  "ERROR_MODULE_LOADING_FAILED_TITLE": "Could not load module",
+  "ERROR_MODULE_LOADING_FAILED_CONTENT": "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
+
+}

@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-app.service('textService', function($q, $window) {
+app.service('textService', function($q, $window, $log) {
 
   var self = this;
 
@@ -33,11 +33,11 @@ app.service('textService', function($q, $window) {
   // Load document & schema from localstorage
   var ls = $window['localStorage'];
   if (ls.getItem('data')) {
-    console.info("Loading document from local storage");
+    $log.info("Loading document from local storage");
     self._documentString = ls.getItem('data');
   }
   if (ls.getItem('schema')) {
-    console.info("Loading schema from local storage");
+    $log.info("Loading schema from local storage");
     self._schemaString = ls.getItem('schema');
   }
 
