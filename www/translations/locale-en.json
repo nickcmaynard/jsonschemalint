@@ -20,8 +20,8 @@
   "GIST_VISIT": "Visit saved schema/document pair",
 
   "sample_titles": {
-    "v5-unofficial-valid": "Sample draft-05 schema and valid document",
-    "v5-unofficial-invalid": "Sample draft-05 schema and <strong>invalid</strong> document",
+    "v5-unofficial-valid": "Sample v5-unofficial schema and valid document",
+    "v5-unofficial-invalid": "Sample v5-unofficial schema and <strong>invalid</strong> document",
     "draft-04-valid": "Sample draft-04 schema and valid document",
     "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document"
   },

@@ -29,15 +29,15 @@
                         </button>
                         <ul uib-dropdown-menu class="dropdown-menu" aria-labelledby="sampleDropdown">
                             <li class="dropdown-header">draft-04</li>
-                            <li role="menuitem"><a ng-click="ctrl.sample('draft4/valid')">{{ 'sample_titles.draft-04-valid' | translate }}</a>
+                            <li role="menuitem"><a ng-click="ctrl.sample('draft4/valid')" ng-bind-html="'sample_titles.draft-04-valid' | translate"></a>
                             </li>
-                            <li role="menuitem"><a ng-click="ctrl.sample('draft4/invalid')">{{ 'sample_titles.draft-04-invalid' | translate }}</a>
+                            <li role="menuitem"><a ng-click="ctrl.sample('draft4/invalid')" ng-bind-html="'sample_titles.draft-04-invalid' | translate"></a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">v5-unofficial</li>
-                            <li role="menuitem"><a ng-click="ctrl.sample('v5-unofficial/valid')">{{ 'sample_titles.v5-unofficial-valid' | translate }}</a>
+                            <li role="menuitem"><a ng-click="ctrl.sample('v5-unofficial/valid')" ng-bind-html="'sample_titles.v5-unofficial-valid' | translate"></a>
                             </li>
-                            <li role="menuitem"><a ng-click="ctrl.sample('v5-unofficial/invalid')">{{ 'sample_titles.v5-unofficial-invalid' | translate }}</a>
+                            <li role="menuitem"><a ng-click="ctrl.sample('v5-unofficial/invalid')" ng-bind-html="'sample_titles.v5-unofficial-invalid' | translate"></a>
                             </li>
                         </ul>
                     </div>
