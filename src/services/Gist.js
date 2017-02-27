@@ -4,7 +4,7 @@ var app = angular.module('app', false);
 
 var base = "https://api.github.com/gists";
 
-app.service('gist', function ($q, $http) {
+app.service('gist', function ($q, $http, $log, $translate) {
 
   // Save the schema and document as a secret anonymous gist
   this.save = function(schema, doc) {
@@ -24,10 +24,10 @@ app.service('gist', function ($q, $http) {
         }
       }
     }).then(function(result) {
-      console.info("Saved gist successfully with ID", result.data.id);
+      $log.info("Saved gist successfully with ID", result.data.id);
       return result.data.id;
     }, function(error) {
-      console.error("Could not save gist", error);
+      $log.error("Could not save gist", error);
       throw error.statusText;
     });
   };
@@ -40,14 +40,16 @@ app.service('gist', function ($q, $http) {
     }).then(function(result) {
       // Sanity check!
       if(!result || !result.data || !result.data.files || !result.data.files["schema"] || !result.data.files["document"]) {
-        throw "Gist is not in jsonschemalint.com format";
+        return $translate("ERROR_GIST_FORMAT").then(function(errorStr) {
+          return $q.reject(errorStr);
+        });
       }
       return {
         "schema": result.data.files["schema"].content,
         "document": result.data.files["document"].content
       };
     }, function(error) {
-      console.error("Could not retrieve gist", error);
+      $log.error("Could not retrieve gist", error);
       throw error.statusText;
     });
   };

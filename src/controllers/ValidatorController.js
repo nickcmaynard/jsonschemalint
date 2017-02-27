@@ -34,7 +34,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
       name: "v5-unofficial",
       alerts: [{
         className: "alert-warning",
-        content: "The v5-unofficial schema version, provided by Ajv to try experimental features, was previously erroneously named \"draft-05\".<br />This is, and will not be,  an official JSON Schema version and <em>should not be used</em>.  Please see the schema dropdown for the latest official version."
+        content_tid: "WARNING_V5_UNOFFICIAL"
       }]
     }
   };
@@ -56,7 +56,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     event.preventDefault();
     event.stopPropagation();
 
-    alertService.alert({title: "About", message: $templateCache.get(aboutDialogTemplateUrl), btnClass: "btn-primary", size: "lg"});
+    alertService.alert({title: "{{ 'ABOUT' | translate }}", message: $templateCache.get(aboutDialogTemplateUrl), btnClass: "btn-primary", size: "lg"});
 
     return false;
   };
@@ -84,7 +84,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         });
       });
     }, function(errors) {
-      alertService.alert({title: "Error loading sample", message: errors[0].message, btnClass: "btn-danger"});
+      alertService.alert({title: "{{ 'ERROR_SAMPLE_LOADING' | translate }}", message: errors[0].message, btnClass: "btn-danger"});
     });
   };
 
@@ -128,7 +128,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
 
     }, function(error) {
       $log.error(error);
-      alertService.alert({title: "Error loading from Gist", message: error, btnClass: "btn-danger"});
+      alertService.alert({title: "{{ 'ERROR_GIST_LOADING' | translate }}", message: error, btnClass: "btn-danger"});
     });
   };
 
@@ -138,12 +138,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
       $route.updateParams({gist: gistId});
       var url = $location.absUrl();
       alertService.alert({
-        title: "Saved as Gist",
-        message: "<a target='_blank' href='" + url + "'>Visit saved schema/document pair</a>"
+        title: "{{ 'GIST_SAVED' | translate }}",
+        message: "<a target='_blank' href='" + url + "'>{{ 'GIST_VISIT' | translate }}</a>"
       });
     }, function(error) {
       $log.error(error);
-      alertService.alert({title: "Error saving as Gist", message: error, btnClass: "btn-danger"});
+      alertService.alert({title: "{{ 'ERROR_GIST_SAVING' | translate }}", message: error, btnClass: "btn-danger"});
     });
   };
 
@@ -181,7 +181,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     if (!schemaObj) {
       return $q.reject([
         {
-          message: "Invalid schema."
+          message_tid: 'ERROR_INVALID_SCHEMA'
         }
       ]);
     }
@@ -197,7 +197,8 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
       // Abort
       return $q.reject([
         {
-          message: "Invalid JSON schema spec version \"" + this.currentValidator.name + "\"."
+          message_tid: 'ERROR_INVALID_VERSION',
+          message_params: self.currentParams
         }
       ]);
     }
@@ -210,7 +211,8 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     if (!this.currentMarkup) {
       return $q.reject([
         {
-          message: "Invalid markup language reference " + this.currentMarkup.name + "."
+          message_tid: 'ERROR_INVALID_MARKUP',
+          message_params: self.currentParams
         }
       ]);
     }
@@ -235,7 +237,7 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     }
 
     if ($route.current.params.gist && self.loadedGistId != $route.current.params.gist) {
-      $log.info("Loading gist :: " + $route.current.params.gist);
+      $log.info("Loading gist :: " + $route.current.params.gist, self.loadedGistId);
       self.loadGist($route.current.params.gist);
     }
 

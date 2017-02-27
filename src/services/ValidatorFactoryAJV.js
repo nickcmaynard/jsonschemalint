@@ -28,8 +28,8 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         } catch (error) {
           $log.error("ValidatorFactoryAJV.setup()", "Could not load AJV", error);
           alertService.alert({
-            title: "Could not load module",
-            message: "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
+            title: "{{ 'ERROR_MODULE_LOADING_FAILED_TITLE' | translate }}",
+            message: "{{ 'ERROR_MODULE_LOADING_FAILED_CONTENT' | translate }}"
           });
           reject(error);
         }
