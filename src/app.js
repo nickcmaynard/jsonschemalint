@@ -1,4 +1,5 @@
 require('./css/main.css');
+require("babel-polyfill");
 
 var angular = require('angular');
 var validationViewTemplateUrl = require("ngtemplate-loader!html-loader!./views/Validation.html");

@@ -20,6 +20,8 @@ app.use(function(req, res, next) {
 
 app.use(compression());
 
-app.use('/', express.static(__dirname + "/dist"));
+app.use('/', express.static(__dirname + "/dist", {
+  maxAge: "1h"
+}));
 
 app.listen(3001);
