@@ -18,11 +18,11 @@ describe('data management', function() {
     var schemaElement = element(by.css("validator[identifier=schema] textarea"));
     schemaElement.clear();
     schemaElement.sendKeys(randomSchema);
-    expect(schemaElement.getAttribute('value')).toEqual(randomSchema);
+    expect(schemaElement.evaluate("$ctrl.myDoc")).toEqual(randomSchema);
     var documentElement = element(by.css("validator[identifier=document] textarea"));
     documentElement.clear();
     documentElement.sendKeys(randomDocument);
-    expect(documentElement.getAttribute('value')).toEqual(randomDocument);
+    expect(documentElement.evaluate("$ctrl.myDoc")).toEqual(randomDocument);
 
     // Select a different version (use the button!)
     // Open the spec version menu
@@ -34,8 +34,8 @@ describe('data management', function() {
     browser.wait(lib.isDoneWorking, 2500);
 
     // Check the RANDOM stuff is still there
-    expect(schemaElement.getAttribute('value')).toEqual(randomSchema);
-    expect(documentElement.getAttribute('value')).toEqual(randomDocument);
+    expect(schemaElement.evaluate("$ctrl.myDoc")).toEqual(randomSchema);
+    expect(documentElement.evaluate("$ctrl.myDoc")).toEqual(randomDocument);
 
   });
 
@@ -52,20 +52,21 @@ describe('data management', function() {
     var schemaElement = element(by.css("validator[identifier=schema] textarea"));
     schemaElement.clear();
     schemaElement.sendKeys(randomSchema);
-    expect(schemaElement.getAttribute('value')).toEqual(randomSchema);
+    expect(schemaElement.evaluate("$ctrl.myDoc")).toEqual(randomSchema);
     var documentElement = element(by.css("validator[identifier=document] textarea"));
     documentElement.clear();
     documentElement.sendKeys(randomDocument);
-    expect(documentElement.getAttribute('value')).toEqual(randomDocument);
+    expect(documentElement.evaluate("$ctrl.myDoc")).toEqual(randomDocument);
 
     // Reload it
     browser.refresh();
+    browser.wait(lib.isDoneWorking, 2500);
 
     // Check the RANDOM stuff is still there
     schemaElement = element(by.css("validator[identifier=schema] textarea"));
     documentElement = element(by.css("validator[identifier=document] textarea"));
-    expect(schemaElement.getAttribute('value')).toEqual(randomSchema);
-    expect(documentElement.getAttribute('value')).toEqual(randomDocument);
+    expect(schemaElement.evaluate("$ctrl.myDoc")).toEqual(randomSchema);
+    expect(documentElement.evaluate("$ctrl.myDoc")).toEqual(randomDocument);
 
   });
 

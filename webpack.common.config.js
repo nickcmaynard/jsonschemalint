@@ -30,7 +30,13 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015']
+          presets: [
+            ["env", {
+              "targets": {
+                "browsers": ["last 2 versions"]
+              }
+            }]
+          ]
         }
       },
       { test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader' })},

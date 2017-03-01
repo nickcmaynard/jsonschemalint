@@ -37,6 +37,7 @@ var config = {
   },
 
   onPrepare: function() {
+    browser.driver.manage().window().setSize(1024, 700);
     jasmine.getEnv().addReporter(new SpecReporter({
       spec: {
         displayStacktrace: true
@@ -54,10 +55,30 @@ if (process.env.TRAVIS) {
   config.multiCapabilities = [
     {
       'browserName': 'chrome',
+      'version': 'latest',
+      'platform': 'Windows 10',
       'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
       'build': process.env.TRAVIS_BUILD_NUMBER
     }, {
       'browserName': 'firefox',
+      'version': 'latest',
+      'platform': 'Windows 10',
+      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+      'build': process.env.TRAVIS_BUILD_NUMBER
+    }, {
+      'browserName': 'internet explorer',
+      'version': 'latest',
+      'platform': 'Windows 10',
+
+      // IE11 just doesn't play nice.  Just run smoke tests
+      'exclude': ['data.spec.js','samples.spec.js'],
+
+      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+      'build': process.env.TRAVIS_BUILD_NUMBER
+    }, {
+      'browserName': 'MicrosoftEdge',
+      'version': 'latest',
+      'platform': 'Windows 10',
       'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
       'build': process.env.TRAVIS_BUILD_NUMBER
     }
