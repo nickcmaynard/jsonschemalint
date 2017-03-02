@@ -1,19 +1,34 @@
 describe('Validator', function() {
   var $compile,
-      $rootScope,
-      $scope;
+    $rootScope,
+    $scope,
+    $q;
 
   // Load the app module, which contains the component
   beforeEach(module('app'));
 
   // Store references to $rootScope and $compile
   // so they are available to all tests in this describe block
-  beforeEach(inject(function(_$compile_, _$rootScope_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_) {
     // The injector unwraps the underscores (_) from around the parameter names when matching
+    $q = _$q_;
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
   }));
+
+  // // Debug logging logic
+  // var $log;
+  //
+  // // Inject the $log service
+  // beforeEach(inject(function(_$log_){
+  //   $log = _$log_;
+  // }));
+  //
+  // // Log debug messages in Karma
+  // afterEach(function(){
+  //   console.log($log.debug.logs);
+  // });
 
   // Utility method to create an element and get a reference to its controller, from some injected HTML
   const _createInstance = (html) => {
@@ -137,6 +152,86 @@ describe('Validator', function() {
     $rootScope.$digest();
 
     expect(spy).to.not.have.been.called();
+  });
+
+  it('calls on-update-obj with null when the injected document doesn\'t validate', function() {
+    const spy = chai.spy(function(params) {});
+    $scope.onUpdateObj = spy;
+
+    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+
+    // We *must* use $q else the promises don't resolve properly :/
+    // Pretend it parses
+    $ctrl.parse = () => $q.resolve({});
+    // But that it doesn't validate
+    $ctrl.validate = () => $q.reject([]);
+    $rootScope.$digest();
+
+    // Change the injected document
+    $scope.upperDoc = "flibble!"
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+    expect(spy).to.have.been.always.with.exactly(null);
+  });
+
+  it('calls on-update-obj with null when the injected document doesn\'t parse', function() {
+    const spy = chai.spy(function(params) {});
+    $scope.onUpdateObj = spy;
+
+    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+
+    // We *must* use $q else the promises don't resolve properly :/
+    // Pretend it doesn't parse
+    $ctrl.parse = () => $q.reject([]);
+    // But that it does (somehow! magic!) validate
+    $ctrl.validate = () => $q.resolve({});
+    $rootScope.$digest();
+
+    // Change the injected document
+    $scope.upperDoc = "flibble!"
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+    expect(spy).to.have.been.always.with.exactly(null);
+  });
+
+  it('calls on-update-obj with a value when the injected document parses and validates', function() {
+    const spy = chai.spy(function(params) {});
+    $scope.onUpdateObj = spy;
+
+    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+
+    // We *must* use $q else the promises don't resolve properly :/
+    // Pretend it parses
+    $ctrl.parse = () => $q.resolve({foo: "bar"});
+    // And that it validates
+    $ctrl.validate = () => $q.resolve({});
+    $rootScope.$digest();
+
+    // Change the injected document
+    $scope.upperDoc = "flibble!"
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+    expect(spy).to.have.been.always.with.exactly({foo: "bar"});
+  });
+
+  it('calls on-update-doc with a value when the injected document changes', function() {
+    const spy = chai.spy(function(params) {});
+    $scope.onUpdateDoc = spy;
+
+    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-doc='onUpdateDoc(value)'></validator>");
+    $rootScope.$digest();
+
+    expect($ctrl.onUpdateDoc).to.be.a.function;
+
+    // Change the injected document
+    $scope.upperDoc = "flibble!"
+    $rootScope.$digest();
+
+    expect(spy).to.have.been.called.once;
+    expect(spy).to.have.been.always.with.exactly("flibble!");
   });
 
 });
