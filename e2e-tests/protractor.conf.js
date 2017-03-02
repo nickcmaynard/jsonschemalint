@@ -69,7 +69,7 @@ if (process.env.TRAVIS) {
       'platform': 'Windows 10',
 
       // IE11 just doesn't play nice.  Just run smoke tests
-      'exclude': ['data.spec.js','samples.spec.js'],
+      'exclude': ['data.spec.js','samples.spec.js', 'interaction.spec.js'],
 
       'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
       'build': process.env.TRAVIS_BUILD_NUMBER

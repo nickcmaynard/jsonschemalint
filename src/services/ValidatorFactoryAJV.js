@@ -15,6 +15,7 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         try {
           require.ensure([], function(require) {
             var ajv = require('ajv');
+            $log.debug("ValidatorFactoryAJV.setup()", "Loaded AJV");
             validator = ajv({
               verbose: true,
               allErrors: true,

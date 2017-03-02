@@ -12,10 +12,11 @@ app.service('markupYaml', function ($window, $q, alertService, $log) {
       try {
         require.ensure([], function(require) {
           yaml = require('yamljs');
+          $log.debug("MarkupYAML.setup()", "Loaded yamljs");
           resolve(true);
         });
       } catch (error) {
-        $log.error("Could not load yamljs", error);
+        $log.error("MarkupYAML.setup()", "Could not load yamljs", error);
         alertService.alert({
           title: "{{ 'ERROR_MODULE_LOADING_FAILED_TITLE' | translate }}",
           message: "{{ 'ERROR_MODULE_LOADING_FAILED_CONTENT' | translate }}"

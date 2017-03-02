@@ -17,6 +17,7 @@ app.factory('validatorFactoryJSV', function ($window, $q, alertService, $log) {
         try {
           require.ensure([], function(require) {
             var JSV = require("JSV");
+            $log.debug("ValidatorFactoryJSV.setup()", "Loaded JSV");
             var jsv = JSV.JSV;
             //
             // VERSION DETERMINATION LOGIC
