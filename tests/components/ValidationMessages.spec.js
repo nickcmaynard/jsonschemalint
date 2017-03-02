@@ -57,4 +57,20 @@ describe('ValidationMessages', function() {
     expect(element[0].querySelectorAll("tbody tr")).to.have.length(3);
 
   });
+
+  it('correctly classifies simple and error messages', function() {
+    var element = $compile("<validation-messages></validation-messages>")($scope);
+    $rootScope.$digest();
+
+    var $ctrl = $scope.$$childHead.$ctrl;
+
+    expect($ctrl.simpleMessages([{ message: "foo" }])).to.have.length(1);
+    expect($ctrl.errorMessages([{ message: "foo" }])).to.have.length(0);
+
+    expect($ctrl.simpleMessages([{ message: "foo", "dataPath": "" }])).to.have.length(0);
+    expect($ctrl.errorMessages([{ message: "foo", "dataPath": "" }])).to.have.length(1);
+
+    expect($ctrl.simpleMessages([{ message: "foo", "dataPath": "bar" }])).to.have.length(0);
+    expect($ctrl.errorMessages([{ message: "foo", "dataPath": "bar" }])).to.have.length(1);
+  });
 });
