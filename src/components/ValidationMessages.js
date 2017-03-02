@@ -5,12 +5,12 @@ var templateUrl = require("ngtemplate-loader!html-loader!./validation-messages.h
 function ValidationMessagesController() {
   // Only the "error" messages
   this.errorMessages = function(messages) {
-    return messages && messages.filter(a => a.dataPath);
+    return messages && messages.filter(a => typeof a.dataPath !== 'undefined');
   };
 
   // Only "simple" messages
   this.simpleMessages = function(messages) {
-    return messages && messages.filter(a => !a.dataPath);
+    return messages && messages.filter(a => typeof a.dataPath === 'undefined');
   }
 }
 
