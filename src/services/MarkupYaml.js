@@ -12,7 +12,7 @@ app.service('markupYaml', function ($window, $q, alertService, $log) {
       try {
         require.ensure([], function(require) {
           yaml = require('yamljs');
-          $log.info("MarkupYAML.setup()", "Loaded yamljs");
+          $log.debug("MarkupYAML.setup()", "Loaded yamljs");
           resolve(true);
         });
       } catch (error) {
