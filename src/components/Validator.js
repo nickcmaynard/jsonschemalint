@@ -1,6 +1,6 @@
 var templateUrl = require("ngtemplate-loader!html-loader!./validator.html")
 
-function ValidatorController($scope, $element, $attrs, $log) {
+function ValidatorController($scope, $element, $attrs, $log, $q) {
 
   var self = this;
 
@@ -46,18 +46,33 @@ function ValidatorController($scope, $element, $attrs, $log) {
     }
 
     // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
+    $log.debug(self.identifier + ".update()", "Begining work");
     this.working = true;
 
-    this.parse(doc).then(function(obj) {
-      // Save the object
-      self.onUpdateObj({value: obj});
-      return obj;
+    // Parse
+    var parsePromise = this.parse(doc);
+    parsePromise.then(function(obj) {
+      $log.debug(self.identifier + ".update()", "Successful parsing", obj);
     }, function(errors) {
-      self.onUpdateObj(null);
-      throw errors;
-    }).then(angular.bind(this, this.validate)).then(function(success) {
+      $log.debug(self.identifier + ".update()", "Errors parsing", errors);
+    });
+
+    // Validate, taking input from parse
+    var validatePromise = parsePromise.then(angular.bind(this, this.validate));
+    validatePromise.then(function(obj) {
+      $log.debug(self.identifier + ".update()", "Successful validating", obj);
+    }, function(errors) {
+      $log.debug(self.identifier + ".update()", "Errors validating", errors);
+    });
+
+    // Combine the two, fail-fast (so if parse fails, we fail immediately rather than waiting for validate)
+    var comboPromise = $q.when(Promise.all([parsePromise, validatePromise])).then(function(results) {
       // Successful validation
-      $log.debug(self.identifier + ".update()", "Successful validation");
+      $log.debug(self.identifier + ".update()", "Successful parsing and validation", results);
+
+      var obj = results[0], validateResults = results[1];
+
+      self.onUpdateObj({value: obj});
       self.isValid = true;
       return self.messages = [{
         message: self.successMessage
@@ -65,10 +80,17 @@ function ValidatorController($scope, $element, $attrs, $log) {
     }, function(errors) {
       // Something went wrong failures
       $log.debug(self.identifier + ".update()", "Errors parsing/validating document", errors);
+
+      var parseErrors = errors[0], validateErrors = errors[1];
+
+      self.onUpdateObj(null);
       self.isValid = false;
-      return self.messages = errors;
-    }).finally(function() {
+      return self.messages = [].concat(parseErrors || []).concat(validateErrors || []);
+    });
+
+    comboPromise.finally(function() {
       // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
+      $log.debug(self.identifier + ".update()", "Done working");
       self.working = false;
     });
   };
