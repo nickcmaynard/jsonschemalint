@@ -53,7 +53,17 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
     this.validate = function (schemaObject, documentObject) {
       $log.debug("ValidatorFactoryAJV.validate()");
       return setup().then(function () {
-        if (validator.validate(schemaObject, documentObject)) {
+        var result;
+        try {
+          result = validator.validate(schemaObject, documentObject);
+        } catch (e) {
+          // Some errors are thrown by Ajv, not wrapped up in its nice validator.errors interface
+          $log.error("ValidatorFactoryAJV.validate()", e.message);
+          // Wrap the exception into our standard format
+          throw [{ message: e.message }];
+        }
+        // Validation completed - check the results
+        if(result) {
           $log.debug("ValidatorFactoryAJV.validate()", "success");
           return true;
         } else {
