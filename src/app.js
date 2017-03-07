@@ -2,7 +2,6 @@ require('./css/main.css');
 require("babel-polyfill");
 
 var angular = require('angular');
-var validationViewTemplateUrl = require("ngtemplate-loader!html-loader!./views/Validation.html");
 
 angular.module('app', [require('angular-sanitize'), require('angular-route'), require('angular-ui-bootstrap'), require('angular-translate'), require('angular-translate-loader-static-files')]).config(function($routeProvider, $translateProvider) {
 
@@ -22,8 +21,7 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
     }
   });
   $routeProvider.when('/version/:specVersion/markup/:markupLanguage', {
-    templateUrl: validationViewTemplateUrl,
-    controller: 'validatorController'
+    template: '<validator-view></validator-view>'
   });
   $routeProvider.otherwise({
     redirectTo: '/version/draft-04/markup/json'
@@ -37,5 +35,4 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
 });
 
 require('./services');
-require('./controllers');
 require('./components');

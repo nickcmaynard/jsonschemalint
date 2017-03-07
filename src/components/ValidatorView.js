@@ -3,7 +3,9 @@
 var app = angular.module('app', false);
 var aboutDialogTemplateUrl = require("ngtemplate-loader!html-loader!../dialogs/About.html");
 
-app.controller('validatorController', function($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService, textService) {
+var templateUrl = require("ngtemplate-loader!html-loader!./validator-view.html");
+
+function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService, textService) {
 
   var self = this;
 
@@ -115,12 +117,12 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
         delete self.loadedGist;
         delete self.loadedGistId;
       };
-      schemaListener = $scope.$watch('ctrl.getSchema()', function(newValue) {
+      schemaListener = $scope.$watch('$ctrl.getSchema()', function(newValue) {
         if (self.loadedGist && newValue !== self.loadedGist.schema) {
           canceller();
         }
       });
-      documentListener = $scope.$watch('ctrl.getDocument()', function(newValue) {
+      documentListener = $scope.$watch('$ctrl.getDocument()', function(newValue) {
         if (self.loadedGist && newValue !== self.loadedGist.document) {
           canceller();
         }
@@ -220,30 +222,20 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
   }
 
   // When the route changes, register the new versions
-  this.currentParams = {};
-  $scope.$on('$routeChangeSuccess', function() {
-    if (self.currentParams.specVersion !== $route.current.params.specVersion) {
-      $log.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
-      self.currentValidator = self.validators[$route.current.params.specVersion];
-      self.validateSchema = angular.bind(self, self._validateSchema);
-      self.validateDocument = angular.bind(self, self._validateDocument, null);
-    }
+  $log.info("Selected JSON Schema version :: " + $route.current.params.specVersion);
+  self.currentValidator = self.validators[$route.current.params.specVersion];
+  self.validateSchema = angular.bind(self, self._validateSchema);
+  self.validateDocument = angular.bind(self, self._validateDocument, null);
 
-    if (self.currentParams.markupLanguage !== $route.current.params.markupLanguage) {
-      $log.info("Selected markup language :: " + $route.current.params.markupLanguage);
-      self.currentMarkup = self.markupLanguages[$route.current.params.markupLanguage];
-      self.parseMarkup = angular.bind(self, self._parseMarkup);
-      self.prettyPrint = angular.bind(self, self._prettyPrint);
-    }
+  $log.info("Selected markup language :: " + $route.current.params.markupLanguage);
+  self.currentMarkup = self.markupLanguages[$route.current.params.markupLanguage];
+  self.parseMarkup = angular.bind(self, self._parseMarkup);
+  self.prettyPrint = angular.bind(self, self._prettyPrint);
 
-    if ($route.current.params.gist && self.loadedGistId != $route.current.params.gist) {
-      $log.info("Loading gist :: " + $route.current.params.gist, self.loadedGistId);
-      self.loadGist($route.current.params.gist);
-    }
-
-    // Save current params for change detection
-    self.currentParams = $route.current.params;
-  });
+  if ($route.current.params.gist && self.loadedGistId != $route.current.params.gist) {
+    $log.info("Loading gist :: " + $route.current.params.gist, self.loadedGistId);
+    self.loadGist($route.current.params.gist);
+  }
 
   // Notice when Validator components tell us things have changed
   this.onUpdateSchemaObj = function(obj) {
@@ -262,4 +254,9 @@ app.controller('validatorController', function($scope, $rootScope, $log, $http, 
     // this.schema = doc;
   };
 
+};
+
+angular.module('app').component('validatorView', {
+  templateUrl: templateUrl,
+  controller: ValidatorViewController
 });
