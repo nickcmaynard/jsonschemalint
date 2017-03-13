@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "lint": "./node_modules/.bin/eslint src www tests e2e-tests",
     "preview": "node server.js",
     "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
     "dev-server": "./node_modules/.bin/webpack-dev-server --content-base dist/ --config webpack.dev.config.js",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "angular-mocks": "^1.5.8",
     "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.1.10",
@@ -51,6 +53,7 @@
     "chunk-manifest-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
+    "eslint": "^3.17.1",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "file-loader": "^0.10.0",
     "geckodriver": "^1.4.0",
