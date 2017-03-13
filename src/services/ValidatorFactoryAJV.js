@@ -15,22 +15,22 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         try {
           require.ensure([], function(require) {
             var ajv = require('ajv');
-            $log.debug("ValidatorFactoryAJV.setup()", "Loaded AJV");
+            $log.debug('ValidatorFactoryAJV.setup()', 'Loaded AJV');
             validator = ajv({
               verbose: true,
               allErrors: true,
               //
               // VERSION DETERMINATION LOGIC
               //
-              v5: version === "v5-unofficial"
+              v5: version === 'v5-unofficial'
             });
             resolve(true);
           });
         } catch (error) {
-          $log.error("ValidatorFactoryAJV.setup()", "Could not load AJV", error);
+          $log.error('ValidatorFactoryAJV.setup()', 'Could not load AJV', error);
           alertService.alert({
-            title: "{{ 'ERROR_MODULE_LOADING_FAILED_TITLE' | translate }}",
-            message: "{{ 'ERROR_MODULE_LOADING_FAILED_CONTENT' | translate }}"
+            title: '{{ "ERROR_MODULE_LOADING_FAILED_TITLE" | translate }}',
+            message: '{{ "ERROR_MODULE_LOADING_FAILED_CONTENT" | translate }}'
           });
           reject(error);
         }
@@ -38,36 +38,36 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
     };
 
     this.validateSchema = function (schemaObject) {
-      $log.debug("ValidatorFactoryAJV.validateSchema()");
+      $log.debug('ValidatorFactoryAJV.validateSchema()');
       return setup().then(function () {
         if (validator.validateSchema(schemaObject)) {
-          $log.debug("ValidatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
+          $log.debug('ValidatorFactoryAJV.validateSchema()', validator.errorsText(validator.errors));
           return true;
         } else {
-          $log.debug("ValidatorFactoryAJV.validateSchema()", validator.errorsText(validator.errors));
+          $log.debug('ValidatorFactoryAJV.validateSchema()', validator.errorsText(validator.errors));
           throw validator.errors;
         }
       });
     };
 
     this.validate = function (schemaObject, documentObject) {
-      $log.debug("ValidatorFactoryAJV.validate()");
+      $log.debug('ValidatorFactoryAJV.validate()');
       return setup().then(function () {
         var result;
         try {
           result = validator.validate(schemaObject, documentObject);
         } catch (e) {
           // Some errors are thrown by Ajv, not wrapped up in its nice validator.errors interface
-          $log.error("ValidatorFactoryAJV.validate()", e.message);
+          $log.error('ValidatorFactoryAJV.validate()', e.message);
           // Wrap the exception into our standard format
           throw [{ message: e.message }];
         }
         // Validation completed - check the results
         if(result) {
-          $log.debug("ValidatorFactoryAJV.validate()", "success");
+          $log.debug('ValidatorFactoryAJV.validate()', 'success');
           return true;
         } else {
-          $log.error("ValidatorFactoryAJV.validate()", validator.errorsText(validator.errors));
+          $log.error('ValidatorFactoryAJV.validate()', validator.errorsText(validator.errors));
           throw validator.errors;
         }
       });

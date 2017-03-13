@@ -1,5 +1,5 @@
 require('./css/main.css');
-require("babel-polyfill");
+require('babel-polyfill');
 
 var angular = require('angular');
 
@@ -29,7 +29,7 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
 
 }).run(function($rootScope, $location, $window) {
   $rootScope.$on('$routeChangeSuccess', function() {
-    console.info("Hash change, informing GA");
+    console.info('Hash change, informing GA');
     $window.ga('send', 'pageview', $location.path());
   });
 });

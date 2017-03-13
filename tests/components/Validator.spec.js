@@ -41,7 +41,7 @@ describe('Validator', function() {
   };
 
   it('mounts the component', function() {
-    const {element, $ctrl} = _createInstance("<validator></validator>");
+    const {element, $ctrl} = _createInstance('<validator></validator>');
 
     // Must have compiled and inserted a scope properly - check that $scope has a child scope
     expect($scope.$$childHead.$ctrl).to.be.ok;
@@ -52,11 +52,11 @@ describe('Validator', function() {
       return a;
     };
 
-    const {element, $ctrl} = _createInstance("<validator validate=\"echo\"></validator>");
+    const {element, $ctrl} = _createInstance('<validator validate="echo"></validator>');
 
     expect($ctrl).to.be.ok;
     expect($ctrl.validate).to.be.a.function;
-    expect($ctrl.validate("foo")).to.eql("foo");
+    expect($ctrl.validate('foo')).to.eql('foo');
   });
 
   it('accepts a parse function', function() {
@@ -64,32 +64,32 @@ describe('Validator', function() {
       return a;
     };
 
-    const {element, $ctrl} = _createInstance("<validator parse=\"echo\"></validator>");
+    const {element, $ctrl} = _createInstance('<validator parse="echo"></validator>');
 
     expect($ctrl).to.be.ok;
     expect($ctrl.parse).to.be.a.function;
-    expect($ctrl.parse("foo")).to.eql("foo");
+    expect($ctrl.parse('foo')).to.eql('foo');
   });
 
   it('contains a form with a document text area', function() {
-    const {element, $ctrl} = _createInstance("<validator></validator>");
+    const {element, $ctrl} = _createInstance('<validator></validator>');
 
-    expect(element[0].querySelector("form textarea.validator-document")).not.to.be.empty;
+    expect(element[0].querySelector('form textarea.validator-document')).not.to.be.empty;
   });
 
   it('binds its document textarea to its document model', function() {
-    $scope.scopeProp = "foo";
+    $scope.scopeProp = 'foo';
 
-    const {element, $ctrl} = _createInstance("<validator doc='scopeProp'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="scopeProp"></validator>');
 
-    var textarea = element[0].querySelector("form textarea.validator-document");
-    expect(textarea.value).to.eql("foo");
+    var textarea = element[0].querySelector('form textarea.validator-document');
+    expect(textarea.value).to.eql('foo');
   });
 
   it('doesn\'t call update when nothing is changed', function() {
-    const {element, $ctrl} = _createInstance("<validator></validator>");
+    const {element, $ctrl} = _createInstance('<validator></validator>');
 
-    var spy = chai.spy.on($ctrl, "update");
+    var spy = chai.spy.on($ctrl, 'update');
 
     // Run a digest
     $rootScope.$digest();
@@ -98,9 +98,9 @@ describe('Validator', function() {
   });
 
   it('calls update when the validate function is changed', function() {
-    const {element, $ctrl} = _createInstance("<validator validate='fn'></validator>");
+    const {element, $ctrl} = _createInstance('<validator validate="fn"></validator>');
 
-    var spy = chai.spy.on($ctrl, "update");
+    var spy = chai.spy.on($ctrl, 'update');
 
     // Change the function
     $scope.fn = function() {
@@ -112,9 +112,9 @@ describe('Validator', function() {
   });
 
   it('calls update when the parse function is changed', function() {
-    const {element, $ctrl} = _createInstance("<validator parse='fn'></validator>");
+    const {element, $ctrl} = _createInstance('<validator parse="fn"></validator>');
 
-    var spy = chai.spy.on($ctrl, "update");
+    var spy = chai.spy.on($ctrl, 'update');
 
     // Change the function
     $scope.fn = function() {
@@ -126,29 +126,29 @@ describe('Validator', function() {
   });
 
   it('calls update when the injected document changes', function() {
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc"></validator>');
 
-    var spy = chai.spy.on($ctrl, "update");
+    var spy = chai.spy.on($ctrl, 'update');
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.have.been.called.once;
   });
 
   it('doesn\'t call update when the injected document changes, but it\'s identical to the internal document', function() {
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc"></validator>');
 
     // Set up the internal state
-    $ctrl.myDoc = "flibble!";
+    $ctrl.myDoc = 'flibble!';
     $ctrl.update($ctrl.myDoc);
     $rootScope.$digest();
 
-    var spy = chai.spy.on($ctrl, "update");
+    var spy = chai.spy.on($ctrl, 'update');
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.not.have.been.called();
@@ -158,7 +158,7 @@ describe('Validator', function() {
     const spy = chai.spy(function(params) {});
     $scope.onUpdateObj = spy;
 
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc" on-update-obj="onUpdateObj(value)"></validator>');
 
     // We *must* use $q else the promises don't resolve properly :/
     // Pretend it parses
@@ -168,7 +168,7 @@ describe('Validator', function() {
     $rootScope.$digest();
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.have.been.called.once;
@@ -179,7 +179,7 @@ describe('Validator', function() {
     const spy = chai.spy(function(params) {});
     $scope.onUpdateObj = spy;
 
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc" on-update-obj="onUpdateObj(value)"></validator>');
 
     // We *must* use $q else the promises don't resolve properly :/
     // Pretend it doesn't parse
@@ -189,7 +189,7 @@ describe('Validator', function() {
     $rootScope.$digest();
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.have.been.called.once;
@@ -200,38 +200,38 @@ describe('Validator', function() {
     const spy = chai.spy(function(params) {});
     $scope.onUpdateObj = spy;
 
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-obj='onUpdateObj(value)'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc" on-update-obj="onUpdateObj(value)"></validator>');
 
     // We *must* use $q else the promises don't resolve properly :/
     // Pretend it parses
-    $ctrl.parse = () => $q.resolve({foo: "bar"});
+    $ctrl.parse = () => $q.resolve({foo: 'bar'});
     // And that it validates
     $ctrl.validate = () => $q.resolve({});
     $rootScope.$digest();
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.have.been.called.once;
-    expect(spy).to.have.been.always.with.exactly({foo: "bar"});
+    expect(spy).to.have.been.always.with.exactly({foo: 'bar'});
   });
 
   it('calls on-update-doc with a value when the injected document changes', function() {
     const spy = chai.spy(function(params) {});
     $scope.onUpdateDoc = spy;
 
-    const {element, $ctrl} = _createInstance("<validator doc='upperDoc' on-update-doc='onUpdateDoc(value)'></validator>");
+    const {element, $ctrl} = _createInstance('<validator doc="upperDoc" on-update-doc="onUpdateDoc(value)"></validator>');
     $rootScope.$digest();
 
     expect($ctrl.onUpdateDoc).to.be.a.function;
 
     // Change the injected document
-    $scope.upperDoc = "flibble!"
+    $scope.upperDoc = 'flibble!'
     $rootScope.$digest();
 
     expect(spy).to.have.been.called.once;
-    expect(spy).to.have.been.always.with.exactly("flibble!");
+    expect(spy).to.have.been.always.with.exactly('flibble!');
   });
 
 });

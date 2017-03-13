@@ -26,18 +26,18 @@ app.service('textService', function($q, $window, $log) {
   this.reset = function() {
     delete self._schemaString;
     delete self._documentString;
-    ls.removeItem("data");
-    ls.removeItem("schema");
+    ls.removeItem('data');
+    ls.removeItem('schema');
   };
 
   // Load document & schema from localstorage
   var ls = $window['localStorage'];
   if (ls.getItem('data')) {
-    $log.info("Loading document from local storage");
+    $log.info('Loading document from local storage');
     self._documentString = ls.getItem('data');
   }
   if (ls.getItem('schema')) {
-    $log.info("Loading schema from local storage");
+    $log.info('Loading schema from local storage');
     self._schemaString = ls.getItem('schema');
   }
 
@@ -46,12 +46,12 @@ app.service('textService', function($q, $window, $log) {
     if (self._documentString) {
       ls.setItem('data', self._documentString);
     } else {
-      ls.removeItem("data");
+      ls.removeItem('data');
     }
     if (self._schemaString) {
       ls.setItem('schema', self._schemaString);
     } else {
-      ls.removeItem("schema");
+      ls.removeItem('schema');
     }
   });
 

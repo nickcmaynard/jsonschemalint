@@ -6,7 +6,7 @@ app.service('alertService', function ($q, $uibModal) {
 
   this.alert = function (params) {
     if (!params) {
-      return $q.reject("params required");
+      return $q.reject('params required');
     }
     return $uibModal.open({
       animation: false,
@@ -14,7 +14,7 @@ app.service('alertService', function ($q, $uibModal) {
       ariaLabelledBy: 'modal-title-top',
       ariaDescribedBy: 'modal-body',
       controller: function ($scope) {},
-      size: params.size || "sm"
+      size: params.size || 'sm'
     }).result;
   };
 

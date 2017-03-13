@@ -1,4 +1,4 @@
-var templateUrl = require("ngtemplate-loader!html-loader!./validator.html")
+var templateUrl = require('ngtemplate-loader!html-loader!./validator.html')
 
 function ValidatorController($scope, $element, $attrs, $log, $q) {
 
@@ -30,7 +30,7 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
 
   let previousDoc = undefined;
   this.update = function(doc) {
-    $log.debug(this.identifier + ".update()");
+    $log.debug(this.identifier + '.update()');
     if (previousDoc !== doc) {
       this.onUpdateDoc({value: doc});
     }
@@ -39,36 +39,36 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
     if (!this.validate || !this.parse) {
       // Abort
       return this.messages = [{
-        message: "Invalid setup, validator is " + this.validate
+        message: 'Invalid setup, validator is ' + this.validate
       },{
-        message: "Invalid setup, parse is " + this.parse
+        message: 'Invalid setup, parse is ' + this.parse
       }];
     }
 
     // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
-    $log.debug(self.identifier + ".update()", "Begining work");
+    $log.debug(self.identifier + '.update()', 'Begining work');
     this.working = true;
 
     // Parse
     var parsePromise = this.parse(doc);
     parsePromise.then(function(obj) {
-      $log.debug(self.identifier + ".update()", "Successful parsing", obj);
+      $log.debug(self.identifier + '.update()', 'Successful parsing', obj);
     }, function(errors) {
-      $log.debug(self.identifier + ".update()", "Errors parsing", errors);
+      $log.debug(self.identifier + '.update()', 'Errors parsing', errors);
     });
 
     // Validate, taking input from parse
     var validatePromise = parsePromise.then(angular.bind(this, this.validate));
     validatePromise.then(function(obj) {
-      $log.debug(self.identifier + ".update()", "Successful validating", obj);
+      $log.debug(self.identifier + '.update()', 'Successful validating', obj);
     }, function(errors) {
-      $log.debug(self.identifier + ".update()", "Errors validating", errors);
+      $log.debug(self.identifier + '.update()', 'Errors validating', errors);
     });
 
     // Combine the two, fail-fast (so if parse fails, we fail immediately rather than waiting for validate)
     var comboPromise = $q.all([parsePromise, validatePromise]).then(function(results) {
       // Successful validation
-      $log.debug(self.identifier + ".update()", "Successful parsing and validation", results);
+      $log.debug(self.identifier + '.update()', 'Successful parsing and validation', results);
 
       var obj = results[0], validateResults = results[1];
 
@@ -79,7 +79,7 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
       }];
     }, function(errors) {
       // Something went wrong failures
-      $log.debug(self.identifier + ".update()", "Errors parsing/validating document", errors);
+      $log.debug(self.identifier + '.update()', 'Errors parsing/validating document', errors);
 
       var parseErrors = errors[0], validateErrors = errors[1];
 
@@ -90,13 +90,13 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
 
     comboPromise.finally(function() {
       // KEEPME: Keep track of whether we're "working".  This is used by the e2e tests
-      $log.debug(self.identifier + ".update()", "Done working");
+      $log.debug(self.identifier + '.update()', 'Done working');
       self.working = false;
     });
   };
 
   this.format = function (doc) {
-    $log.debug(this.identifier + ".format()");
+    $log.debug(this.identifier + '.format()');
     this.parse(doc).then(angular.bind(this, this.prettyPrint)).then(function (text) {
       self.myDoc = text;
       self.update(self.myDoc);
@@ -109,14 +109,14 @@ angular.module('app').component('validator', {
   templateUrl: templateUrl,
   controller: ValidatorController,
   bindings: {
-    "identifier": "@",
-    "title": "@",
-    "doc": "<",
-    "validate": "<",
-    "parse": "<",
-    "prettyPrint": "<",
-    "successMessage": "<",
-    "onUpdateDoc": "&",
-    "onUpdateObj": "&",
+    'identifier': '@',
+    'title': '@',
+    'doc': '<',
+    'validate': '<',
+    'parse': '<',
+    'prettyPrint': '<',
+    'successMessage': '<',
+    'onUpdateDoc': '&',
+    'onUpdateObj': '&',
   }
 });
