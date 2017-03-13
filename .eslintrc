@@ -7,6 +7,7 @@
     // in CommonJS
     "node": true
   },
+  "extends": "eslint:recommended",
   // To give you an idea how to override rule options:
   "rules": {
     "quotes": [2, "single"],
@@ -14,5 +15,8 @@
     "no-mixed-requires": [0],
     "no-underscore-dangle": [0],
     "indent": ["error", 2]
+  },
+  "globals": {
+    "angular": true
   }
 }

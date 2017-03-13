@@ -13,7 +13,7 @@ app.service('alertService', function ($q, $uibModal) {
       template: `<div class="modal-header"><h3 class="modal-title" id="modal-title">${params.title}</h3></div><div class="modal-body" id="modal-body">${params.message}</div><div class="modal-footer"><button class="btn ${params.btnClass || 'btn-primary'}" type="button" ng-click="$close()">{{ 'OK' | translate }}</button></div>`,
       ariaLabelledBy: 'modal-title-top',
       ariaDescribedBy: 'modal-body',
-      controller: function ($scope) {},
+      controller: function () {},
       size: params.size || 'sm'
     }).result;
   };

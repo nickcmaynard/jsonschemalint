@@ -27,9 +27,9 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
     redirectTo: '/version/draft-04/markup/json'
   });
 
-}).run(function($rootScope, $location, $window) {
+}).run(function($rootScope, $location, $window, $log) {
   $rootScope.$on('$routeChangeSuccess', function() {
-    console.info('Hash change, informing GA');
+    $log.info('Hash change, informing GA');
     $window.ga('send', 'pageview', $location.path());
   });
 });

@@ -1,6 +1,5 @@
 'use strict';
 
-var app = angular.module('app', false);
 var aboutDialogTemplateUrl = require('ngtemplate-loader!html-loader!../dialogs/About.html');
 
 var templateUrl = require('ngtemplate-loader!html-loader!./validator-view.html');
@@ -254,7 +253,7 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     // this.schema = doc;
   };
 
-};
+}
 
 angular.module('app').component('validatorView', {
   templateUrl: templateUrl,

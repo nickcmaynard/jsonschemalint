@@ -10,13 +10,13 @@ app.service('textService', function($q, $window, $log) {
   this._documentString;
 
   // Accessors
-  this.getSchema = function(str) {
+  this.getSchema = function() {
     return self._schemaString;
   };
   this.setSchema = function(str) {
     self._schemaString = str;
   };
-  this.getDocument = function(str) {
+  this.getDocument = function() {
     return self._documentString;
   };
   this.setDocument = function(str) {

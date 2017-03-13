@@ -70,7 +70,7 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
       // Successful validation
       $log.debug(self.identifier + '.update()', 'Successful parsing and validation', results);
 
-      var obj = results[0], validateResults = results[1];
+      var obj = results[0];
 
       self.onUpdateObj({value: obj});
       self.isValid = true;
