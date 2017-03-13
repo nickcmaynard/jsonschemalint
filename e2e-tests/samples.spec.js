@@ -22,9 +22,9 @@ describe('samples', function() {
         browser.get('#/version/' + mode + '/markup/' + markup);
 
         // Open the samples menu
-        element(by.buttonText("Samples")).click();
+        element(by.buttonText('Samples')).click();
         // SUSPICION - the samples menu displays outside angular's digest cycle.  So protractor doesn't really know if it's there
-        browser.wait(EC.visibilityOf(element(by.css("ul[aria-labelledby=sampleDropdown]"))), 250);
+        browser.wait(EC.visibilityOf(element(by.css('ul[aria-labelledby=sampleDropdown]'))), 250);
 
         // Click the sample to load it
         element(by.linkText(sample)).click();
@@ -32,19 +32,19 @@ describe('samples', function() {
         browser.wait(lib.isDoneWorking, 2500);
 
         // Schema is valid/invalid
-        expect(element(by.css("validator[identifier=schema] .panel.panel-" + (schemaValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
+        expect(element(by.css('validator[identifier=schema] .panel.panel-' + (schemaValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
         // Document is valid/invalid
-        expect(element(by.css("validator[identifier=document] .panel.panel-" + (documentValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
+        expect(element(by.css('validator[identifier=document] .panel.panel-' + (documentValid ? 'success' : 'danger') )).isDisplayed()).toBeTruthy();
       });
     });
   };
 
   describe('JSON samples', function() {
-    markupSampleTests("json");
+    markupSampleTests('json');
   });
 
   describe('YAML samples', function() {
-    markupSampleTests("yaml");
+    markupSampleTests('yaml');
   });
 
 });

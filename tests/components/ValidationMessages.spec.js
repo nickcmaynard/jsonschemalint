@@ -1,7 +1,5 @@
 describe('ValidationMessages', function() {
-  var $compile,
-      $rootScope,
-      $scope;
+  var $compile, $rootScope, $scope;
 
   // Load the app module, which contains the component
   beforeEach(module('app'));
@@ -16,7 +14,7 @@ describe('ValidationMessages', function() {
   }));
 
   it('mounts the component', function() {
-    var element = $compile("<validation-messages></validation-messages>")($scope);
+    var element = $compile('<validation-messages></validation-messages>')($scope);
     $rootScope.$digest();
 
     // Must have compiled and inserted a scope properly - check that $scope has a child scope
@@ -24,7 +22,7 @@ describe('ValidationMessages', function() {
   });
 
   it('doesn\'t mount a misnamed component', function() {
-    var element = $compile("<validation-messages-are-us></validation-messages-are-us>")($scope);
+    var element = $compile('<validation-messages-are-us></validation-messages-are-us>')($scope);
     $rootScope.$digest();
 
     // Should not have compiled and inserted a scope properly
@@ -32,45 +30,45 @@ describe('ValidationMessages', function() {
   });
 
   it('is empty when given no data', function() {
-    var element = $compile("<validation-messages></validation-messages>")($scope);
+    var element = $compile('<validation-messages></validation-messages>')($scope);
     $rootScope.$digest();
 
-    expect(element[0].querySelectorAll("*")).to.have.length(0);
+    expect(element[0].querySelectorAll('*')).to.have.length(0);
   });
 
   it('has a row for each message', function() {
-    var element = $compile("<validation-messages messages='scopeProp'></validation-messages>")($scope);
+    var element = $compile('<validation-messages messages="scopeProp"></validation-messages>')($scope);
     $rootScope.$digest();
 
     var $ctrl = $scope.$$childHead.$ctrl;
 
     // Simple messages
-    $scope.scopeProp = [ { "message":"foo" }, { "message":"foo" } ];
+    $scope.scopeProp = [ { 'message':'foo' }, { 'message':'foo' } ];
     $rootScope.$digest();
 
-    expect(element[0].querySelectorAll("tbody tr")).to.have.length(2);
+    expect(element[0].querySelectorAll('tbody tr')).to.have.length(2);
 
     // Complex messages
-    $scope.scopeProp = [ { "message":"foo", "dataPath": "bar" }, { "message":"foo", "dataPath": "bar2" }, { "message":"foo", "dataPath": "bar3" } ];
+    $scope.scopeProp = [ { 'message':'foo', 'dataPath': 'bar' }, { 'message':'foo', 'dataPath': 'bar2' }, { 'message':'foo', 'dataPath': 'bar3' } ];
     $rootScope.$digest();
 
-    expect(element[0].querySelectorAll("tbody tr")).to.have.length(3);
+    expect(element[0].querySelectorAll('tbody tr')).to.have.length(3);
 
   });
 
   it('correctly classifies simple and error messages', function() {
-    var element = $compile("<validation-messages></validation-messages>")($scope);
+    var element = $compile('<validation-messages></validation-messages>')($scope);
     $rootScope.$digest();
 
     var $ctrl = $scope.$$childHead.$ctrl;
 
-    expect($ctrl.simpleMessages([{ message: "foo" }])).to.have.length(1);
-    expect($ctrl.errorMessages([{ message: "foo" }])).to.have.length(0);
+    expect($ctrl.simpleMessages([{ message: 'foo' }])).to.have.length(1);
+    expect($ctrl.errorMessages([{ message: 'foo' }])).to.have.length(0);
 
-    expect($ctrl.simpleMessages([{ message: "foo", "dataPath": "" }])).to.have.length(0);
-    expect($ctrl.errorMessages([{ message: "foo", "dataPath": "" }])).to.have.length(1);
+    expect($ctrl.simpleMessages([{ message: 'foo', 'dataPath': '' }])).to.have.length(0);
+    expect($ctrl.errorMessages([{ message: 'foo', 'dataPath': '' }])).to.have.length(1);
 
-    expect($ctrl.simpleMessages([{ message: "foo", "dataPath": "bar" }])).to.have.length(0);
-    expect($ctrl.errorMessages([{ message: "foo", "dataPath": "bar" }])).to.have.length(1);
+    expect($ctrl.simpleMessages([{ message: 'foo', 'dataPath': 'bar' }])).to.have.length(0);
+    expect($ctrl.errorMessages([{ message: 'foo', 'dataPath': 'bar' }])).to.have.length(1);
   });
 });

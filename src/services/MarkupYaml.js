@@ -12,14 +12,14 @@ app.service('markupYaml', function ($window, $q, alertService, $log) {
       try {
         require.ensure([], function(require) {
           yaml = require('yamljs');
-          $log.debug("MarkupYAML.setup()", "Loaded yamljs");
+          $log.debug('MarkupYAML.setup()', 'Loaded yamljs');
           resolve(true);
         });
       } catch (error) {
-        $log.error("MarkupYAML.setup()", "Could not load yamljs", error);
+        $log.error('MarkupYAML.setup()', 'Could not load yamljs', error);
         alertService.alert({
-          title: "{{ 'ERROR_MODULE_LOADING_FAILED_TITLE' | translate }}",
-          message: "{{ 'ERROR_MODULE_LOADING_FAILED_CONTENT' | translate }}"
+          title: '{{ "ERROR_MODULE_LOADING_FAILED_TITLE" | translate }}',
+          message: '{{ "ERROR_MODULE_LOADING_FAILED_CONTENT" | translate }}'
         });
         reject(error);
       }
@@ -33,7 +33,7 @@ app.service('markupYaml', function ($window, $q, alertService, $log) {
         return obj;
       } catch (err) {
         throw [{
-          message_tid: "ERROR_INVALID_YAML"
+          message_tid: 'ERROR_INVALID_YAML'
         }];
       }
     });

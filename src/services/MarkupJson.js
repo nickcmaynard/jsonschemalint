@@ -11,7 +11,7 @@ app.service('markupJson', function ($q) {
         resolve(obj);
       } catch (err) {
         reject([{
-          message_tid: "ERROR_INVALID_JSON"
+          message_tid: 'ERROR_INVALID_JSON'
         }]);
       }
     });
