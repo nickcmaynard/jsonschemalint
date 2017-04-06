@@ -14,16 +14,37 @@ app.service('textService', function($q, $window, $log) {
     return self._schemaString;
   };
   this.setSchema = function(str) {
+    if (str !== self._schemaString) {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Content',
+        eventAction: 'Schema-Change'
+      });
+    }
     self._schemaString = str;
   };
   this.getDocument = function() {
     return self._documentString;
   };
   this.setDocument = function(str) {
+    if (str !== self._documentString) {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Content',
+        eventAction: 'Document-Change'
+      });
+    }
     self._documentString = str;
   };
 
   this.reset = function() {
+    // Analytics
+    $window.ga('send', {
+      hitType: 'event',
+      eventCategory: 'Content',
+      eventAction: 'Reset'
+    });
+
     delete self._schemaString;
     delete self._documentString;
     ls.removeItem('data');

@@ -73,7 +73,9 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
   this.sample = function(ref) {
     $log.debug('sample', ref);
 
-    this.getCurrentMarkupService().then(function(markupService) {
+    var p = this.getCurrentMarkupService();
+    // Function
+    p.then(function(markupService) {
       $http.get('samples/' + ref + '.document.json').success(function(data) {
         markupService.prettyPrint(data).then(function(text) {
           textService.setDocument(text);
@@ -87,13 +89,28 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     }, function(errors) {
       alertService.alert({title: '{{ "ERROR_SAMPLE_LOADING" | translate }}', message: errors[0].message, btnClass: 'btn-danger'});
     });
+    // Analytics
+    p.then(function() {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Samples',
+        eventAction: 'Load',
+        eventLabel: ref
+      });
+    }, function(errors) {
+      $window.ga('send', 'exception', {
+        exDescription: 'sample-load-error :: ' + errors[0].message
+      });
+    });
   };
 
   // Load a Gist by ID
   this.loadGist = function(gistId) {
     this.loadedGistId = gistId;
 
-    gist.retrieve(gistId).then(function(gist) {
+    var p = gist.retrieve(gistId);
+    // Function
+    p.then(function(gist) {
       $log.info('Retrieved gist', gistId, gist);
 
       self.loadedGist = gist;
@@ -131,11 +148,25 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
       $log.error(error);
       alertService.alert({title: '{{ "ERROR_GIST_LOADING" | translate }}', message: error, btnClass: 'btn-danger'});
     });
+    // Analytics
+    p.then(function() {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Gists',
+        eventAction: 'Load'
+      });
+    }, function(error) {
+      $window.ga('send', 'exception', {
+        exDescription: 'gist-load-error :: ' + error
+      });
+    });
   };
 
   // Save a Gist and inform of success
   this.saveGist = function() {
-    gist.save(textService.getSchema(), textService.getDocument()).then(function(gistId) {
+    var p = gist.save(textService.getSchema(), textService.getDocument());
+    // Function
+    p.then(function(gistId) {
       $route.updateParams({gist: gistId});
       var url = $location.absUrl();
       alertService.alert({
@@ -145,6 +176,19 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     }, function(error) {
       $log.error(error);
       alertService.alert({title: '{{ "ERROR_GIST_SAVING" | translate }}', message: error, btnClass: 'btn-danger'});
+
+    });
+    // Analytics
+    p.then(function() {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Gists',
+        eventAction: 'Save'
+      });
+    }, function(error) {
+      $window.ga('send', 'exception', {
+        exDescription: 'gist-save-error :: ' + error
+      });
     });
   };
 
@@ -245,12 +289,10 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
   this.onUpdateDocumentString = function(doc) {
     $log.debug('Document string changed');
     textService.setDocument(doc);
-    // this.document = doc;
   };
   this.onUpdateSchemaString = function(doc) {
     $log.debug('Schema string changed');
     textService.setSchema(doc);
-    // this.schema = doc;
   };
 
 }
