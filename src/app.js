@@ -30,7 +30,8 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
 }).run(function($rootScope, $location, $window, $log) {
   $rootScope.$on('$routeChangeSuccess', function() {
     $log.info('Hash change, informing GA');
-    $window.ga('send', 'pageview', $location.path());
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+    $window.ga('set', 'page', $location.path());
   });
 });
 

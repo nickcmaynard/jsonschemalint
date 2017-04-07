@@ -1,6 +1,6 @@
 var templateUrl = require('ngtemplate-loader!html-loader!./validator.html')
 
-function ValidatorController($scope, $element, $attrs, $log, $q) {
+function ValidatorController($scope, $element, $attrs, $log, $q, $window) {
 
   var self = this;
 
@@ -97,9 +97,24 @@ function ValidatorController($scope, $element, $attrs, $log, $q) {
 
   this.format = function (doc) {
     $log.debug(this.identifier + '.format()');
-    this.parse(doc).then(angular.bind(this, this.prettyPrint)).then(function (text) {
+    var p = this.parse(doc).then(angular.bind(this, this.prettyPrint));
+    // Function
+    p.then(function (text) {
       self.myDoc = text;
       self.update(self.myDoc);
+    });
+    // Analytics
+    p.then(function() {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Content',
+        eventAction: 'Format',
+        eventLabel: self.identifier
+      });
+    }, function(error) {
+      $window.ga('send', 'exception', {
+        exDescription: 'content-format-error :: ' + error.message
+      });
     });
   };
 
