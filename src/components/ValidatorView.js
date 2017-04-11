@@ -1,8 +1,8 @@
 'use strict';
 
-var aboutDialogTemplateUrl = require('ngtemplate-loader!html-loader!../dialogs/About.html');
+var aboutDialogTemplateUrl = require('ngtemplate-loader?relativeTo=/src/!html-loader!../dialogs/About.html');
 
-var templateUrl = require('ngtemplate-loader!html-loader!./validator-view.html');
+var templateUrl = require('ngtemplate-loader?relativeTo=/src/!html-loader!./validator-view.html');
 
 function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $route, $location, $uibModal, $templateCache, gist, markupJson, markupYaml, validatorFactoryJSV, validatorFactoryAJV, alertService, textService) {
 
