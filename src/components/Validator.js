@@ -1,4 +1,4 @@
-var templateUrl = require('ngtemplate-loader!html-loader!./validator.html')
+var templateUrl = require('ngtemplate-loader?relativeTo=/src/!html-loader!./validator.html')
 
 function ValidatorController($scope, $element, $attrs, $log, $q, $window) {
 
