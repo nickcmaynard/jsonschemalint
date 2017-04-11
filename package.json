@@ -29,7 +29,7 @@
     "ajv": "^4.6.0",
     "angular": "~1.5.8",
     "angular-route": "~1.5.8",
-    "angular-sanitize": "^1.5.8",
+    "angular-sanitize": "~1.5.8",
     "angular-translate": "^2.13.0",
     "angular-translate-loader-static-files": "^2.13.0",
     "angular-ui-bootstrap": "^2.2.0",
