@@ -5,6 +5,8 @@ node_js:
 - 6
 install:
 - npm install
+- npm update
+- npm prune
 script:
 - npm run ci:travis
 cache:
