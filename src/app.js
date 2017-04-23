@@ -7,7 +7,7 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
 
   $translateProvider.useSanitizeValueStrategy('sanitize');
   // Bake in 'en' using webpack
-  $translateProvider.translations('en', require('json-loader!../www/translations/locale-en.json'));
+  $translateProvider.translations('en', require('../www/translations/locale-en.json'));
   // For everything else, go to the static files loader
   $translateProvider.useStaticFilesLoader({
     prefix: 'translations/locale-',
@@ -29,7 +29,7 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
 
 }).run(function($rootScope, $location, $window, $log) {
   $rootScope.$on('$routeChangeSuccess', function() {
-    $log.info('Hash change, informing GA');
+    $log.info('Hash change, informing GA', $location.path());
     $window.ga('send', 'pageview', $location.path());
   });
 });
