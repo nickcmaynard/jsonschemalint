@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-// Handles draft-04, v5-unofficial
+// Handles draft-04, v5-unofficial, and draft-06
 app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
 
   var Validator = function (version) {
@@ -15,15 +15,43 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         try {
           require.ensure([], function(require) {
             var ajv = require('ajv');
+            var ajvKeywords = require('ajv-keywords');
+            var schemas = require('./MetaSchemaLoader');
             $log.debug('ValidatorFactoryAJV.setup()', 'Loaded AJV');
             validator = ajv({
               verbose: true,
               allErrors: true,
               //
               // VERSION DETERMINATION LOGIC
+              // draft-04: Official draft-04 metaschema
+              // v5-unofficial: An unofficial version of the scrapped draft-05 metaschema. It's a long story, don't ask. 
+              // draft-06: The official draft-06 
+              // Experimental: Currently draft-06, but with the $data flag enabled, and custom keywords added.
               //
-              v5: version === 'v5-unofficial'
+              meta: !['draft-04', 'v5-unofficial'].includes(version),
+              $data: ['v5-unofficial', 'Experimental'].includes(version),
+              patternGroups: version === 'v5-unofficial', //Waiting for patternGroups hotfix
+              unknownFormats: 'ignore',
+              extendRefs: true
             });
+            if (version === 'draft-04') {
+              validator.addMetaSchema(schemas.draft4);
+              validator._opts.defaultMeta = schemas.draft4.id;
+              validator.removeKeyword('propertyNames');
+              validator.removeKeyword('contains');
+              validator.removeKeyword('const');
+            }
+            else if (version === 'v5-unofficial') {
+              validator.addMetaSchema(schemas.draft4);
+              validator.addMetaSchema(schemas.v5);
+              validator._opts.defaultMeta = schemas.v5.id;
+              validator.addKeyword('constant', {macro: x => ({'const': x})});
+              validator.removeKeyword('propertyNames');
+              ajvKeywords(validator, ['switch', 'patternRequired', 'formatMinimum', 'formatMaximum']);
+            }
+            else if (version === 'Experimental') {
+              ajvKeywords(validator);
+            }
             resolve(true);
           });
         } catch (error) {

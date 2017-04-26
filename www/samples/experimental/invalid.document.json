@@ -1,0 +1,14 @@
+{
+  "foo": "Should be equal to bar",
+  "bar": "These should be identical",
+  "baz": {
+    "staticProperty": ["This needs at least one number"],
+    "prop erty1": "The propertyNames keyword is an alternative to patternProperties",
+    "pr()perty2": "All property names must match supplied conditions (in this case, it's a regex)"
+  },
+  "rangeExample": 6,
+  "ifExample": {
+    "foo": true,
+    "bar": "Where is baz?"
+  }
+}

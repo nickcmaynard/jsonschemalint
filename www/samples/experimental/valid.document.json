@@ -1,0 +1,14 @@
+{
+  "foo": "These should be identical",
+  "bar": "These should be identical",
+  "baz": {
+    "staticProperty": ["This needs at least one number", 32],
+    "property1": "The propertyNames keyword is an alternative to patternProperties",
+    "property2": "All property names must match supplied conditions (in this case, it's a regex)"
+  },
+  "rangeExample": 3,
+  "ifExample": {
+    "foo": true,
+    "baz": 32
+  }
+}

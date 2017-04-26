@@ -39,6 +39,18 @@
                             </li>
                             <li role="menuitem"><a ng-click="$ctrl.sample('v5-unofficial/invalid')" ng-bind-html="'sample_titles.v5-unofficial-invalid' | translate"></a>
                             </li>
+                            <li role="seperator" class="divider"></li>
+                            <li class="dropdown-header">draft-06</li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/valid')">Sample draft-06 schema and valid document</a>
+                            </li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/invalid')">Sample draft-06 schema and <strong>invalid</strong> document</a>
+                            </li>
+                            <li role="seperator" class="divider"></li>
+                            <li class="dropdown-header">Experimental</li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/valid')">Sample Experimental schema and valid document</a>
+                            </li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/invalid')">Sample Experimental schema and <strong>invalid</strong> document</a>
+                            </li>
                         </ul>
                     </div>
 

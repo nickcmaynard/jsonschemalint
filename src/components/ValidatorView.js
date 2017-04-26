@@ -28,7 +28,7 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     },
     'draft-04': {
       service: validatorFactoryAJV('draft-04'),
-      name: 'draft-04 (latest)'
+      name: 'draft-04'
     },
     'v5-unofficial': {
       service: validatorFactoryAJV('v5-unofficial'),
@@ -36,6 +36,18 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
       alerts: [{
         className: 'alert-warning',
         content_tid: 'WARNING_V5_UNOFFICIAL'
+      }]
+    },
+    'draft-06': {
+      service: validatorFactoryAJV('draft-06'),
+      name: 'draft-06 (latest)'
+    },
+    'Experimental': {
+      service: validatorFactoryAJV('Experimental'),
+      name: 'Experimental',
+      alerts: [{
+        className: 'alert-warning',
+        content_tid: 'WARNING_EXPERIMENTAL'
       }]
     }
   };
