@@ -79,6 +79,7 @@
     "protractor": "^5.1.1",
     "protractor-jasmine2-screenshot-reporter": "^0.3.3",
     "rimraf": "^2.6.0",
+    "serviceworker-webpack-plugin": "^0.2.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1",
