@@ -36,8 +36,8 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
   // Service worker registration
   var runtime = require('serviceworker-webpack-plugin/lib/runtime');
   if ('serviceWorker' in navigator) {
-    const registration = runtime.register();
-    console.info("Service Worker registered");
+    runtime.register();
+    $log.info('Service Worker registered');
   }
 });
 
