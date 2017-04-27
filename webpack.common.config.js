@@ -4,6 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var WebpackMd5Hash = require('webpack-md5-hash');
+var ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
 var path = require('path');
 
 module.exports = {
@@ -65,6 +66,10 @@ module.exports = {
         warnings: false
       },
       sourceMap: true
+    }),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, 'src/service-worker.js'),
+      filename: 'service-worker.js'
     })
   ],
   node: {
