@@ -1,5 +1,12 @@
+env:
+  global:
+  # SAUCE_USERNAME encrypted for Travis
+  - secure: "h2epx5OW3gyFLAOXxtGqGy0PrLEGW9FMvZIa6TdQ83ozw3yPVx4CfusMQ7axy02UeZg1yCZ+ELNOd5aE1q/bTJejtrafJz/tx9N6J4DQOemL9ocA+Z598PKFdW0NdFMUkUlgktU0h1aoWYf2CBfDoeEadwxDlgqnCzJKvDLRAIo="
 addons:
   sauce_connect: true
+  jwt:
+  # SAUCE_ACCESS_TOKEN encrypted for Travis
+  - secure: "OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8="
 language: node_js
 node_js:
 - 6
