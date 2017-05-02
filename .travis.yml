@@ -1,7 +1,5 @@
 env:
-  global:
-  # SAUCE_USERNAME encrypted for Travis
-  - secure: "h2epx5OW3gyFLAOXxtGqGy0PrLEGW9FMvZIa6TdQ83ozw3yPVx4CfusMQ7axy02UeZg1yCZ+ELNOd5aE1q/bTJejtrafJz/tx9N6J4DQOemL9ocA+Z598PKFdW0NdFMUkUlgktU0h1aoWYf2CBfDoeEadwxDlgqnCzJKvDLRAIo="
+  - SAUCE_USERNAME=nickcmaynard-oss
 addons:
   sauce_connect: true
   jwt:
