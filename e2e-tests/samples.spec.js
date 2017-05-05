@@ -9,12 +9,19 @@ describe('samples', function() {
     // Validating in draft-03 mode should force JSV to get loaded - the draft-04 samples (because they're simple) should be OK
     { mode: 'draft-03', sample: 'Sample draft-04 schema and valid document', schemaValid: true, documentValid: true },
     { mode: 'draft-03', sample: 'Sample draft-04 schema and invalid document', schemaValid: true, documentValid: false },
-    // Validating in draft-04 mode should force Ajv to get loaded
+    // Validating in draft-06 mode should force Ajv to get loaded
+    { mode: 'draft-06', sample: 'Sample draft-06 schema and valid document', schemaValid: true, documentValid: true },
+    { mode: 'draft-06', sample: 'Sample draft-06 schema and invalid document', schemaValid: true, documentValid: false },
+    // Validating in draft-04 mode to make sure AJV's backwards comptible options are set properly
     { mode: 'draft-04', sample: 'Sample draft-04 schema and valid document', schemaValid: true, documentValid: true },
     { mode: 'draft-04', sample: 'Sample draft-04 schema and invalid document', schemaValid: true, documentValid: false },
     // v5-unofficial because we can
     { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and valid document', schemaValid: true, documentValid: true },
-    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and invalid document', schemaValid: true, documentValid: false }
+    { mode: 'v5-unofficial', sample: 'Sample v5-unofficial schema and invalid document', schemaValid: true, documentValid: false },
+    // Technically, the draft-06 tests would work with experimental as well - these samples exist mainly to 
+    // show off the new features. But we may as well throw them in the test matrix for the sake of completeness. 
+    { mode: 'experimental', sample: 'Sample experimental schema and valid document', schemaValid: true, documentValid: true },
+    { mode: 'experimental', sample: 'Sample experimental schema and invalid document', schemaValid: true, documentValid: false }
   ];
   var markupSampleTests = function(markup) {
     sampleTestMatrix.forEach(({mode, sample, schemaValid, documentValid}) => {

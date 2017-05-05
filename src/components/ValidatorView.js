@@ -42,9 +42,9 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
       service: validatorFactoryAJV('draft-06'),
       name: 'draft-06 (latest)'
     },
-    'Experimental': {
-      service: validatorFactoryAJV('Experimental'),
-      name: 'Experimental',
+    'experimental': {
+      service: validatorFactoryAJV('experimental'),
+      name: 'experimental',
       alerts: [{
         className: 'alert-warning',
         content_tid: 'WARNING_EXPERIMENTAL'

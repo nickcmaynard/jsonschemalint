@@ -2,7 +2,7 @@
 
 var app = angular.module('app', false);
 
-// Handles draft-04, v5-unofficial, and draft-06
+// Handles draft-04 and up
 app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
 
   var Validator = function (version) {
@@ -26,10 +26,10 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
               // draft-04: Official draft-04 metaschema
               // v5-unofficial: An unofficial version of the scrapped draft-05 metaschema. It's a long story, don't ask. 
               // draft-06: The official draft-06 
-              // Experimental: Currently draft-06, but with the $data flag enabled, and custom keywords added.
+              // experimental: Currently draft-06, but with the $data flag enabled, and custom keywords added.
               //
               meta: !['draft-04', 'v5-unofficial'].includes(version),
-              $data: ['v5-unofficial', 'Experimental'].includes(version),
+              $data: ['v5-unofficial', 'experimental'].includes(version),
               patternGroups: version === 'v5-unofficial', //Waiting for patternGroups hotfix
               unknownFormats: 'ignore',
               extendRefs: true
@@ -49,7 +49,7 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
               validator.removeKeyword('propertyNames');
               ajvKeywords(validator, ['switch', 'patternRequired', 'formatMinimum', 'formatMaximum']);
             }
-            else if (version === 'Experimental') {
+            else if (version === 'experimental') {
               ajvKeywords(validator);
             }
             resolve(true);
