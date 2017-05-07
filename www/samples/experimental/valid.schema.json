@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "foo": {
+      "const": {
+        "$data": "/bar"
+      }
+    },
+    "bar": {
+      "type": "string"
+    },
+    "baz": {
+      "type": "object",
+      "properties": {
+        "staticProperty": {
+          "type": "array",
+          "contains": {
+            "type": "number"
+          }
+        }
+      },
+      "propertyNames": {
+        "pattern": "^([0-9a-zA-Z]*)$"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "rangeExample": {
+      "type": "number",
+      "range": [0,5]
+    },
+    "ifExample": {
+      "type": "object",
+      "if": {
+        "enum": [true]
+      },
+      "then": {
+        "required": ["bar"]
+      },
+      "else": {
+        "required": ["baz"]
+      }
+    }
+  }
+}
