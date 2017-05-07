@@ -4,7 +4,8 @@
   "RESET": "Reset",
   "SAVE_AS_GIST": "Save as Gist",
   "MARKUP_LANGUAGE": "Markup language",
-  "SPEC_VERSION": "Spec version",
+  "OFFICIAL_SPEC_VERSION": "Official spec version",
+  "UNOFFICIAL_SPEC_VERSION": "Unofficial spec version",
   "SCHEMA": "Schema",
   "DOCUMENT": "Document",
   "MESSAGE": "Message",
@@ -20,15 +21,19 @@
   "GIST_VISIT": "Visit saved schema/document pair",
 
   "sample_titles": {
+    "draft-04-valid": "Sample draft-04 schema and valid document",
+    "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document",
+    "draft-06-valid": "Sample draft-06 schema and valid document",
+    "draft-06-invalid": "Sample draft-06 schema and <strong>invalid</strong> document",
     "v5-unofficial-valid": "Sample v5-unofficial schema and valid document",
     "v5-unofficial-invalid": "Sample v5-unofficial schema and <strong>invalid</strong> document",
-    "draft-04-valid": "Sample draft-04 schema and valid document",
-    "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document"
+    "experimental-valid": "Sample experimental schema and valid document",
+    "experimental-invalid": "Sample experimental schema and <strong>invalid</strong> document"
   },
 
   "WARNING_V5_UNOFFICIAL": "This schema version, v5-unofficial, was a prototype for a draft version that was eventually scrapped. Previously, JSON Schema Lint offered this prototype as \"draft-05\", as it was originally meant to supersede draft-04.<br />This is not, and will never be, an official JSON Schema version and <em>should not be used for new projects</em>.  Please see the schema dropdown for the latest official version.",
   "WARNING_EXPERIMENTAL": "This is an experimental meta-schema used for testing new features. Currently uses draft-06 with the <a href='https://epoberezkin.github.io/ajv/#data-reference'>$data keyword</a> enabled,<br /> along with additional <a href='https://github.com/epoberezkin/ajv-keywords'>custom keywords</a> provided by Ajv. Features may be added or removed from experimental at any time. <br /> Avoid using experimental for new projects unless you fully understand the risks of doing so.",
-  
+
   "SCHEMA_VALID_MESSAGE": "Schema is valid according to {{name}}.",
   "DOCUMENT_VALID_MESSAGE": "Document validates against the schema, spec version {{name}}.",
 

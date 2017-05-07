@@ -34,22 +34,22 @@
                             <li role="menuitem"><a ng-click="$ctrl.sample('draft4/invalid')" ng-bind-html="'sample_titles.draft-04-invalid' | translate"></a>
                             </li>
                             <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">draft-06</li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/valid')" ng-bind-html="'sample_titles.draft-06-valid' | translate"></a>
+                            </li>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/invalid')" ng-bind-html="'sample_titles.draft-06-invalid' | translate"></a>
+                            </li>
+                            <li role="separator" class="divider"></li>
                             <li class="dropdown-header">v5-unofficial</li>
                             <li role="menuitem"><a ng-click="$ctrl.sample('v5-unofficial/valid')" ng-bind-html="'sample_titles.v5-unofficial-valid' | translate"></a>
                             </li>
                             <li role="menuitem"><a ng-click="$ctrl.sample('v5-unofficial/invalid')" ng-bind-html="'sample_titles.v5-unofficial-invalid' | translate"></a>
                             </li>
                             <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">draft-06</li>
-                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/valid')">Sample draft-06 schema and valid document</a>
-                            </li>
-                            <li role="menuitem"><a ng-click="$ctrl.sample('draft6/invalid')">Sample draft-06 schema and <strong>invalid</strong> document</a>
-                            </li>
-                            <li role="separator" class="divider"></li>
                             <li class="dropdown-header">experimental</li>
-                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/valid')">Sample experimental schema and valid document</a>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/valid')" ng-bind-html="'sample_titles.experimental-valid' | translate"></a>
                             </li>
-                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/invalid')">Sample experimental schema and <strong>invalid</strong> document</a>
+                            <li role="menuitem"><a ng-click="$ctrl.sample('experimental/invalid')" ng-bind-html="'sample_titles.experimental-invalid' | translate"></a>
                             </li>
                         </ul>
                     </div>
@@ -84,9 +84,14 @@
                                 <span class="caret"></span>
                             </button>
                             <ul uib-dropdown-menu class="dropdown-menu" aria-labelledby="specVersionDropdown">
-                                <li class="dropdown-header">{{ 'SPEC_VERSION' | translate:$ctrl.currentValidator }}</li>
-                                <li role="menuitem" ng-repeat="(key, value) in $ctrl.validators" ng-class="{disabled: $ctrl.specVersion==key}">
-                                    <a ng-click="$ctrl.setSpecVersion(key)">{{value.name}}</a>
+                                <li class="dropdown-header">{{ 'OFFICIAL_SPEC_VERSION' | translate:$ctrl.currentValidator }}</li>
+                                <li role="menuitem" ng-repeat="value in $ctrl.validatorsArr() | filter: { unofficial: '!true' }" ng-class="{disabled: $ctrl.specVersion==value.name}">
+                                    <a ng-click="$ctrl.setSpecVersion(value.name)">{{value.label || value.name}}</a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">{{ 'UNOFFICIAL_SPEC_VERSION' | translate:$ctrl.currentValidator }}</li>
+                                <li role="menuitem" ng-repeat="value in $ctrl.validatorsArr() | filter:{ unofficial : true }" ng-class="{disabled: $ctrl.specVersion==value.name}">
+                                    <a ng-click="$ctrl.setSpecVersion(value.name)">{{value.label || value.name}}</a>
                                 </li>
                             </ul>
                         </div>

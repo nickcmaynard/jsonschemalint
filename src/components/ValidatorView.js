@@ -30,17 +30,19 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
       service: validatorFactoryAJV('draft-04'),
       name: 'draft-04'
     },
+    'draft-06': {
+      service: validatorFactoryAJV('draft-06'),
+      name: 'draft-06',
+      label: 'draft-06 (latest)'
+    },
     'v5-unofficial': {
       service: validatorFactoryAJV('v5-unofficial'),
       name: 'v5-unofficial',
       alerts: [{
         className: 'alert-warning',
         content_tid: 'WARNING_V5_UNOFFICIAL'
-      }]
-    },
-    'draft-06': {
-      service: validatorFactoryAJV('draft-06'),
-      name: 'draft-06 (latest)'
+      }],
+      unofficial: true
     },
     'experimental': {
       service: validatorFactoryAJV('experimental'),
@@ -48,8 +50,12 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
       alerts: [{
         className: 'alert-warning',
         content_tid: 'WARNING_EXPERIMENTAL'
-      }]
+      }],
+      unofficial: true
     }
+  };
+  this.validatorsArr = function() {
+    return Object.values(this.validators);
   };
 
   // Set up markup languages
