@@ -39,11 +39,13 @@ module.exports = function (config) {
 
     babelPreprocessor: {
       options: {
-        presets: ['env', {
-          'targets': {
-            'browsers': ['last 2 versions']
-          }
-        }]
+        presets: [
+          ['env', {
+            'targets': {
+              'browsers': ['last 2 versions']
+            }
+          }]
+        ]
       }
     },
 
