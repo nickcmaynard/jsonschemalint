@@ -6,7 +6,7 @@ var webpackConfig = require('./webpack.dev.config');
 var commonsChunkPluginIndex = webpackConfig.plugins.findIndex(plugin => plugin.chunkNames);
 webpackConfig.plugins.splice(commonsChunkPluginIndex, 1);
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -39,7 +39,11 @@ module.exports = function(config) {
 
     babelPreprocessor: {
       options: {
-        presets: ['es2015']
+        presets: ['env', {
+          'targets': {
+            'browsers': ['last 2 versions']
+          }
+        }]
       }
     },
 
