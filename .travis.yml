@@ -17,10 +17,10 @@ cache:
   directories:
   - node_modules
 deploy:
-  # Deploy via rsync
+  # Deploy via rsync - only the dist/ folder
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet -e 'ssh -o IdentitiesOnly=yes -o IdentityFile=$TRAVIS_BUILD_DIR/.travis/travis-ssh-key' --exclude '.git' --exclude '.travis' $TRAVIS_BUILD_DIR/ ncm@jsonschemalint.com:/
+  script: rsync -r -e 'ssh -o IdentitiesOnly=yes -o IdentityFile=$TRAVIS_BUILD_DIR/.travis/travis-ssh-key' $TRAVIS_BUILD_DIR/dist/ ncm@jsonschemalint.com:/
   on:
     branch: master
 before_deploy:
