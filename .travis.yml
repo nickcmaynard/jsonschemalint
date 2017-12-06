@@ -4,6 +4,8 @@ addons:
   sauce_connect: true
   jwt:
   - secure: OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8=
+  ssh_known_hosts:
+  - jsonschemalint.com # For deployment
 language: node_js
 node_js:
 - 6
