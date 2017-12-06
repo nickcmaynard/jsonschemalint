@@ -3,6 +3,10 @@ Order Allow,Deny
 Deny from all
 </Files>
 
+# Some things should never be served up
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.travis
+
 RewriteEngine On
 
 # Not letsencrypt challenge responses!

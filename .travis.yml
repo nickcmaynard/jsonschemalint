@@ -1,10 +1,9 @@
 env:
-  - SAUCE_USERNAME=nickcmaynard-oss
+- SAUCE_USERNAME=nickcmaynard-oss
 addons:
   sauce_connect: true
   jwt:
-  # SAUCE_ACCESS_TOKEN encrypted for Travis
-  - secure: "OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8="
+  - secure: OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8=
 language: node_js
 node_js:
 - 6
@@ -17,3 +16,17 @@ script:
 cache:
   directories:
   - node_modules
+deploy:
+  # Deploy via rsync
+  provider: script
+  skip_cleanup: true
+  script: rsync -r --delete-after --quiet -e 'ssh -o IdentitiesOnly=yes -o IdentityFile=$TRAVIS_BUILD_DIR/.travis/travis-ssh-key' --exclude '.git' --exclude '.travis' $TRAVIS_BUILD_DIR/ ncm@jsonschemalint.com:/
+  on:
+    branch: master
+before_deploy:
+  # Make the SSH key available
+- openssl aes-256-cbc -K $encrypted_ab3dc958fbe9_key -iv $encrypted_ab3dc958fbe9_iv
+  -in .travis/travis-ssh-key.enc -out .travis/travis-ssh-key -d
+after_deploy:
+  # Remove the SSH key
+- rm .travis/travis-ssh-key
