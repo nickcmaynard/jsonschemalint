@@ -27,6 +27,7 @@ deploy:
     branch: master
 before_deploy:
   # Make the SSH key available
+- umask 0077
 - openssl aes-256-cbc -K $encrypted_ab3dc958fbe9_key -iv $encrypted_ab3dc958fbe9_iv
   -in .travis/travis-ssh-key.enc -out .travis/travis-ssh-key -d
 after_deploy:
