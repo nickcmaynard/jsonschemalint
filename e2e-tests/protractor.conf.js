@@ -27,7 +27,7 @@ var config = {
     });
   },
 
-  baseUrl: 'http://localhost:3001/',
+  baseUrl: process.env.LIVE ? 'https://jsonschemalint.com' : 'http://localhost:3001/',
 
   framework: 'jasmine2',
 

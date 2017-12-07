@@ -33,3 +33,4 @@ before_deploy:
 after_deploy:
   # Remove the SSH key
 - rm .travis/travis-ssh-key
+- npm run e2e-live
