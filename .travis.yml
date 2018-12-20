@@ -22,7 +22,7 @@ deploy:
   # Deploy via rsync - only the dist/ folder
   provider: script
   skip_cleanup: true
-  script: rsync -vrc -e 'ssh -o IdentitiesOnly=yes -o IdentityFile=$TRAVIS_BUILD_DIR/.travis/travis-ssh-key' $TRAVIS_BUILD_DIR/dist/ ncm@jsonschemalint.com:/
+  script: rsync -vrc -e 'ssh --perms --chmod=u=rwX,g=rXs,o= -o IdentitiesOnly=yes -o IdentityFile=$TRAVIS_BUILD_DIR/.travis/travis-ssh-key' $TRAVIS_BUILD_DIR/dist/ ncm@jsonschemalint.com:/
   on:
     branch: master
 before_deploy:
