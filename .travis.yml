@@ -1,23 +1,23 @@
 env:
-- SAUCE_USERNAME=nickcmaynard-oss
+  - SAUCE_USERNAME=nickcmaynard-oss
 addons:
   sauce_connect: true
   jwt:
-  - secure: OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8=
+    - secure: OnM1eOOnynTqEYq3zHIXKGvEawidafw4bxZbgFw3OaHd6YjoSJgYqqPWlDJkFPiY/t8BrQ8TOY5a9zN+JzhMxACPz6y5Kexo2HsqzWOESNCQMneeozo0UDLkKTfy5VkH+T5T5zZdhdXAPYCgvzgCm2vJyC0Z+5BS4pyks64ufk8=
   ssh_known_hosts:
-  - jsonschemalint.com # For deployment
+    - jsonschemalint.com # For deployment
 language: node_js
 node_js:
-- 10
+  - 10
 install:
-- npm install
-- npm update
-- npm prune
+  - npm install
+  - npm update
+  - npm prune
 script:
-- npm run ci:travis
+  - npm run ci:travis
 cache:
   directories:
-  - node_modules
+    - node_modules
 deploy:
   # Deploy via rsync - only the dist/ folder
   provider: script
@@ -27,10 +27,12 @@ deploy:
     branch: master
 before_deploy:
   # Make the SSH key available
-- umask 0077
-- openssl aes-256-cbc -K $encrypted_ab3dc958fbe9_key -iv $encrypted_ab3dc958fbe9_iv
-  -in .travis/travis-ssh-key.enc -out .travis/travis-ssh-key -d
+  - umask 0077
+  - openssl aes-256-cbc -K $encrypted_ab3dc958fbe9_key -iv $encrypted_ab3dc958fbe9_iv -in .travis/travis-ssh-key.enc -out .travis/travis-ssh-key -d
 after_deploy:
   # Remove the SSH key
-- rm .travis/travis-ssh-key
-- npm run e2e-live
+  - rm .travis/travis-ssh-key
+  - npm run e2e-live
+notifications:
+  email:
+    - secure: "V8Lc5za7Oqi0osojMEFkmrt9C6bqedVOGIjF6YeVVpUKH61sgYrxU2ICHvPu1exu1c8aa4gs5kBuDGLsm74miikE3Z7YFRrYR8XpTo0Dd7rxeMT8GLV/UGjFrZ3NAxV/oFQzC6TBCNrD9swZnqNGnnTFRU09Ili+ARGkS8bCCO0="
