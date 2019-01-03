@@ -31,8 +31,8 @@
     "experimental-invalid": "Sample experimental schema and <strong>invalid</strong> document"
   },
 
-  "WARNING_V5_UNOFFICIAL": "This schema version, v5-unofficial, was a prototype for a draft version that was eventually scrapped. Previously, JSON Schema Lint offered this prototype as \"draft-05\", as it was originally meant to supersede draft-04.<br />This is not, and will never be, an official JSON Schema version and <em>should not be used for new projects</em>.  Please see the schema dropdown for the latest official version.",
-  "WARNING_EXPERIMENTAL": "This is an experimental meta-schema used for testing new features. Currently uses draft-06 with the <a href='https://epoberezkin.github.io/ajv/#data-reference'>$data keyword</a> enabled,<br /> along with additional <a href='https://github.com/epoberezkin/ajv-keywords'>custom keywords</a> provided by Ajv. Features may be added or removed from experimental at any time. <br /> Avoid using experimental for new projects unless you fully understand the risks of doing so.",
+  "WARNING_V5_UNOFFICIAL": "<strong>RETIRED</strong> schema version.  Please use the latest official version instead.<br /><br />This schema version, v5-unofficial, was a prototype for a draft version that was eventually scrapped. Previously, JSON Schema Lint offered this prototype as \"draft-05\", as it was originally meant to supersede draft-04.<br />This was not, and will never be, an official JSON Schema version.",
+  "WARNING_EXPERIMENTAL": "<strong>RETIRED</strong> schema version.  Please use the latest official version instead.<br /><br />This was an experimental meta-schema used for testing new features.",
 
   "SCHEMA_VALID_MESSAGE": "Schema is valid according to {{name}}.",
   "DOCUMENT_VALID_MESSAGE": "Document validates against the schema, spec version {{name}}.",

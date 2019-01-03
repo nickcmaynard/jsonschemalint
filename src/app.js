@@ -24,7 +24,7 @@ angular.module('app', [require('angular-sanitize'), require('angular-route'), re
     template: '<validator-view></validator-view>'
   });
   $routeProvider.otherwise({
-    redirectTo: '/version/draft-06/markup/json'
+    redirectTo: '/version/draft-07/markup/json'
   });
 
 }).run(function($rootScope, $location, $window, $log) {

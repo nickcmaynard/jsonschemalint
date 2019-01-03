@@ -32,26 +32,29 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     },
     'draft-06': {
       service: validatorFactoryAJV('draft-06'),
-      name: 'draft-06',
-      label: 'draft-06 (latest)'
+      name: 'draft-06'
     },
+    'draft-07': {
+      service: validatorFactoryAJV('draft-07'),
+      name: 'draft-07',
+      label: 'draft-07 (latest)'
+    },
+    // RETIRED schema versions
     'v5-unofficial': {
-      service: validatorFactoryAJV('v5-unofficial'),
       name: 'v5-unofficial',
       alerts: [{
-        className: 'alert-warning',
+        className: 'alert-error',
         content_tid: 'WARNING_V5_UNOFFICIAL'
       }],
-      unofficial: true
+      hidden: true
     },
     'experimental': {
-      service: validatorFactoryAJV('experimental'),
       name: 'experimental',
       alerts: [{
-        className: 'alert-warning',
+        className: 'alert-error',
         content_tid: 'WARNING_EXPERIMENTAL'
       }],
-      unofficial: true
+      hidden: true
     }
   };
   this.validatorsArr = function() {

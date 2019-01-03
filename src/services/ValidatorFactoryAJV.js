@@ -15,42 +15,39 @@ app.factory('validatorFactoryAJV', function ($window, $q, alertService, $log) {
         try {
           require.ensure([], function(require) {
             var ajv = require('ajv');
-            var ajvKeywords = require('ajv-keywords');
             var schemas = require('./MetaSchemaLoader');
             $log.debug('ValidatorFactoryAJV.setup()', 'Loaded AJV');
+            
             validator = ajv({
               verbose: true,
               allErrors: true,
+              meta: false, // Don't load a meta-schema by default
               //
-              // VERSION DETERMINATION LOGIC
-              // draft-04: Official draft-04 metaschema
-              // v5-unofficial: An unofficial version of the scrapped draft-05 metaschema. It's a long story, don't ask. 
-              // draft-06: The official draft-06 
-              // experimental: Currently draft-06, but with the $data flag enabled, and custom keywords added.
+              // Loading logic follows guidance at
+              // https://github.com/epoberezkin/ajv/releases/tag/5.0.0
+              // and 
+              // https://github.com/epoberezkin/ajv/releases/tag/v6.0.0
               //
-              meta: !['draft-04', 'v5-unofficial'].includes(version),
-              $data: ['v5-unofficial', 'experimental'].includes(version),
-              patternGroups: version === 'v5-unofficial', //Waiting for patternGroups hotfix
-              unknownFormats: 'ignore',
-              extendRefs: true
+              unknownFormats: 'draft-04' === version ? 'ignore' : undefined,
+              extendRefs: 'draft-04' === version ? true : undefined,
+              schemaId: 'draft-04' === version ? 'id': undefined
             });
+            
             if (version === 'draft-04') {
               validator.addMetaSchema(schemas.draft4);
               validator._opts.defaultMeta = schemas.draft4.id;
+              validator._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
               validator.removeKeyword('propertyNames');
               validator.removeKeyword('contains');
               validator.removeKeyword('const');
             }
-            else if (version === 'v5-unofficial') {
-              validator.addMetaSchema(schemas.draft4);
-              validator.addMetaSchema(schemas.v5);
-              validator._opts.defaultMeta = schemas.v5.id;
-              validator.addKeyword('constant', {macro: x => ({'const': x})});
-              validator.removeKeyword('propertyNames');
-              ajvKeywords(validator, ['switch', 'patternRequired', 'formatMinimum', 'formatMaximum']);
+            else if (version === 'draft-06') {
+              validator.addMetaSchema(schemas.draft6);
+              validator._opts.defaultMeta = schemas.draft6.$id;
             }
-            else if (version === 'experimental') {
-              ajvKeywords(validator);
+            else if (version === 'draft-07') {
+              validator.addMetaSchema(schemas.draft7);
+              validator._opts.defaultMeta = schemas.draft7.$id;
             }
             resolve(true);
           });
