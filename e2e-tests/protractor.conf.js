@@ -15,7 +15,7 @@ var defaultCapabilities = [{
 //jshint strict: false
 var config = {
 
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 20000,
 
   specs: ['*.spec.js'],
 
@@ -32,7 +32,7 @@ var config = {
   framework: 'jasmine2',
 
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 60000,
     print: function() {}
   },
 
