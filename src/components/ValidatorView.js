@@ -43,7 +43,7 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     'v5-unofficial': {
       name: 'v5-unofficial',
       alerts: [{
-        className: 'alert-error',
+        className: 'alert-danger',
         content_tid: 'WARNING_V5_UNOFFICIAL'
       }],
       hidden: true
@@ -51,7 +51,7 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     'experimental': {
       name: 'experimental',
       alerts: [{
-        className: 'alert-error',
+        className: 'alert-danger',
         content_tid: 'WARNING_EXPERIMENTAL'
       }],
       hidden: true
