@@ -50,7 +50,8 @@ module.exports = {
       name: ['app', 'vendor']
     }),
     new CopyWebpackPlugin([
-      { from: 'www' }
+      { from: 'www' },
+      { from: '.htaccess' }
     ]),
     new HtmlWebpackPlugin({
       template: 'html-loader!./www/index.html',
