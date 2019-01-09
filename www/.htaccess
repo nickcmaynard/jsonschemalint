@@ -9,6 +9,8 @@ RewriteEngine On
 # We need this in case it's being served from a subdirectory (like dist/)
 # and the root .htaccess is locally rewriting to it.
 RewriteBase /
+# Not letsencrypt challenge responses!
+RewriteCond %{REQUEST_URI} !^/\.well-known
 # Old draftX should be stripped out
 RewriteRule "^draft\d[\/]{0,1}$"  ""  [R]
 
