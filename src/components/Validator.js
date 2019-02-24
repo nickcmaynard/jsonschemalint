@@ -81,11 +81,9 @@ function ValidatorController($scope, $element, $attrs, $log, $q, $window) {
       // Something went wrong failures
       $log.debug(self.identifier + '.update()', 'Errors parsing/validating document', errors);
 
-      var parseErrors = errors[0], validateErrors = errors[1];
-
       self.onUpdateObj({value: null});
       self.isValid = false;
-      return self.messages = [].concat(parseErrors || []).concat(validateErrors || []);
+      return self.messages = [].concat(errors);
     });
 
     comboPromise.finally(function() {
