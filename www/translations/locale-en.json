@@ -44,8 +44,8 @@
 
   "ERROR_SAMPLE_LOADING": "Error loading sample",
 
-  "ERROR_INVALID_JSON": "Document is invalid JSON. Try http://jsonlint.com to fix it.",
-  "ERROR_INVALID_YAML": "Document is invalid YAML. Try http://codebeautify.org/yaml-validator to fix it.",
+  "ERROR_INVALID_JSON": "Document is invalid JSON. Try https://jsonlint.com to fix it.",
+  "ERROR_INVALID_YAML": "Document is invalid YAML. Try https://codebeautify.org/yaml-validator to fix it.",
 
   "ERROR_INVALID_MARKUP": "Invalid markup language '{{markupLanguage}}'.",
   "ERROR_INVALID_VERSION": "Invalid schema version '{{specVersion}}'.",
