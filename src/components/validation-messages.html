@@ -13,7 +13,7 @@
     <tbody>
         <tr ng-repeat="message in $ctrl.simpleMessages($ctrl.messages)">
             <td ng-if="message.message" ng-bind="message.message"></td>
-            <td ng-if="message.message_tid" ng-bind="message.message_tid | translate:message.message_params"></td>
+            <td ng-if="message.message_tid" ng-bind-html="message.message_tid | translate:message.message_params"></td>
         </tr>
         <tr ng-repeat="message in $ctrl.errorMessages($ctrl.messages)">
             <td ng-bind="message.dataPath" class="error-path"></td>
