@@ -15,11 +15,11 @@ function ValidatorController($scope, $element, $attrs, $log, $q, $window) {
 
     // We need to be a bit careful - we can't trust this "changesObj" entirely, as it actually represents the projected current & previous values of the *external* model, not our internal model
     let doUpdate = false;
-    if (changesObj.hasOwnProperty('doc') && changesObj.doc.currentValue !== this.myDoc) {
+    if (Object.prototype.hasOwnProperty.call(changesObj, 'doc') && changesObj.doc.currentValue !== this.myDoc) {
       this.myDoc = changesObj.doc.currentValue;
       doUpdate = true;
     }
-    if (changesObj.hasOwnProperty('validate') || changesObj.hasOwnProperty('parse')) {
+    if (Object.prototype.hasOwnProperty.call(changesObj, 'validate') || Object.prototype.hasOwnProperty.call(changesObj, 'parse')) {
       doUpdate = true;
     }
 
