@@ -97,13 +97,13 @@ function ValidatorViewController($scope, $rootScope, $log, $http, $window, $q, $
     var p = this.getCurrentMarkupService();
     // Function
     p.then(function(markupService) {
-      $http.get('samples/' + ref + '.document.json').success(function(data) {
-        markupService.prettyPrint(data).then(function(text) {
+      $http.get('samples/' + ref + '.document.json').then(function(response) {
+        markupService.prettyPrint(response.data).then(function(text) {
           textService.setDocument(text);
         });
       });
-      $http.get('samples/' + ref + '.schema.json').success(function(data) {
-        markupService.prettyPrint(data).then(function(text) {
+      $http.get('samples/' + ref + '.schema.json').then(function(response) {
+        markupService.prettyPrint(response.data).then(function(text) {
           textService.setSchema(text);
         });
       });
