@@ -28,9 +28,9 @@
   "dependencies": {
     "JSV": "git://github.com/nickcmaynard/JSV.git#master",
     "ajv": "^6.12.2",
-    "angular": "~1.7.9",
-    "angular-route": "~1.7.9",
-    "angular-sanitize": "~1.7.9",
+    "angular": "~1.8.0",
+    "angular-route": "~1.8.0",
+    "angular-sanitize": "~1.8.0",
     "angular-translate": "^2.18.2",
     "angular-translate-loader-static-files": "^2.18.2",
     "angular-ui-bootstrap": "^2.2.0",
@@ -41,7 +41,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "angular-mocks": "~1.7.9",
+    "angular-mocks": "~1.8.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^7.1.5",
