@@ -1,6 +1,6 @@
 # JSON Schema Lint
 
-[![Build Status](https://travis-ci.org/nickcmaynard/jsonschemalint.svg?branch=master)](https://travis-ci.org/nickcmaynard/jsonschemalint)
+[![Build Status](https://travis-ci.com/nickcmaynard/jsonschemalint.svg?branch=master)](https://travis-ci.org/nickcmaynard/jsonschemalint)
 
 ## Setup
 ```sh
