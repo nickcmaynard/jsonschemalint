@@ -77,7 +77,8 @@ var config = {
       const account = new SauceLabs();
       console.info('Launching Sauce Connect...');
       return account.startSauceConnect({
-        tunnelIdentifier: sauceTunnelId
+        tunnelIdentifier: sauceTunnelId,
+        startConnect: false
       }).then(process => {
         console.info('...launched Sauce Connect.');
         // Keep track
