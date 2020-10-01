@@ -54,6 +54,13 @@ var config = {
           'tunnel-identifier': sauceTunnelId,
           'build': process.env.TRAVIS_BUILD_NUMBER
         }, {
+          'browserName': 'MicrosoftEdge',
+          'version': 'latest',
+          'platform': 'Windows 10',
+          'tunnel-identifier': sauceTunnelId,
+          'build': process.env.TRAVIS_BUILD_NUMBER
+        }, 
+        {
           'browserName': 'internet explorer',
           'version': 'latest',
           'platform': 'Windows 10',
@@ -63,33 +70,19 @@ var config = {
 
           'tunnel-identifier': sauceTunnelId,
           'build': process.env.TRAVIS_BUILD_NUMBER
-        }, {
-          'browserName': 'MicrosoftEdge',
-          'version': 'latest',
-          'platform': 'Windows 10',
-          'tunnel-identifier': sauceTunnelId,
-          'build': process.env.TRAVIS_BUILD_NUMBER
         }
       ];
 
       // Launch Sauce Connect
-      const sauceConnectLauncher = require('sauce-connect-launcher');
-      // eslint-disable-next-line
-      return new Promise((resolve, reject) => {
-        console.info('Launching Sauce Connect...');
-        sauceConnectLauncher({
+      const SauceLabs = require('saucelabs').default;
+      const account = new SauceLabs();
+      console.info('Launching Sauce Connect...');
+      return account.startSauceConnect({
           tunnelIdentifier: sauceTunnelId
-        }, function (err, process) {
-          if (err) {
-            console.error(err.message);
-            return reject(err);
-          }
-          
-          console.info('...Sauce Connect ready');          
-          // Keep track
-          sauceConnectProcess = process;
-          return resolve();
-        });
+      }).then(process => {
+        console.info('...launched Sauce Connect.');
+        // Keep track
+        sauceConnectProcess = process;
       }).then(() => {
         // Capabilities for testing remotely
         return capabilities;
@@ -123,12 +116,11 @@ var config = {
       // Clean up Sauce Connect
       console.info('Closing Sauce Connect...');
       // eslint-disable-next-line
-      return new Promise((resolve, reject) => {
-        sauceConnectProcess.close(function () {
-          console.log('...closed Sauce Connect.');
-          resolve();
-        });
+      const p = sauceConnectProcess.close();
+      p.then(() => {
+        console.info('...closed Sauce Connect.');
       });
+      return p;
     }
   }
 
