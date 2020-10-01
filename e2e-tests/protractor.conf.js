@@ -16,7 +16,7 @@ var defaultCapabilities = [{
 }];
 
 // Sauce Connect
-const useSauce = process.env.USE_SAUCE || process.env.TRAVIS_CI;
+const useSauce = process.env.USE_SAUCE || process.env.TRAVIS;
 // Keep track
 let sauceConnectProcess;
 // Tunnel identifier
