@@ -3,6 +3,9 @@
 // Allow ES6 in protractor tests
 require('babel-register');
 
+// Dotenv
+require('dotenv').config()
+
 var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 
 // Standard capabilities to select
@@ -12,19 +15,89 @@ var defaultCapabilities = [{
   browserName: 'firefox'
 }];
 
+// Sauce Connect
+const useSauce = process.env.USE_SAUCE || process.env.TRAVIS_CI;
+// Keep track
+let sauceConnectProcess;
+// Tunnel identifier
+const sauceTunnelId = useSauce ? (process.env.TRAVIS_JOB_NUMBER || 'cli-e2e') : undefined;
+
 //jshint strict: false
 var config = {
 
   allScriptsTimeout: 20000,
 
   specs: ['*.spec.js'],
+  
+  // Only resolves if environment is actually set up
+  sauceUser: useSauce ? process.env.SAUCE_USERNAME : undefined,
+  sauceKey: useSauce ? process.env.SAUCE_ACCESS_KEY : undefined,
 
   getMultiCapabilities: function() {
     // use --params.browsers='chrome,firefox' or --params.browsers='chrome' to select specific browsers
     var browsers = (this.params && this.params.browsers && this.params.browsers.split(',')) || defaultCapabilities.map((cap) => cap.browserName);
-    return defaultCapabilities.filter(function(cap) {
+    let capabilities = defaultCapabilities.filter(function(cap) {
       return browsers.indexOf(cap.browserName) != -1;
     });
+    
+    if (useSauce) {
+      // In Travis, we test everything, so update the capabilities array
+      capabilities = [
+        {
+          'browserName': 'chrome',
+          'version': 'latest',
+          'tunnel-identifier': sauceTunnelId,
+          'build': process.env.TRAVIS_BUILD_NUMBER
+        }, {
+          'browserName': 'firefox',
+          'version': 'latest',
+          'tunnel-identifier': sauceTunnelId,
+          'build': process.env.TRAVIS_BUILD_NUMBER
+        }, {
+          'browserName': 'internet explorer',
+          'version': 'latest',
+          'platform': 'Windows 10',
+
+          // IE11 just doesn't play nice.  Just run smoke tests
+          'exclude': ['data.spec.js','samples.spec.js', 'interaction.spec.js'],
+
+          'tunnel-identifier': sauceTunnelId,
+          'build': process.env.TRAVIS_BUILD_NUMBER
+        }, {
+          'browserName': 'MicrosoftEdge',
+          'version': 'latest',
+          'platform': 'Windows 10',
+          'tunnel-identifier': sauceTunnelId,
+          'build': process.env.TRAVIS_BUILD_NUMBER
+        }
+      ];
+
+      // Launch Sauce Connect
+      const sauceConnectLauncher = require('sauce-connect-launcher');
+      // eslint-disable-next-line
+      return new Promise((resolve, reject) => {
+        console.info('Launching Sauce Connect...');
+        sauceConnectLauncher({
+          tunnelIdentifier: sauceTunnelId
+        }, function (err, process) {
+          if (err) {
+            console.error(err.message);
+            return reject(err);
+          }
+          
+          console.info('...Sauce Connect ready');          
+          // Keep track
+          sauceConnectProcess = process;
+          return resolve();
+        });
+      }).then(() => {
+        // Capabilities for testing remotely
+        return capabilities;
+      });
+    } else {
+      // Capabilities for testing locally
+      return capabilities;
+    }
   },
 
   baseUrl: process.env.LIVE ? 'https://jsonschemalint.com' : 'http://localhost:3001/',
@@ -43,44 +116,22 @@ var config = {
         displayStacktrace: true
       }
     }));
+  },
+  
+  afterLaunch: function() {
+    if (sauceConnectProcess) {
+      // Clean up Sauce Connect
+      console.info('Closing Sauce Connect...');
+      // eslint-disable-next-line
+      return new Promise((resolve, reject) => {
+        sauceConnectProcess.close(function () {
+          console.log('...closed Sauce Connect.');
+          resolve();
+        });
+      });
+    }
   }
 
 };
-
-if (process.env.TRAVIS) {
-  config.sauceUser = process.env.SAUCE_USERNAME;
-  config.sauceKey = process.env.SAUCE_ACCESS_KEY;
-  // In Travis, we test everything
-  delete config.getMultiCapabilities;
-  config.multiCapabilities = [
-    {
-      'browserName': 'chrome',
-      'version': 'latest',
-      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-      'build': process.env.TRAVIS_BUILD_NUMBER
-    }, {
-      'browserName': 'firefox',
-      'version': 'latest',
-      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-      'build': process.env.TRAVIS_BUILD_NUMBER
-    }, {
-      'browserName': 'internet explorer',
-      'version': 'latest',
-      'platform': 'Windows 10',
-
-      // IE11 just doesn't play nice.  Just run smoke tests
-      'exclude': ['data.spec.js','samples.spec.js', 'interaction.spec.js'],
-
-      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-      'build': process.env.TRAVIS_BUILD_NUMBER
-    }, {
-      'browserName': 'MicrosoftEdge',
-      'version': 'latest',
-      'platform': 'Windows 10',
-      'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-      'build': process.env.TRAVIS_BUILD_NUMBER
-    }
-  ];
-}
 
 exports.config = config;
