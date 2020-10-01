@@ -59,8 +59,7 @@ var config = {
           'platform': 'Windows 10',
           'tunnel-identifier': sauceTunnelId,
           'build': process.env.TRAVIS_BUILD_NUMBER
-        }, 
-        {
+        }, {
           'browserName': 'internet explorer',
           'version': 'latest',
           'platform': 'Windows 10',
@@ -78,7 +77,7 @@ var config = {
       const account = new SauceLabs();
       console.info('Launching Sauce Connect...');
       return account.startSauceConnect({
-          tunnelIdentifier: sauceTunnelId
+        tunnelIdentifier: sauceTunnelId
       }).then(process => {
         console.info('...launched Sauce Connect.');
         // Keep track
