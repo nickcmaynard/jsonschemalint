@@ -1,5 +1,6 @@
 env:
   - SAUCE_USERNAME=nickcmaynard-oss
+sudo: required
 addons:
   ssh_known_hosts:
     - jsonschemalint.com # For deployment
