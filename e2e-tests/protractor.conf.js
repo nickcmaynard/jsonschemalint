@@ -72,18 +72,20 @@ var config = {
         }
       ];
 
-      // Launch Sauce Connect
+      // Launch Sauce Connect - we have to do it here because beforeLaunch doesn't wait for promises?!
       const SauceLabs = require('saucelabs').default;
       const account = new SauceLabs();
       console.info('Launching Sauce Connect...');
-      return account.startSauceConnect({
+      const scp = account.startSauceConnect({
         tunnelIdentifier: sauceTunnelId
       }).then(process => {
         console.info('...launched Sauce Connect.');
         // Keep track
         sauceConnectProcess = process;
-      }).then(() => {
-        // Capabilities for testing remotely
+      });
+      
+      // Wait for SCP then return capabilities for testing remotely
+      return scp.then(() => {
         return capabilities;
       });
     } else {
