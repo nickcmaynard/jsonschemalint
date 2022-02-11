@@ -61,7 +61,7 @@
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.28.0",
     "jasmine-spec-reporter": "^3.2.0",
-    "karma": "^4.4.1",
+    "karma": "^6.3.14",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chai": "^0.1.0",
     "karma-chai-spies": "^0.1.4",
