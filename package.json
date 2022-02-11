@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "JSV": "git://github.com/nickcmaynard/JSV.git#master",
-    "ajv": "^6.12.2",
+    "ajv": "^6.12.3",
     "angular": "~1.8.0",
     "angular-route": "~1.8.0",
     "angular-sanitize": "~1.8.0",
