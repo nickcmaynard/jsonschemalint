@@ -146,16 +146,18 @@ watch(myDoc, (value, oldValue) => {
 <template>
   <div class="card" :class="{ 'border-danger': !valid }">
     <div class="card-header d-flex justify-content-between align-items-center text-white" :class="{ 'bg-danger': !valid, 'bg-success': valid }">
-      {{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }} :: {{ configStore.markups[currentMarkup].title }}{{ mode === 'schema' ? ', ' + currentSpec : '' }}
+      <span>
+        <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup].title }}{{ mode === 'schema' ? ', ' + currentSpec : '' }}
+      </span>
       <button type="button" class="btn btn-light btn-sm" @click="format"> <i class="bi bi-list-nested" aria-hidden="true"></i>&nbsp;{{ $t('FORMAT') }} </button>
     </div>
 
     <div class="validator">
       <form novalidate>
-        <textarea v-model="myDoc" class="form-control validator-document font-monospace"></textarea>
+        <textarea v-model="myDoc" class="form-control validator-document font-monospace" spellcheck="false"></textarea>
       </form>
 
-      <ValidationMessages :messages="messages"></ValidationMessages>
+      <ValidationMessages :messages="messages" :doctype="mode.toUpperCase()"></ValidationMessages>
     </div>
   </div>
 </template>

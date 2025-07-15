@@ -7,7 +7,13 @@ const props = defineProps({
       return []
     },
   },
+  doctype: {
+    type: String,
+    default: 'DOCUMENT',
+  },
 })
+
+import { defaults } from 'lodash-es'
 
 // Only the "error" messages
 function errorMessages(messages) {
@@ -17,6 +23,13 @@ function errorMessages(messages) {
 // Only "simple" messages
 function simpleMessages(messages) {
   return messages && messages.filter((a) => typeof a.instancePath === 'undefined')
+}
+
+// Merge message parameters with default values
+function mergedParams(message_params) {
+  return defaults({}, message_params, {
+    doctype: props.doctype,
+  })
 }
 </script>
 
@@ -36,7 +49,7 @@ function simpleMessages(messages) {
     <tbody>
       <tr v-for="message in simpleMessages(props.messages)" :key="message">
         <td v-if="message.message">{{ message.message }}</td>
-        <td v-if="message.message_tid" v-html="$t(message.message_tid, message.message_params)"></td>
+        <td v-if="message.message_tid" v-html="$t(message.message_tid, mergedParams(message.message_params))"></td>
       </tr>
       <tr v-for="message in errorMessages(props.messages)" :key="message">
         <td class="error-path">{{ message.instancePath }}</td>
