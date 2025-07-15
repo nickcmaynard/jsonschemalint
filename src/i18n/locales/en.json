@@ -1,0 +1,61 @@
+{
+  "FORMAT": "Format",
+  "SAMPLES": "Samples",
+  "RESET": "Reset",
+  "SAVE_AS_GIST": "Save as Gist",
+  "MARKUP_LANGUAGE": "Markup language",
+  "OFFICIAL_SPEC_VERSION": "Official spec version",
+  "UNOFFICIAL_SPEC_VERSION": "Unofficial spec version",
+  "SCHEMA": "Schema",
+  "DOCUMENT": "Document",
+  "MESSAGE": "Message",
+  "FIELD": "Field",
+  "ERROR": "Error",
+  "VALUE": "Value",
+  "TOGGLE_NAVIGATION": "Toggle navigation",
+  "ABOUT": "About",
+
+  "OK": "OK",
+
+  "GIST_SAVED": "Saved as Gist",
+  "GIST_VISIT": "Visit saved schema/document pair",
+
+  "sample_titles": {
+    "draft-04-valid": "Sample draft-04 schema and valid document",
+    "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document",
+    "draft-06-valid": "Sample draft-06 schema and valid document",
+    "draft-06-invalid": "Sample draft-06 schema and <strong>invalid</strong> document",
+    "v5-unofficial-valid": "Sample v5-unofficial schema and valid document",
+    "v5-unofficial-invalid": "Sample v5-unofficial schema and <strong>invalid</strong> document",
+    "experimental-valid": "Sample experimental schema and valid document",
+    "experimental-invalid": "Sample experimental schema and <strong>invalid</strong> document"
+  },
+
+  "WARNING_V5_UNOFFICIAL": "<strong>RETIRED</strong> schema version.  Please use the latest official version instead.<br /><br />This schema version, v5-unofficial, was a prototype for a draft version that was eventually scrapped. Previously, JSON Schema Lint offered this prototype as \"draft-05\", as it was originally meant to supersede draft-04.<br />This was not, and will never be, an official JSON Schema version.",
+  "WARNING_EXPERIMENTAL": "<strong>RETIRED</strong> schema version.  Please use the latest official version instead.<br /><br />This was an experimental meta-schema used for testing new features.",
+  "WARNING_UNSUPPORTED_SPEC_VERSION": "<strong>UNSUPPORTED</strong> schema version.  Please use the latest official version instead.<br /><br />This schema version is no longer supported by JSON Schema Lint.",
+
+  "SCHEMA_VALID_MESSAGE": "Schema is valid according to {name}.",
+  "DOCUMENT_VALID_MESSAGE": "Document validates against the schema, spec version {name}.",
+
+  "ERROR_GIST_SAVING": "Error saving Gist",
+  "ERROR_GIST_LOADING": "Error loading Gist",
+
+  "ERROR_GIST_FORMAT": "Gist is not in JSON Schema Lint format",
+
+  "ERROR_SAMPLE_LOADING": "Error loading sample",
+
+  "ERROR_INVALID_JSON": "Document is invalid JSON. Try <a target='_blank' href='https://jsonlint.com'>JSONLint</a> to fix it.",
+  "ERROR_INVALID_YAML": "Document is invalid YAML. Try <a target='_blank' href='https://codebeautify.org/yaml-validator'>YAML Validator</a> to fix it.",
+
+  "ERROR_INVALID_MARKUP": "Invalid markup language '{markupLanguage}'.",
+  "ERROR_INVALID_VERSION": "Invalid schema version '{specVersion}'.",
+
+  "ERROR_INVALID_SCHEMA": "Invalid schema.",
+
+  "ERROR_INVALID_MARKUP_BUTTON": "???",
+  "ERROR_INVALID_VERSION_BUTTON": "???",
+
+  "ERROR_MODULE_LOADING_FAILED_TITLE": "Could not load module",
+  "ERROR_MODULE_LOADING_FAILED_CONTENT": "We couldn't load a vital part of the application.  This is probably due to network conditions.  We recommend reloading the page once conditions improve."
+}
