@@ -29,3 +29,5 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+// We do it this way as otherwise the route isn't ready for our non-RouterView pattern
+// router.isReady().then(() => app.mount('#app'))

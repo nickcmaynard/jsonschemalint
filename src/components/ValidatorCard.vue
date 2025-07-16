@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import ValidationMessages from '@/components/ValidationMessages.vue'
 
 import Validator from '@/utilities/Validator'
-import { debounce, throttle, isEqual } from 'lodash-es'
+import { debounce, isEqual } from 'lodash-es'
 
 // Config
 import { useConfigStore } from '@/stores/config'
@@ -12,19 +12,29 @@ const configStore = useConfigStore()
 const { currentMarkup, currentSpec } = storeToRefs(configStore)
 
 // Get the current markup service
-const getMarkupService = () => {
-  return configStore.markups[configStore.currentMarkup].service
+const getMarkupService = async () => {
+  if (configStore.markups[configStore.currentMarkup]) {
+    return configStore.markups[configStore.currentMarkup].service
+  } else {
+    return Promise.reject([
+      {
+        message_tid: 'ERROR_INVALID_MARKUP',
+        message_params: { markupLanguage: configStore.currentMarkup },
+      },
+    ])
+  }
 }
 
 // Format the document using the current markup service
 function format() {
-  console.debug('FValidatorCard.format()')
+  console.debug('ValidatorCard.format()')
   getMarkupService()
-    .parse(myDoc.value)
-    .then(getMarkupService().prettyPrint)
-    .then((formatted) => {
-      myDoc.value = formatted
-    })
+    .then((service) =>
+      service
+        .parse(myDoc.value)
+        .then(service.prettyPrint)
+        .then((formatted) => (myDoc.value = formatted)),
+    )
     .catch((errors) => {
       console.error('Error formatting document:', errors)
       messages.value = errors || []
@@ -75,21 +85,24 @@ const validateDocument = function () {
 const computeMessages = async () => {
   console.debug(`ValidatorCard[${props.mode}]: computeMessages()`)
   return getMarkupService()
-    .parse(myDoc.value)
-    .then((parsed) => {
-      console.info('Parsed document:', parsed)
-      documentModel.value = parsed
-    })
-    .then(() => {
-      const result = props.mode === 'schema' ? validateSchema() : validateDocument()
-      messages.value = [
-        {
-          message_tid: props.mode === 'schema' ? 'SCHEMA_VALID_MESSAGE' : 'DOCUMENT_VALID_MESSAGE',
-          message_params: { name: currentSpec },
-        },
-      ]
-      console.debug('Validation result:', result)
-      valid.value = true
+    .then((service) => {
+      return service
+        .parse(myDoc.value)
+        .then((parsed) => {
+          console.info('Parsed document:', parsed)
+          documentModel.value = parsed
+        })
+        .then(() => {
+          const result = props.mode === 'schema' ? validateSchema() : validateDocument()
+          messages.value = [
+            {
+              message_tid: props.mode === 'schema' ? 'SCHEMA_VALID_MESSAGE' : 'DOCUMENT_VALID_MESSAGE',
+              message_params: { name: currentSpec },
+            },
+          ]
+          console.debug('Validation result:', result)
+          valid.value = true
+        })
     })
     .catch((errors) => {
       console.error('Error parsing document:', errors)
@@ -122,7 +135,7 @@ watch(schemaModel, () => {
 })
 onMounted(async () => {
   console.debug(`ValidatorCard[${props.mode}]: onMounted() fired`)
-  myDoc.value = await getMarkupService().prettyPrint(documentModel.value)
+  myDoc.value = await (await getMarkupService()).prettyPrint(documentModel.value)
   computeMessages()
 })
 watch(documentModel, async (value, oldValue) => {
@@ -130,7 +143,7 @@ watch(documentModel, async (value, oldValue) => {
   // This check is essential to avoid infinite loops
   if (!isEqual(value, oldValue)) {
     console.debug(`ValidatorCard[${props.mode}]: watch(documentModel) fired & changed`)
-    myDoc.value = typeof value === 'undefined' ? undefined : await getMarkupService().prettyPrint(value)
+    myDoc.value = typeof value === 'undefined' ? undefined : await (await getMarkupService()).prettyPrint(value)
     debouncedComputeMessages() // Don't do it immediately - myDoc watch will fire too
   }
 })
@@ -147,7 +160,8 @@ watch(myDoc, (value, oldValue) => {
   <div class="card" :class="{ 'border-danger': !valid }">
     <div class="card-header d-flex justify-content-between align-items-center text-white" :class="{ 'bg-danger': !valid, 'bg-success': valid }">
       <span>
-        <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup].title }}{{ mode === 'schema' ? ', ' + currentSpec : '' }}
+        <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON')
+        }}{{ mode === 'schema' ? ', ' + (configStore.specs[currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON')) : '' }}
       </span>
       <button type="button" class="btn btn-light btn-sm" @click="format"> <i class="bi bi-list-nested" aria-hidden="true"></i>&nbsp;{{ $t('FORMAT') }} </button>
     </div>

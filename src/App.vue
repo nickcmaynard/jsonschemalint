@@ -1,10 +1,10 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { pickBy } from 'lodash-es'
 
+import { useEventEmit } from 'mitt-vue'
+
 import AboutContent from '@/components/AboutContent.vue'
-import ValidatorCard from '@/components/ValidatorCard.vue'
 
 import { useConfigStore } from '@/stores/config'
 const configStore = useConfigStore()
@@ -25,50 +25,21 @@ const samples = {
 const displayedSpecs = (specs) => pickBy(specs, (spec) => !spec.hidden)
 
 const setMarkup = (markup) => {
-  console.debug('Setting markup language to:', markup)
+  console.debug('App.setMarkup(): Setting markup language to:', markup)
   configStore.currentMarkup = markup
 }
 const setSpec = (spec) => {
-  console.debug('Setting spec to:', spec)
+  console.debug('App.setSpec(): Setting spec to:', spec)
   configStore.currentSpec = spec
 }
 const loadSample = async (sample) => {
-  console.debug('Loading sample:', sample)
-  fetch('samples/' + sample.ref + '.schema.json')
-    .then((res) => res.json())
-    .then((data) => (schemaModel.value = data))
-    .catch((err) => {
-      console.error(err)
-    })
-  fetch('samples/' + sample.ref + '.document.json')
-    .then((res) => res.json())
-    .then((data) => (documentModel.value = data))
-    .catch((err) => {
-      console.error(err)
-    })
+  console.debug('App.loadSample(): Loading sample:', sample)
+  useEventEmit('load-sample', { ref: sample.ref })
 }
 const reset = () => {
-  schemaModel.value = undefined
-  documentModel.value = undefined
+  console.debug('App.reset(): Reset')
+  useEventEmit('reset')
 }
-
-const schemaModel = ref()
-const documentModel = ref()
-watch(schemaModel, (newSchema) => {
-  console.info('Schema model updated:', newSchema)
-  if (newSchema && newSchema.$schema) {
-    console.info('Schema model has $schema:', newSchema.$schema)
-    const newSpec = Object.keys(pickBy(configStore.specs, (spec) => spec.schema === newSchema.$schema))[0]
-    if (newSpec) {
-      console.info('Setting current spec to:', newSpec)
-      configStore.currentSpec = newSpec
-    } else {
-      console.warn('No matching spec found for schema:', newSchema.$schema)
-    }
-  } else {
-    console.info('Schema model does not have $schema:', newSchema)
-  }
-})
 </script>
 
 <template>
@@ -136,7 +107,7 @@ watch(schemaModel, (newSchema) => {
               <!-- Markup language dropdown -->
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="bi bi-pencil-fill"></span>
-                &nbsp;{{ configStore.markups[configStore.currentMarkup].title || $t('ERROR_INVALID_MARKUP_BUTTON') }}
+                &nbsp;{{ configStore.markups[configStore.currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON') }}
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li>
@@ -152,7 +123,7 @@ watch(schemaModel, (newSchema) => {
               <!-- Specification version dropdown -->
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="schemaModel && schemaModel.$schema">
                 <span class="bi bi-signpost-fill"></span>
-                &nbsp;{{ configStore.specs[configStore.currentSpec].name || $t('ERROR_INVALID_VERSION_BUTTON') }}
+                &nbsp;{{ configStore.specs[configStore.currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON') }}
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li>
@@ -170,14 +141,7 @@ watch(schemaModel, (newSchema) => {
   </nav>
 
   <main class="container-fluid">
-    <div class="row g-3">
-      <div class="col-xs-12 col-md-6">
-        <ValidatorCard v-model:document="schemaModel" :mode="'schema'" />
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <ValidatorCard v-model:document="documentModel" v-model:schema="schemaModel" :mode="'document'" />
-      </div>
-    </div>
+    <RouterView />
   </main>
 </template>
 

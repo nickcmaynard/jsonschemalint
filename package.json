@@ -18,6 +18,7 @@
     "bootstrap": "^5.3.6",
     "bootstrap-icons": "^1.13.1",
     "lodash-es": "^4.17.21",
+    "mitt-vue": "^2.1.1",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.5",

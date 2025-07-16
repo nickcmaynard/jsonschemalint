@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+
 import MarkupJson from '@/utilities/MarkupJson'
 import MarkupYaml from '@/utilities/MarkupYaml'
 
@@ -100,8 +101,8 @@ export const useConfigStore = defineStore('config', () => {
     },
   }
 
-  const currentMarkup = ref('json')
-  const currentSpec = ref('draft-07')
+  const currentMarkup = ref()
+  const currentSpec = ref()
 
   return { markups, specs, currentMarkup, currentSpec }
 })
