@@ -18,6 +18,8 @@ import { useEventListener } from 'mitt-vue'
 const schemaModel = ref()
 const documentModel = ref()
 
+console.debug('LintView setup()', route.params)
+
 // React to store changes
 watch(currentMarkup, (markup) => {
   console.debug(`LintView: watch(currentMarkup) fired`, markup)
@@ -71,7 +73,7 @@ useEventListener('load-sample', async (sample) => {
     })
 })
 
-console.log('LintView', route.params.markupLanguage, route.params.version)
+// TODO: We need some way of informing the document card if the schema card is having trouble - and thus should be in an error state
 
 // React to $schema stuff
 watch(schemaModel, (newSchema) => {

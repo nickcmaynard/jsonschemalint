@@ -12,12 +12,26 @@ const configStore = useConfigStore()
 const samples = {
   'draft-06': [
     {
-      title: 'sample_titles.draft-06-valid',
-      ref: 'draft6/valid',
+      i18n_title: 'SAMPLE_TITLES.VALID',
+      i18n_params: { version: 'draft-06' },
+      ref: 'draft-06/valid',
     },
     {
-      title: 'sample_titles.draft-06-invalid',
-      ref: 'draft6/invalid',
+      i18n_title: 'SAMPLE_TITLES.INVALID',
+      i18n_params: { version: 'draft-06' },
+      ref: 'draft-06/invalid',
+    },
+  ],
+  'draft-07': [
+    {
+      i18n_title: 'SAMPLE_TITLES.VALID',
+      i18n_params: { version: 'draft-07' },
+      ref: 'draft-07/valid',
+    },
+    {
+      i18n_title: 'SAMPLE_TITLES.INVALID',
+      i18n_params: { version: 'draft-07' },
+      ref: 'draft-07/invalid',
     },
   ],
 }
@@ -85,7 +99,7 @@ const reset = () => {
                   <h6 class="dropdown-header">{{ specKey }}</h6>
                 </li>
                 <li v-for="sample in spec" :key="sample">
-                  <a class="dropdown-item" @click="loadSample(sample)" v-html="$t(sample.title)"></a>
+                  <a class="dropdown-item" @click="loadSample(sample)" v-html="$t(sample.i18n_title, sample.i18n_params)"></a>
                 </li>
                 <li v-if="index < Object.keys(samples).length - 1"><hr class="dropdown-divider" /></li>
               </div>

@@ -20,15 +20,9 @@
   "GIST_SAVED": "Saved as Gist",
   "GIST_VISIT": "Visit saved schema/document pair",
 
-  "sample_titles": {
-    "draft-04-valid": "Sample draft-04 schema and valid document",
-    "draft-04-invalid": "Sample draft-04 schema and <strong>invalid</strong> document",
-    "draft-06-valid": "Sample draft-06 schema and valid document",
-    "draft-06-invalid": "Sample draft-06 schema and <strong>invalid</strong> document",
-    "v5-unofficial-valid": "Sample v5-unofficial schema and valid document",
-    "v5-unofficial-invalid": "Sample v5-unofficial schema and <strong>invalid</strong> document",
-    "experimental-valid": "Sample experimental schema and valid document",
-    "experimental-invalid": "Sample experimental schema and <strong>invalid</strong> document"
+  "SAMPLE_TITLES": {
+    "VALID": "Sample {version} schema and valid document",
+    "INVALID": "Sample {version} schema and <strong>invalid</strong> document"
   },
 
   "WARNING_V5_UNOFFICIAL": "<strong>RETIRED</strong> schema version.  Please use the latest official version instead.<br /><br />This schema version, v5-unofficial, was a prototype for a draft version that was eventually scrapped. Previously, JSON Schema Lint offered this prototype as \"draft-05\", as it was originally meant to supersede draft-04.<br />This was not, and will never be, an official JSON Schema version.",
