@@ -34,7 +34,7 @@ function mergedParams(message_params) {
 </script>
 
 <template>
-  <table class="table validation-messages-table table-striped" v-if="props.messages.length">
+  <table class="table validation-messages table-striped" v-if="props.messages.length">
     <thead>
       <tr v-if="simpleMessages(props.messages).length">
         <th scope="col">{{ $t('MESSAGE') }}</th>

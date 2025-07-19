@@ -117,9 +117,9 @@ const reset = () => {
 
         <ul class="nav navbar-nav navbar-right">
           <div class="btn-group" role="group" aria-label="Mode selection">
-            <div class="btn-group" role="group">
+            <div class="btn-group" role="group" aria-label="Markup selection">
               <!-- Markup language dropdown -->
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="markupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="bi bi-pencil-fill"></span>
                 &nbsp;{{ configStore.markups[configStore.currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON') }}
               </button>
@@ -133,9 +133,9 @@ const reset = () => {
               </ul>
             </div>
 
-            <div class="btn-group" role="group">
+            <div class="btn-group" role="group" aria-label="Spec version selection">
               <!-- Specification version dropdown -->
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="schemaModel && schemaModel.$schema">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="specDropdown" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="schemaModel && schemaModel.$schema">
                 <span class="bi bi-signpost-fill"></span>
                 &nbsp;{{ configStore.specs[configStore.currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON') }}
               </button>

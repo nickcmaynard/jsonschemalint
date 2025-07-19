@@ -157,7 +157,7 @@ watch(myDoc, (value, oldValue) => {
 </script>
 
 <template>
-  <div class="card" :class="{ 'border-danger': !valid }">
+  <div class="card validator-card" :class="{ 'border-danger': !valid }">
     <div class="card-header d-flex justify-content-between align-items-center text-white" :class="{ 'bg-danger': !valid, 'bg-success': valid }">
       <span>
         <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON')

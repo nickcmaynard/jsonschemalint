@@ -96,10 +96,10 @@ watch(schemaModel, (newSchema) => {
 <template>
   <div class="row g-3">
     <div class="col-xs-12 col-md-6">
-      <ValidatorCard v-model:document="schemaModel" :mode="'schema'" />
+      <ValidatorCard v-model:document="schemaModel" :mode="'schema'" identifier="schema" />
     </div>
     <div class="col-xs-12 col-md-6">
-      <ValidatorCard v-model:document="documentModel" v-model:schema="schemaModel" :mode="'document'" />
+      <ValidatorCard v-model:document="documentModel" v-model:schema="schemaModel" :mode="'document'" identifier="document" />
     </div>
   </div>
 </template>
