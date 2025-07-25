@@ -26,6 +26,7 @@ test.describe('document/spec interaction', () => {
     await documentTextarea.fill('{}')
 
     // Wait for validation to complete (replace with a better selector if possible)
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000)
 
     // Check for document errors

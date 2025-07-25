@@ -23,6 +23,7 @@ function markupSampleTests(markup) {
 
       // Wait for validation to finish (simulate lib.isDoneWorking)
       // Wait for validation to complete (replace with a better selector if possible)
+      // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(1000)
 
       // Schema is valid/invalid

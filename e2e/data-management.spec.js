@@ -27,6 +27,7 @@ test.describe('data management', () => {
     await page.getByLabel('Spec version selection').getByText('draft-07').click()
 
     // Wait for app to finish working (simulate lib.isDoneWorking)
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000)
 
     // Check the RANDOM stuff is still there
@@ -55,6 +56,7 @@ test.describe('data management', () => {
 
     // Reload it
     await page.reload()
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000)
 
     // Check the RANDOM stuff is still there
@@ -82,6 +84,7 @@ test.describe('data management', () => {
     await schemaElement.fill(schemaWithSpec)
 
     // Wait for app to finish working (simulate lib.isDoneWorking)
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000)
 
     // Check the route has updated to draft-07
