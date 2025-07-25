@@ -3,7 +3,6 @@ import ValidatorCard from '@/components/ValidatorCard.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
-import { pickBy } from 'lodash-es'
 import { storeToRefs } from 'pinia'
 
 import { useConfigStore } from '@/stores/config'
@@ -105,24 +104,6 @@ useEventListener('load-sample', async (sample) => {
       console.error(err)
     })
 })
-
-// React to $schema stuff
-// TODO: Re-enable this
-// watch(schemaModel, (newSchema) => {
-//   console.info('Schema model updated:', newSchema)
-//   if (newSchema && newSchema.$schema) {
-//     console.info('Schema model has $schema:', newSchema.$schema)
-//     const newSpec = Object.keys(pickBy(configStore.specs, (spec) => spec.schema === newSchema.$schema))[0]
-//     if (newSpec) {
-//       console.info('Setting current spec to:', newSpec)
-//       configStore.currentSpec = newSpec
-//     } else {
-//       console.warn('No matching spec found for schema:', newSchema.$schema)
-//     }
-//   } else {
-//     console.info('Schema model does not have $schema:', newSchema)
-//   }
-// })
 </script>
 
 <template>
