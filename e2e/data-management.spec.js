@@ -61,4 +61,30 @@ test.describe('data management', () => {
     await expect(schemaElement).toHaveValue(randomSchema)
     await expect(documentElement).toHaveValue(randomDocument)
   })
+
+  test('should update the route and schema spec when a schema with $schema is loaded', async ({ page }) => {
+    await page.goto('/version/draft-06/markup/json')
+
+    // Reset
+    await page.getByRole('button', { name: 'Reset' }).click()
+
+    // Type a schema with $schema
+    const schemaElement = page.locator('.validator-card[identifier=schema] textarea')
+    const schemaWithSpec = `{
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "foo": {
+          "type": "string"
+        }
+      }
+    }`
+    await schemaElement.fill(schemaWithSpec)
+
+    // Wait for app to finish working (simulate lib.isDoneWorking)
+    await page.waitForTimeout(1000)
+
+    // Check the route has updated to draft-07
+    expect(page.url()).toMatch(/\/version\/2020-12\/markup\/json/)
+  })
 })

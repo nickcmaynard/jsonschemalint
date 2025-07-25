@@ -49,9 +49,12 @@ describe('MarkupYaml', () => {
 
     it('should reject invalid YAML', async () => {
       const invalidYaml = 'foo: bar:'
-      await expect(MarkupYaml.parse(invalidYaml)).rejects.toEqual([
-        { message_tid: 'ERROR_INVALID_YAML' },
-      ])
+      await expect(MarkupYaml.parse(invalidYaml, 'foo')).rejects.toEqual([{ message_tid: 'ERROR_INVALID_YAML', message_params: { doctype: 'FOO' } }])
+    })
+
+    it('should assume a default doctype of "document" if not provided', async () => {
+      const invalidYaml = 'foo: bar:'
+      await expect(MarkupYaml.parse(invalidYaml)).rejects.toEqual([{ message_tid: 'ERROR_INVALID_YAML', message_params: { doctype: 'DOCUMENT' } }])
     })
   })
 })

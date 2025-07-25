@@ -3,6 +3,8 @@ import { ref, onMounted, watch, computed, defineModel, isProxy, toRaw } from 'vu
 import { storeToRefs } from 'pinia'
 import ValidationMessages from '@/components/ValidationMessages.vue'
 
+import Promise from 'bluebird'
+
 import Validator from '@/utilities/Validator'
 import { debounce, isEqual } from 'lodash-es'
 
@@ -31,9 +33,9 @@ function format() {
   getMarkupService()
     .then((service) =>
       service
-        .parse(myDoc.value)
+        .parse(documentModel.value)
         .then(service.prettyPrint)
-        .then((formatted) => (myDoc.value = formatted)),
+        .then((formatted) => (documentModel.value = formatted)),
     )
     .catch((errors) => {
       console.error('Error formatting document:', errors)
@@ -43,8 +45,9 @@ function format() {
 
 // reactive state
 const valid = ref()
-const myDoc = ref()
 const messages = ref([])
+// const localDocumentObject = ref()
+// const localSchemaObject = ref()
 
 const props = defineProps({
   mode: {
@@ -55,30 +58,26 @@ const props = defineProps({
 
 // Define a model to hold the parsed document
 const documentModel = defineModel('document', {
-  type: Object,
+  type: String,
 })
 const schemaModel = defineModel('schema', {
-  type: Object,
-})
-const schemaUrl = computed(() => {
-  return schemaModel.value && schemaModel.value.$schema ? schemaModel.value.$schema : configStore.specs[configStore.currentSpec].schema
+  type: String,
 })
 const validator = computed(() => {
   // Create a new Validator instance with the current spec
-  if (!schemaUrl.value) {
+  if (!configStore.specs[configStore.currentSpec].schema) {
     console.warn('No schema reference found for current spec:', configStore.currentSpec)
     return null
   }
-  return new Validator(schemaUrl.value)
+  return new Validator(configStore.specs[configStore.currentSpec].schema)
 })
-const validateSchema = function () {
-  const documentObject = isProxy(documentModel.value) ? toRaw(documentModel.value) : documentModel.value
-  console.debug('Validating schema', documentObject)
-  return validator.value.validateSchema(documentObject)
+const validateSchema = function (schemaObject) {
+  console.debug('Validating schema', schemaObject)
+  return validator.value.validateSchema(schemaObject)
 }
-const validateDocument = function () {
+const validateDocument = function (schemaObject, documentObject) {
   console.debug('Validating document')
-  return validator.value.validate(schemaModel.value, documentModel.value)
+  return validator.value.validate(schemaObject, documentObject)
 }
 
 // Compute messages based on the document
@@ -86,26 +85,34 @@ const computeMessages = async () => {
   console.debug(`ValidatorCard[${props.mode}]: computeMessages()`)
   return getMarkupService()
     .then((service) => {
-      return service
-        .parse(myDoc.value)
-        .then((parsed) => {
-          console.info('Parsed document:', parsed)
-          documentModel.value = parsed
+      return Promise.props({
+        documentObject: service.parse(documentModel.value, props.mode),
+        schemaObject: props.mode === 'document' ? service.parse(schemaModel.value, 'schema') : undefined,
+      })
+        .then((res) => {
+          if (props.mode === 'schema') {
+            // Set configstore from $schema if specified
+            if (res.documentObject?.$schema) {
+              console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${res.documentObject.$schema}`)
+              configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === res.documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
+            }
+          }
+          return props.mode === 'schema' ? validateSchema(res.documentObject) : validateDocument(res.schemaObject, res.documentObject)
         })
-        .then(() => {
-          const result = props.mode === 'schema' ? validateSchema() : validateDocument()
+        .then((result) => {
+          console.debug('Validation result:', result)
           messages.value = [
             {
               message_tid: props.mode === 'schema' ? 'SCHEMA_VALID_MESSAGE' : 'DOCUMENT_VALID_MESSAGE',
               message_params: { name: currentSpec },
             },
           ]
-          console.debug('Validation result:', result)
           valid.value = true
         })
     })
     .catch((errors) => {
       console.error('Error parsing document:', errors)
+      console.info(errors.message)
       messages.value = errors || []
       valid.value = false
     })
@@ -120,7 +127,7 @@ const debouncedComputeMessages = debounce(() => {
 const inputReactionComputeMessages = debounce(() => {
   debouncedComputeMessages.flush()
   _nextTickComputeMessages()
-}, 500)
+}, 250)
 watch(currentMarkup, () => {
   console.debug(`ValidatorCard[${props.mode}]: watch(currentMarkup) fired`)
   debouncedComputeMessages()
@@ -131,11 +138,11 @@ watch(currentSpec, () => {
 })
 watch(schemaModel, () => {
   console.debug(`ValidatorCard[${props.mode}]: watch(schemaModel) fired`)
-  debouncedComputeMessages()
+  inputReactionComputeMessages()
 })
 onMounted(async () => {
   console.debug(`ValidatorCard[${props.mode}]: onMounted() fired`)
-  myDoc.value = await (await getMarkupService()).prettyPrint(documentModel.value)
+  // myDoc.value = await (await getMarkupService()).prettyPrint(documentModel.value)
   computeMessages()
 })
 watch(documentModel, async (value, oldValue) => {
@@ -143,17 +150,17 @@ watch(documentModel, async (value, oldValue) => {
   // This check is essential to avoid infinite loops
   if (!isEqual(value, oldValue)) {
     console.debug(`ValidatorCard[${props.mode}]: watch(documentModel) fired & changed`)
-    myDoc.value = typeof value === 'undefined' ? undefined : await (await getMarkupService()).prettyPrint(value)
-    debouncedComputeMessages() // Don't do it immediately - myDoc watch will fire too
+    // myDoc.value = typeof value === 'undefined' ? undefined : await (await getMarkupService()).prettyPrint(value)
+    inputReactionComputeMessages() // Don't do it immediately
   }
 })
-watch(myDoc, (value, oldValue) => {
-  console.debug(`ValidatorCard[${props.mode}]: watch(myDoc) fired`, value, oldValue)
-  if (value !== oldValue) {
-    console.debug(`ValidatorCard[${props.mode}]: watch(myDoc) fired & changed`)
-    inputReactionComputeMessages()
-  }
-})
+// watch(myDoc, (value, oldValue) => {
+//   console.debug(`ValidatorCard[${props.mode}]: watch(myDoc) fired`, value, oldValue)
+//   if (value !== oldValue) {
+//     console.debug(`ValidatorCard[${props.mode}]: watch(myDoc) fired & changed`)
+//     inputReactionComputeMessages()
+//   }
+// })
 </script>
 
 <template>
@@ -168,7 +175,7 @@ watch(myDoc, (value, oldValue) => {
 
     <div class="validator">
       <form novalidate>
-        <textarea v-model="myDoc" class="form-control validator-document font-monospace" spellcheck="false"></textarea>
+        <textarea v-model="documentModel" class="form-control validator-document font-monospace" spellcheck="false"></textarea>
       </form>
 
       <ValidationMessages :messages="messages" :doctype="mode.toUpperCase()"></ValidationMessages>
