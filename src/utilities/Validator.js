@@ -1,18 +1,16 @@
 'use strict'
 
 // Ajv
-import * as Ajv from 'ajv/dist/ajv.js'
-import * as Ajv2019 from 'ajv/dist/2019.js'
-import * as Ajv2020 from 'ajv/dist/2020.js'
+// import * as Ajv from 'ajv/dist/ajv.js'
+// import * as Ajv2019 from 'ajv/dist/2019.js'
+// import * as Ajv2020 from 'ajv/dist/2020.js'
 
-// Ajv's meta schema for draft-06
-import draft6MetaSchema from 'ajv/dist/refs/json-schema-draft-06.json'
-
-export default function (schemaUrl) {
-  console.debug('Validator() schemaUrl:', schemaUrl)
-
-  this.schemaUrl = schemaUrl
-
+/**
+ * Asynchronous builder for Validator.
+ * @param {string} schemaUrl - The schema URL to use.
+ * @returns {Promise<Validator>}
+ */
+export async function buildValidator(schemaUrl) {
   const opts = {
     verbose: true,
     allErrors: true,
@@ -23,21 +21,31 @@ export default function (schemaUrl) {
   switch (schemaUrl) {
     // draft4 is not supported because we'd need an old version of Ajv
     case 'https://json-schema.org/draft-06/schema':
-      opts.meta = draft6MetaSchema
-      validator = new Ajv(opts)
+      // Ajv's meta schema for draft-06
+      opts.meta = await import('ajv/dist/refs/json-schema-draft-06.json')
+      validator = new (await import('ajv/dist/ajv.js'))(opts)
       break
     case 'https://json-schema.org/draft-07/schema':
-      validator = new Ajv(opts)
+      validator = new (await import('ajv/dist/ajv.js'))(opts)
       break
     case 'https://json-schema.org/draft/2019-09/schema':
-      validator = new Ajv2019(opts)
+      validator = new (await import('ajv/dist/2019.js'))(opts)
       break
     case 'https://json-schema.org/draft/2020-12/schema':
-      validator = new Ajv2020(opts)
+      validator = new (await import('ajv/dist/2020.js'))(opts)
       break
     default:
       console.error('Validator: Unsupported schema URL:', schemaUrl)
   }
+
+  return new _Validator(validator, schemaUrl)
+}
+
+const _Validator = function (validator, schemaUrl) {
+  console.debug('Validator() schemaUrl:', schemaUrl)
+
+  this.schemaUrl = schemaUrl
+  this.validator = validator
 
   this.validateSchema = function (schemaObject) {
     if (validator.validateSchema(schemaObject)) {

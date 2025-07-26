@@ -1,11 +1,9 @@
 <script setup>
-import { ref, onMounted, watch, computed, defineModel } from 'vue'
+import { ref, onMounted, watch, defineModel } from 'vue'
 import { storeToRefs } from 'pinia'
 import ValidationMessages from '@/components/ValidationMessages.vue'
 
-import Promise from 'bluebird'
-
-import Validator from '@/utilities/Validator'
+import { buildValidator } from '@/utilities/Validator'
 import { debounce, isEqual } from 'lodash-es'
 
 // Config
@@ -63,21 +61,23 @@ const documentModel = defineModel('document', {
 const schemaModel = defineModel('schema', {
   type: String,
 })
-const validator = computed(() => {
+
+// Validation
+const getValidator = async () => {
   // Create a new Validator instance with the current spec
   if (!configStore.specs[configStore.currentSpec].schema) {
     console.warn('No schema reference found for current spec:', configStore.currentSpec)
     return null
   }
-  return new Validator(configStore.specs[configStore.currentSpec].schema)
-})
-const validateSchema = function (schemaObject) {
-  console.debug('Validating schema', schemaObject)
-  return validator.value.validateSchema(schemaObject)
+  return await buildValidator(configStore.specs[configStore.currentSpec].schema)
 }
-const validateDocument = function (schemaObject, documentObject) {
+const validateSchema = async function (schemaObject) {
+  console.debug('Validating schema', schemaObject)
+  return (await getValidator()).validateSchema(schemaObject)
+}
+const validateDocument = async function (schemaObject, documentObject) {
   console.debug('Validating document')
-  return validator.value.validate(schemaObject, documentObject)
+  return (await getValidator()).validate(schemaObject, documentObject)
 }
 
 // Compute messages based on the document
@@ -85,19 +85,22 @@ const computeMessages = async () => {
   console.debug(`ValidatorCard[${props.mode}]: computeMessages()`)
   return getMarkupService()
     .then((service) => {
-      return Promise.props({
-        documentObject: service.parse(documentModel.value, props.mode),
-        schemaObject: props.mode === 'document' ? service.parse(schemaModel.value, 'schema') : undefined,
-      })
+      return Promise.all([
+        //
+        service.parse(documentModel.value, props.mode),
+        props.mode === 'document' ? service.parse(schemaModel.value, 'schema') : undefined,
+      ])
         .then((res) => {
+          const documentObject = res[0],
+            schemaObject = res[1]
           if (props.mode === 'schema') {
             // Set configstore from $schema if specified
-            if (res.documentObject?.$schema) {
-              console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${res.documentObject.$schema}`)
-              configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === res.documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
+            if (documentObject?.$schema) {
+              console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${documentObject.$schema}`)
+              configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
             }
           }
-          return props.mode === 'schema' ? validateSchema(res.documentObject) : validateDocument(res.schemaObject, res.documentObject)
+          return props.mode === 'schema' ? validateSchema(documentObject) : validateDocument(schemaObject, documentObject)
         })
         .then((result) => {
           console.debug('Validation result:', result)
