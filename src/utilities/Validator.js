@@ -17,22 +17,27 @@ export async function buildValidator(schemaUrl) {
     addUsedSchema: false, // Don't cache schemas
   }
 
+  let ajv
   let validator
   switch (schemaUrl) {
     // draft4 is not supported because we'd need an old version of Ajv
     case 'https://json-schema.org/draft-06/schema':
       // Ajv's meta schema for draft-06
       opts.meta = await import('ajv/dist/refs/json-schema-draft-06.json')
-      validator = new (await import('ajv/dist/ajv.js'))(opts)
+      ajv = await import('ajv/dist/ajv.js')
+      validator = new ajv(opts)
       break
     case 'https://json-schema.org/draft-07/schema':
-      validator = new (await import('ajv/dist/ajv.js'))(opts)
+      ajv = await import('ajv/dist/ajv.js')
+      validator = new ajv(opts)
       break
     case 'https://json-schema.org/draft/2019-09/schema':
-      validator = new (await import('ajv/dist/2019.js'))(opts)
+      ajv = await import('ajv/dist/2019.js')
+      validator = new ajv(opts)
       break
     case 'https://json-schema.org/draft/2020-12/schema':
-      validator = new (await import('ajv/dist/2020.js'))(opts)
+      ajv = await import('ajv/dist/2020.js')
+      validator = new ajv(opts)
       break
     default:
       console.error('Validator: Unsupported schema URL:', schemaUrl)
