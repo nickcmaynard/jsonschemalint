@@ -48,14 +48,8 @@ export const useConfigStore = defineStore('config', () => {
       hidden: true,
     },
     'draft-04': {
-      alerts: [
-        {
-          className: 'alert-danger',
-          content_tid: 'WARNING_UNSUPPORTED_SPEC_VERSION',
-        },
-      ],
+      schema: 'https://json-schema.org/draft-04/schema',
       name: 'draft-04',
-      hidden: true,
     },
     'draft-06': {
       // service: validatorFactoryAJV('draft-06'),

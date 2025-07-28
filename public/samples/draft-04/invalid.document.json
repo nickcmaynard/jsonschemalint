@@ -1,0 +1,4 @@
+{
+    "foo": "this is a string, not a number",
+    "bar": "this is a string that isn't allowed"
+}

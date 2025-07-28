@@ -6,10 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
+  plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -17,8 +14,6 @@ export default defineConfig({
     },
   },
   build: {
-    rollupOptions: {
-      external: ['ajv']  // Include all of Ajv as an external dependency
-    }
-  }
+    // sourcemap: 'inline',
+  },
 })

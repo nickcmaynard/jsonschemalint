@@ -8,7 +8,7 @@ const router = createRouter({
     {
       // TODO: Generate from configstore info
       // Catch bad/retired specs
-      path: '/version/:version(draft-0[1-4]|v5-unofficial|experimental)/:discard(.*)',
+      path: '/version/:version(draft-0[1-3]|v5-unofficial|experimental)/:discard(.*)',
       component: InvalidVersionView,
     },
     {

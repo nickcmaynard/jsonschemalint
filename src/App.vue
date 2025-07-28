@@ -10,6 +10,18 @@ import { useConfigStore } from '@/stores/config'
 const configStore = useConfigStore()
 
 const samples = {
+  'draft-04': [
+    {
+      i18n_title: 'SAMPLE_TITLES.VALID',
+      i18n_params: { version: 'draft-04' },
+      ref: 'draft-04/valid',
+    },
+    {
+      i18n_title: 'SAMPLE_TITLES.INVALID',
+      i18n_params: { version: 'draft-04' },
+      ref: 'draft-04/invalid',
+    },
+  ],
   'draft-06': [
     {
       i18n_title: 'SAMPLE_TITLES.VALID',

@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test'
 
 const sampleTestMatrix = [
+  { mode: 'draft-04', sample: 'Sample draft-04 schema and valid document', schemaValid: true, documentValid: true },
+  { mode: 'draft-04', sample: 'Sample draft-04 schema and invalid document', schemaValid: true, documentValid: false },
   { mode: 'draft-06', sample: 'Sample draft-06 schema and valid document', schemaValid: true, documentValid: true },
   { mode: 'draft-06', sample: 'Sample draft-06 schema and invalid document', schemaValid: true, documentValid: false },
-  { mode: 'draft-07', sample: 'Sample draft-06 schema and valid document', schemaValid: true, documentValid: true },
-  { mode: 'draft-07', sample: 'Sample draft-06 schema and invalid document', schemaValid: true, documentValid: false },
+  { mode: 'draft-07', sample: 'Sample draft-07 schema and valid document', schemaValid: true, documentValid: true },
+  { mode: 'draft-07', sample: 'Sample draft-07 schema and invalid document', schemaValid: true, documentValid: false },
 ]
 
 function markupSampleTests(markup) {

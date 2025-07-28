@@ -17,30 +17,29 @@ export async function buildValidator(schemaUrl) {
     addUsedSchema: false, // Don't cache schemas
   }
 
-  let ajv
   let validator
-  switch (schemaUrl) {
-    // draft4 is not supported because we'd need an old version of Ajv
-    case 'https://json-schema.org/draft-06/schema':
-      // Ajv's meta schema for draft-06
-      opts.meta = await import('ajv/dist/refs/json-schema-draft-06.json')
-      ajv = await import('ajv/dist/ajv.js')
-      validator = new ajv(opts)
-      break
-    case 'https://json-schema.org/draft-07/schema':
-      ajv = await import('ajv/dist/ajv.js')
-      validator = new ajv(opts)
-      break
-    case 'https://json-schema.org/draft/2019-09/schema':
-      ajv = await import('ajv/dist/2019.js')
-      validator = new ajv(opts)
-      break
-    case 'https://json-schema.org/draft/2020-12/schema':
-      ajv = await import('ajv/dist/2020.js')
-      validator = new ajv(opts)
-      break
-    default:
-      console.error('Validator: Unsupported schema URL:', schemaUrl)
+  // draft4 is not supported because we'd need an old version of Ajv
+  if (schemaUrl === 'https://json-schema.org/draft-04/schema') {
+    const Ajv = await import('ajv-draft-04')
+    // This is a special case for draft-04, which uses a different Ajv version
+    // XXX: Workaround a funky packaging issue.  Ajv.default seems to work in both built and dev versions
+    validator = new Ajv.default(opts)
+  } else if (schemaUrl === 'https://json-schema.org/draft-06/schema') {
+    // Ajv's meta schema for draft-06
+    opts.meta = await import('ajv/dist/refs/json-schema-draft-06.json')
+    const { Ajv: AjvDraft06 } = await import('ajv')
+    validator = new AjvDraft06(opts)
+  } else if (schemaUrl === 'https://json-schema.org/draft-07/schema') {
+    const { Ajv: AjvDraft07 } = await import('ajv')
+    validator = new AjvDraft07(opts)
+  } else if (schemaUrl === 'https://json-schema.org/draft/2019-09/schema') {
+    const { Ajv2019 } = await import('ajv/dist/2019.js')
+    validator = new Ajv2019(opts)
+  } else if (schemaUrl === 'https://json-schema.org/draft/2020-12/schema') {
+    const { Ajv2020 } = await import('ajv/dist/2020.js')
+    validator = new Ajv2020(opts)
+  } else {
+    console.error('Validator: Unsupported schema URL:', schemaUrl)
   }
 
   return new _Validator(validator, schemaUrl)
