@@ -12,7 +12,7 @@ const sampleTestMatrix = [
 function markupSampleTests(markup) {
   for (const { mode, sample, schemaValid, documentValid } of sampleTestMatrix) {
     test(`in ${mode} mode, should correctly validate the ${sample} (${markup})`, async ({ page }) => {
-      await page.goto(`/version/${mode}/markup/${markup}`)
+      await page.goto(`/#!/version/${mode}/markup/${markup}`)
 
       // Open the samples menu
       await page.getByRole('button', { name: 'Samples' }).click()

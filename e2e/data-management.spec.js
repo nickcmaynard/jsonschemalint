@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('data management', () => {
   test('should preserve schema and document across route changes', async ({ page }) => {
-    await page.goto('/version/draft-06/markup/json')
+    await page.goto('/#!/version/draft-06/markup/json')
 
     const randomSchema = Math.random()
       .toString(36)
@@ -36,7 +36,7 @@ test.describe('data management', () => {
   })
 
   test('should preserve schema and document across page reloads', async ({ page }) => {
-    await page.goto('/version/draft-06/markup/json')
+    await page.goto('/#!/version/draft-06/markup/json')
 
     const randomSchema = Math.random()
       .toString(36)
@@ -65,7 +65,7 @@ test.describe('data management', () => {
   })
 
   test('should update the route and schema spec when a schema with $schema is loaded', async ({ page }) => {
-    await page.goto('/version/draft-06/markup/json')
+    await page.goto('/#!/version/draft-06/markup/json')
 
     // Reset
     await page.getByRole('button', { name: 'Reset' }).click()
@@ -88,6 +88,6 @@ test.describe('data management', () => {
     await page.waitForTimeout(1000)
 
     // Check the route has updated to draft-07
-    expect(page.url()).toMatch(/\/version\/2020-12\/markup\/json/)
+    expect(page.url()).toMatch(/#!\/version\/2020-12\/markup\/json$/)
   })
 })

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('document/spec interaction', () => {
   test('should show an explanatory error in the document errors when the schema is invalid', async ({ page }) => {
-    await page.goto('/version/draft-07/markup/json')
+    await page.goto('/#!/version/draft-07/markup/json')
 
     const invalidSchema = `{
             "type": "object",

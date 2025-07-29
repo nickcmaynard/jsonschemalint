@@ -4,7 +4,7 @@ test.describe('Smoke tests', () => {
   test('should automatically redirect to a default version & markup when location hash/fragment is empty', async ({ page }) => {
     await page.goto('/')
     const url = page.url()
-    expect(url).toMatch(/\/version\/.*\/markup\/.*/)
+    expect(url).toMatch(/\/#!\/version\/[^/]+\/markup\/[^/]+$/)
   })
 
   test.describe('about dialog', () => {
