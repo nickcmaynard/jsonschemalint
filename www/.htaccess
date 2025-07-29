@@ -1,7 +1,0 @@
-<Files .htaccess>
-Order Allow,Deny
-Deny from all
-</Files>
-
-ExpiresActive On
-ExpiresDefault "access plus 1 week"
