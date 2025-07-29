@@ -40,6 +40,7 @@ export async function buildValidator(schemaUrl) {
     validator = new Ajv2020(opts)
   } else {
     console.error('Validator: Unsupported schema URL:', schemaUrl)
+    throw new Error(`Unsupported schema URL: ${schemaUrl}`)
   }
 
   return new _Validator(validator, schemaUrl)
