@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import LintView from '@/views/LintView.vue'
 import InvalidVersionView from '@/views/InvalidVersionView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory('#!/'), // Match the old scheme from Angular days
   routes: [
     {
       // TODO: Generate from configstore info
