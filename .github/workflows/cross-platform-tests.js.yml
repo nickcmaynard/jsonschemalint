@@ -37,7 +37,6 @@ jobs:
 
       # deps
       - run: npm ci
-      - run: npm run clean
 
       # tests
       - run: npm test:unit
