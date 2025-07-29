@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "foo": {
+      "type": "number"
+    },
+    "bar": {
+      "const": "Must equal this value"
+    },
+    "baz": {
+      "type": "object",
+      "properties": {
+        "staticProperty": {
+          "type": "array",
+          "contains": {
+            "type": "number"
+          }
+        }
+      },
+      "propertyNames": {
+        "pattern": "^([0-9a-zA-Z]*)$"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+name: Build container image
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: 
+      - 'master'
+    paths:
+      - 'Containerfile'
+  schedule:
+    - cron:  '0 0 * * *'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# permissions are needed if pushing to ghcr.io
+permissions: 
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # Get the repository's code
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Compute short SHA
+      id: sha
+      run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_OUTPUT
+
+    - name: Install qemu dependency
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qemu-user-static
+
+    - name: Build
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ steps.sha.outputs.SHORT_SHA }}
+        containerfiles: |
+          ./Containerfile
+        platforms: linux/amd64,linux/arm64
+        context: .
+
+    - name: Push to GHCR
+      id: push-to-ghcr
+      uses: redhat-actions/push-to-registry@v2
+      if: github.event_name != 'pull_request'
+      with:
+        tags: ${{ steps.build-image.outputs.tags }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,15 @@
+@import '~bootstrap/scss/bootstrap';
+
+// Update the import directory to point to it‘s location within node_modules
+$bootstrap-icons-font-dir: 'bootstrap-icons/font/fonts';
+
+body {
+  padding-bottom: 0.75rem;
+}
+
+html {
+  font-size: 14px;
+}
+
+// Import the Sass files as usual
+@import 'bootstrap-icons/font/bootstrap-icons';

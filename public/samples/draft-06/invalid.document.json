@@ -1,0 +1,9 @@
+{
+  "foo": "Not a number",
+  "bar": "Doesn't equal constant",
+  "baz": {
+    "staticProperty": ["This array needs at least one number"],
+    "property1": "The propertyNames keyword is an alternative to patternProperties",
+    "pr()perty2": "All property names must match supplied conditions (in this case, it's a regex)"
+  }
+}
