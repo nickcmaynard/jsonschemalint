@@ -39,7 +39,7 @@ jobs:
       - run: npm ci
 
       # tests
-      - run: npm test:unit
+      - run: npm run test:unit
       - name: Publish Test Report
         uses: scacap/action-surefire-report@v1
         with:
