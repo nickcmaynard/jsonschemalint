@@ -1,60 +1,53 @@
-# jsonschemalint-v2
+# JSON Schema Lint
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Setup
 
 ```sh
-npm install
+npm ci
 ```
 
-### Compile and Hot-Reload for Development
+## Run tests
+
+```sh
+# Unit tests
+npm run test:unit
+
+# End-to-end tests
+npm run test:e2e
+
+# Run limited set of end-to-end tests on Chromium
+npx playwright test --project chromium
+```
+
+## Preview
+
+### "live reload" dev
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+Open [http://localhost:5173](http://localhost:5173).
+
+### Built site (of dist/)
+
+```sh
+npm run build
+npm run preview
+```
+
+Open [http://localhost:4173/](http://localhost:4173/).
+
+## Building dist/
+
+### Production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Development (with sourcemap)
 
 ```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+npx vite build --sourcemap true
 ```
