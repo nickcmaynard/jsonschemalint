@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router'
 import { pickBy } from 'lodash-es'
 
 import { Dropdown } from 'bootstrap'
@@ -149,7 +149,7 @@ const reset = () => {
 
             <div class="btn-group" role="group" aria-label="Spec version selection">
               <!-- Specification version dropdown -->
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="specDropdown" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="schemaModel && schemaModel.$schema">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="specDropdown" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="configStore.specDefinesSchema">
                 <span class="bi bi-signpost-fill"></span>
                 &nbsp;{{ configStore.specs[configStore.currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON') }}
               </button>

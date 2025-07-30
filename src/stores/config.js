@@ -97,6 +97,7 @@ export const useConfigStore = defineStore('config', () => {
 
   const currentMarkup = ref()
   const currentSpec = ref()
+  const specDefinesSchema = ref(false)
 
-  return { markups, specs, currentMarkup, currentSpec }
+  return { markups, specs, currentMarkup, currentSpec, specDefinesSchema }
 })

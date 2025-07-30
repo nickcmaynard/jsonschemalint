@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, defineModel } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import ValidationMessages from '@/components/ValidationMessages.vue'
 
@@ -99,6 +99,7 @@ const computeMessages = async () => {
               console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${documentObject.$schema}`)
               configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
             }
+            configStore.specDefinesSchema = !!documentObject?.$schema;
           }
           return props.mode === 'schema' ? validateSchema(documentObject) : validateDocument(schemaObject, documentObject)
         })
