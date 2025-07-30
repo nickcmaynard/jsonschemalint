@@ -16,4 +16,16 @@ export default defineConfig({
   build: {
     // sourcemap: 'inline',
   },
+  css: {
+     preprocessorOptions: {
+        scss: {
+          silenceDeprecations: [
+            'import',
+            'mixed-decls',
+            'color-functions',
+            'global-builtin',
+          ],
+        },
+     },
+  },
 })
