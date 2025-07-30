@@ -2,6 +2,8 @@
 import { RouterLink } from 'vue-router'
 import { pickBy } from 'lodash-es'
 
+import { Dropdown } from 'bootstrap'
+
 import { useEventEmit } from 'mitt-vue'
 
 import AboutContent from '@/components/AboutContent.vue'

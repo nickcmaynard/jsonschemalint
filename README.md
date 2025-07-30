@@ -13,6 +13,7 @@ npm ci
 npm run test:unit
 
 # End-to-end tests
+npx playright install --with-deps
 npm run test:e2e
 
 # Run limited set of end-to-end tests on Chromium
