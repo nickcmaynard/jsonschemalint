@@ -41,6 +41,7 @@
 
   "ERROR_INVALID_JSON": "@.capitalize:{doctype} is invalid JSON. Try <a target='_blank' href='https://jsonlint.com'>JSONLint</a> to fix it.",
   "ERROR_INVALID_YAML": "@.capitalize:{doctype} is invalid YAML. Try <a target='_blank' href='https://codebeautify.org/yaml-validator'>YAML Validator</a> to fix it.",
+  "ERROR_INVALID_HJSON": "@.capitalize:{doctype} is invalid HJSON. Try <a target='_blank' href='https://hjson.github.io/try.html'>Hjson</a> to fix it.",
 
   "ERROR_INVALID_MARKUP": "Invalid markup language '{markupLanguage}'.",
   "ERROR_INVALID_VERSION": "Invalid schema version '{specVersion}'.",

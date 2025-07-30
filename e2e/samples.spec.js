@@ -46,3 +46,7 @@ test.describe('JSON samples', () => {
 test.describe('YAML samples', () => {
   markupSampleTests('yaml')
 })
+
+test.describe('HJSON samples', () => {
+  markupSampleTests('hjson')
+})

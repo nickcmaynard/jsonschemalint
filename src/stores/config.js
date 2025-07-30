@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 import MarkupJson from '@/utilities/MarkupJson'
 import MarkupYaml from '@/utilities/MarkupYaml'
+import MarkupHjson from '@/utilities/MarkupHjson'
 
 export const useConfigStore = defineStore('config', () => {
   const markups = {
@@ -14,6 +15,10 @@ export const useConfigStore = defineStore('config', () => {
       title: 'YAML',
       service: MarkupYaml,
     },
+    hjson: {
+      title: 'HJSON',
+      service: MarkupHjson,
+    }
   }
 
   const specs = {
