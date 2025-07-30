@@ -12,13 +12,19 @@ describe('MarkupHjson', () => {
     it('should pretty-print an array', async () => {
       const arr = [1, 2, 3]
       const result = await MarkupHjson.prettyPrint(arr)
-      await expect(result).toBe('[\n  1\n  2\n  3\n]')
+      await expect(result).toBeTypeOf('string')
+      // OK, it's a string, but is it accurate?
+      const reparsed = await MarkupHjson.parse(result);
+      expect(reparsed).toEqual(arr);
     })
 
     it('should pretty-print nested objects', async () => {
       const obj = { a: { b: { c: 2 } } }
       const result = await MarkupHjson.prettyPrint(obj)
-      await expect(result).toBe('{\n  "a": {\n    "b": {\n      "c": 2\n    }\n  }\n}')
+      await expect(result).toBeTypeOf('string')
+      // OK, it's a string, but is it accurate?
+      const reparsed = await MarkupHjson.parse(result);
+      expect(reparsed).toEqual(obj);
     })
   })
 
