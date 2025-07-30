@@ -9,7 +9,7 @@ describe('MarkupHjson', () => {
       expect(result).toBeTypeOf('string')
       // OK, it's a string, but is it accurate?
       const reparsed = await MarkupHjson.parse(result);
-      expect(reparsed).toEqual(arr);
+      expect(reparsed).toEqual(obj);
     })
 
     it('should pretty-print an array', async () => {
