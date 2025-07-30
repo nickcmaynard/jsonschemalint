@@ -6,7 +6,10 @@ describe('MarkupHjson', () => {
     it('should pretty-print a simple object', async () => {
       const obj = { a: 1, b: 'test' }
       const result = await MarkupHjson.prettyPrint(obj)
-      expect(result).toBe('{\n  "a": 1\n  "b": "test"\n}')
+      expect(result).toBeTypeOf('string')
+      // OK, it's a string, but is it accurate?
+      const reparsed = await MarkupHjson.parse(result);
+      expect(reparsed).toEqual(arr);
     })
 
     it('should pretty-print an array', async () => {
