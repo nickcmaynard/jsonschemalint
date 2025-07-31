@@ -63,6 +63,7 @@ jobs:
           detailed_summary: true # show a detailed summary of the test results
           skip_success_summary: false # always show the summary, even if all tests pass
           include_passed: true 
+          annotate_notice: true
 
 
       # e2e tests
@@ -80,6 +81,7 @@ jobs:
           detailed_summary: true # show a detailed summary of the test results
           skip_success_summary: false # always show the summary, even if all tests pass
           include_passed: true 
+          annotate_notice: true
   build-image:
     needs: all-tests
     runs-on: ubuntu-latest
