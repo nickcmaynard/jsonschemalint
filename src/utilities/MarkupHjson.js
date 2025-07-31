@@ -12,7 +12,7 @@ const MarkupHjson = {
    * @returns {Promise<string>} - A Promise that resolves with the pretty-printed JSON string.
    */
   async prettyPrint(data) {
-    return stringify(data, { space: 2, condense: true, bracesSameLine: true, quotes: 'all', keepWsc: true })
+    return stringify(data, { space: 2, condense: 60, bracesSameLine: true, quotes: 'all', keepWsc: true })
   },
 
   /**
