@@ -60,8 +60,8 @@ jobs:
         with:
           check_name: Unit test report (${{ matrix.platform }}, ${{ matrix.node-version }})
           report_paths: 'test-results/TEST-**.xml'
-          detailed_summary: true
-          include_passed: true
+          detailed_summary: true # show a detailed summary of the test results
+          skip_success_summary: false # always show the summary, even if all tests pass
 
 
       # e2e tests
@@ -76,8 +76,8 @@ jobs:
         with:
           check_name: E2E test report (${{ matrix.platform }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
-          detailed_summary: true
-          include_passed: true
+          detailed_summary: true # show a detailed summary of the test results
+          skip_success_summary: false # always show the summary, even if all tests pass
   build-image:
     needs: all-tests
     runs-on: ubuntu-latest
