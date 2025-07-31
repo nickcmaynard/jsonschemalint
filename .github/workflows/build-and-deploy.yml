@@ -53,17 +53,25 @@ jobs:
 
       # unit tests
       - run: npm run test:unit
-      - name: Publish Test Report
+      - name: Unit test report
         uses: scacap/action-surefire-report@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+          report_paths: test-results/TEST-**.xml
 
       # e2e tests
       - name: Install playwright browsers
         run: npx playwright install --with-deps
       - run: npm run build
       - run: npm run test:e2e
+
+      - name: E2E test report
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+          report_paths: playwright-report/TEST-**.xml
   build-image:
     needs: all-tests
     runs-on: ubuntu-latest
