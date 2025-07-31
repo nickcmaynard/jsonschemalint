@@ -11,8 +11,6 @@ on:
   pull_request:
     branches: 
       - 'master'
-    paths:
-      - 'Containerfile'
   schedule:
     - cron:  '0 0 * * *'
 
@@ -26,7 +24,48 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  all-tests:
+    strategy:
+      matrix:
+        # https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners
+        # ARM not yet supported on private repos - not even Pro
+        # platform: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [24.x]
+
+    runs-on: ${{ matrix.platform }}
+
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
+
+      # deps
+      - run: npm ci
+
+      # unit tests
+      - run: npm run test:unit
+      - name: Publish Test Report
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+
+      # e2e tests
+      - name: Install playwright browsers
+        run: npx playwright install --with-deps
+      - run: npm run build
+      - run: npm run test:e2e
+  build-image:
+    needs: all-tests
     runs-on: ubuntu-latest
     steps:
     # Get the repository's code
