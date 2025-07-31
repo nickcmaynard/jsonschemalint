@@ -57,7 +57,7 @@ jobs:
         uses: scacap/action-surefire-report@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+          check_name: Unit test report (${{ matrix.platform }}, ${{ matrix.node-version }})
           report_paths: test-results/TEST-**.xml
 
       # e2e tests
@@ -70,7 +70,7 @@ jobs:
         uses: scacap/action-surefire-report@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+          check_name: E2E test report (${{ matrix.platform }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
   build-image:
     needs: all-tests
