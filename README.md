@@ -1,5 +1,7 @@
 # JSON Schema Lint
 
+[![Build container image](https://github.com/nickcmaynard/jsonschemalint/workflows/Build%20container%20image/badge.svg)](https://github.com/nickcmaynard/jsonschemalint/actions?query=workflow%3A%22Build+container+image%22)
+
 ## Setup
 
 ```sh
