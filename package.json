@@ -16,7 +16,7 @@
     "@popperjs/core": "^2.11.8",
     "ajv": "^8.17.1",
     "ajv-draft-04": "^1.0.0",
-    "bootstrap": "^5.3.6",
+    "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "hjson": "^3.2.2",
     "lodash-es": "^4.17.21",
