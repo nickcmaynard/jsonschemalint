@@ -28,7 +28,7 @@ test.describe('data management', () => {
 
     // Wait for app to finish working (simulate lib.isDoneWorking)
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(500)
 
     // Check the RANDOM stuff is still there
     await expect(schemaElement).toHaveValue(randomSchema)
@@ -57,7 +57,7 @@ test.describe('data management', () => {
     // Reload it
     await page.reload()
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(500)
 
     // Check the RANDOM stuff is still there
     await expect(schemaElement).toHaveValue(randomSchema)
@@ -85,7 +85,7 @@ test.describe('data management', () => {
 
     // Wait for app to finish working (simulate lib.isDoneWorking)
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(500)
 
     // Check the route has updated to draft-07
     expect(page.url()).toMatch(/#!\/version\/2020-12\/markup\/json$/)

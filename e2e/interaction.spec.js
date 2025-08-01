@@ -27,7 +27,7 @@ test.describe('document/spec interaction', () => {
 
     // Wait for validation to complete (replace with a better selector if possible)
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(500)
 
     // Check for document errors
     const documentErrors = page.locator('.validator-card[identifier=document] .validation-messages tbody tr')
