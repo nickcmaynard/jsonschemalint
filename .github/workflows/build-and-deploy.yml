@@ -29,7 +29,7 @@ jobs:
   all-tests:
     strategy:
       matrix: 
-        platforms:
+        platform:
           - ubuntu-latest
           # Disabled macos and windows.  Browsers should be identical, and we only build docker images for linux.
           # - macos-latest
