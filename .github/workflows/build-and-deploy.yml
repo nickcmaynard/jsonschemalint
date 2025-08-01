@@ -28,11 +28,12 @@ permissions:
 jobs:
   all-tests:
     strategy:
-      matrix:
-        # https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners
-        # ARM not yet supported on private repos - not even Pro
-        # platform: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+      matrix: 
+        platforms:
+          - ubuntu-latest
+          # Disabled macos and windows.  Browsers should be identical, and we only build docker images for linux.
+          # - macos-latest
+          # - windows-latest
         node-version: [24.x]
 
     runs-on: ${{ matrix.platform }}
