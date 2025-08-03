@@ -2,7 +2,6 @@ name: Build container image
 
 # Controls when the workflow will run
 on:
-  workflow_call:
   workflow_dispatch:
   push:
     branches:
@@ -12,8 +11,6 @@ on:
   pull_request:
     branches: 
       - 'master'
-  schedule:
-    - cron: '0 3 * * *' # Runs daily at 3 AM UTC
 
 env:
   REGISTRY: ghcr.io
