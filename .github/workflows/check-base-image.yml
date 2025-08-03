@@ -30,7 +30,7 @@ jobs:
         with:
           base-image: ${{ steps.get_base_image.outputs.base-image }}
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64 # Use 'all' to check all platforms
 
   rebuild:
     needs: check
