@@ -9,3 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily" # this is the maxmimum frequency permitted by GitHub
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: daily
