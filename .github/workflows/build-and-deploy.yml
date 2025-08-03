@@ -12,6 +12,8 @@ on:
   pull_request:
     branches: 
       - 'master'
+  schedule:
+    - cron: '0 3 * * *' # Runs daily at 3 AM UTC
 
 env:
   REGISTRY: ghcr.io
@@ -63,6 +65,7 @@ jobs:
           check_name: Unit test report (${{ matrix.platform }}, ${{ matrix.node-version }})
           report_paths: 'test-results/TEST-**.xml'
           annotate_notice: true
+          include_success: true
 
 
       # e2e tests

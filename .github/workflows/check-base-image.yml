@@ -2,8 +2,8 @@ name: Check base image updated
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * *' # Runs daily at 6 AM UTC
+#  schedule:
+#    - cron: '0 6 * * *' # Runs daily at 6 AM UTC
 
 env:
   REGISTRY: ghcr.io
