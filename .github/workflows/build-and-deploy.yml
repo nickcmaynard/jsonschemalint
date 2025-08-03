@@ -2,6 +2,17 @@ name: Build container image
 
 # Controls when the workflow will run
 on:
+  workflow_call:
+    inputs:
+      # This is used to trigger the workflow from another workflow
+      secrets:
+        personal_access_token:
+          required: true
+      trigger: 
+        description: 'Trigger the build and deploy workflow'
+        required: false
+        default: 'false'
+  # This workflow will run on push, pull request, and on a schedule
   workflow_dispatch:
   push:
     branches:
@@ -11,8 +22,6 @@ on:
   pull_request:
     branches: 
       - 'master'
-  schedule:
-    - cron:  '0 0 * * *'
 
 env:
   REGISTRY: ghcr.io
