@@ -1,0 +1,32 @@
+name: Check base image updated
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *' # Runs daily at 6 AM UTC
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      needs-updating: ${{ steps.check.outputs.needs-updating }}
+    steps:
+      - name: Get base image from Containerfile
+        id: get_base_image
+        run: |
+          base_image=$(grep -i '^FROM ' Containerfile | head -n1 | awk '{print $2}')
+          echo "base-image=$base_image" >> $GITHUB_OUTPUT
+
+      - name: Check if update available
+        id: check
+        uses: lucacome/docker-image-update-checker@v2.0.0
+        with:
+          base-image: ${{ steps.get_base_image.outputs.base-image }}
+          image: ghcr.io/nickcmaynard/jsonschemalint:latest
+          platforms: linux/amd64,linux/arm64 # Use 'all' to check all platforms
+
+  rebuild:
+    needs: check
+    if: needs.checker.outputs.needs-updating == 'true'
+    uses: ./.github/workflows/build-and-deploy.yml
+    secrets: inherit
