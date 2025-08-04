@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # deps
       - run: npm ci
@@ -69,7 +69,7 @@ jobs:
         id: playwright-version
         run: echo "PLAYWRIGHT_VERSION=$(npm ls --json @playwright/test | jq -r '.dependencies.["@playwright/test"].version')" >> $GITHUB_ENV
       - name: Cache playwright binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: playwright-cache
         with:
             path: ${{ matrix.platform.playwright-cache-location }}
