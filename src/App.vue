@@ -4,6 +4,11 @@ import { pickBy } from 'lodash-es'
 
 import { Dropdown } from 'bootstrap'
 
+import IconJournals from '~icons/bi/journals'
+import IconTrash from '~icons/bi/trash'
+import IconPencilFill from '~icons/bi/pencil-fill'
+import IconSignpostFill from '~icons/bi/signpost-fill'
+
 import { useEventEmit } from 'mitt-vue'
 
 import AboutContent from '@/components/AboutContent.vue'
@@ -104,7 +109,7 @@ const reset = () => {
           <!-- Samples dropdown -->
           <li class="nav-item dropdown me-2">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-journals"></i>
+              <icon-journals />
               &nbsp;{{ $t('SAMPLES') }}
             </button>
             <ul class="dropdown-menu">
@@ -123,7 +128,7 @@ const reset = () => {
           <!-- Reset button-->
           <div class="btn-group navbar-btn me-2" role="group" aria-label="Actions">
             <button class="btn btn-default btn-danger" @click="reset()">
-              <i class="bi bi-trash"></i>
+              <icon-trash />
               &nbsp;{{ $t('RESET') }}
             </button>
           </div>
@@ -134,7 +139,7 @@ const reset = () => {
             <div class="btn-group" role="group" aria-label="Markup selection">
               <!-- Markup language dropdown -->
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="markupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="bi bi-pencil-fill"></span>
+                <icon-pencil-fill />
                 &nbsp;{{ configStore.markups[configStore.currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON') }}
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
@@ -150,7 +155,7 @@ const reset = () => {
             <div class="btn-group" role="group" aria-label="Spec version selection">
               <!-- Specification version dropdown -->
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="specDropdown" data-bs-toggle="dropdown" aria-expanded="false" v-bind:disabled="configStore.specDefinesSchema">
-                <span class="bi bi-signpost-fill"></span>
+                <icon-signpost-fill />
                 &nbsp;{{ configStore.specs[configStore.currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON') }}
               </button>
               <ul class="dropdown-menu dropdown-menu-end">

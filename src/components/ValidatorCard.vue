@@ -6,6 +6,8 @@ import ValidationMessages from '@/components/ValidationMessages.vue'
 import { buildValidator } from '@/utilities/Validator'
 import { debounce, isEqual } from 'lodash-es'
 
+import IconFormat from '~icons/bi/list-nested'
+
 // Config
 import { useConfigStore } from '@/stores/config'
 const configStore = useConfigStore()
@@ -174,7 +176,7 @@ watch(documentModel, async (value, oldValue) => {
         <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON')
         }}{{ mode === 'schema' ? ', ' + (configStore.specs[currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON')) : '' }}
       </span>
-      <button type="button" class="btn btn-light btn-sm" @click="format"> <i class="bi bi-list-nested" aria-hidden="true"></i>&nbsp;{{ $t('FORMAT') }} </button>
+      <button type="button" class="btn btn-light btn-sm" @click="format"> <icon-format />&nbsp;{{ $t('FORMAT') }} </button>
     </div>
 
     <div class="validator">
