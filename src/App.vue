@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { pickBy } from 'lodash-es'
 
+// eslint-disable-next-line no-unused-vars
 import { Dropdown } from 'bootstrap'
 
 import IconJournals from '~icons/bi/journals'
