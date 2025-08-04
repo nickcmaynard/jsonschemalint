@@ -74,9 +74,9 @@ jobs:
         with:
             path: ${{ matrix.platform.playwright-cache-location }}
             key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install playwright browsers
-        run: npx playwright install --with-deps
-        # only install if the cache was not hit
+      - run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       # e2e tests
