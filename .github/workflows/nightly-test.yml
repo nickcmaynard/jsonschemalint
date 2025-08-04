@@ -11,13 +11,13 @@ jobs:
     strategy:
       matrix: 
         platform:
-          - ubuntu-latest
+          - { name: ubuntu-latest, playwright-cache-location: ~/.cache/ms-playwright }
           # Disabled macos and windows.  Browsers should be identical, and we only build docker images for linux.
           # - macos-latest
           # - windows-latest
         node-version: [24.x]
 
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.platform.name }}
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
@@ -30,16 +30,29 @@ jobs:
       # deps
       - run: npm ci
 
-      # e2e tests
+      # playwright setup
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(npm ls --json @playwright/test | jq -r '.dependencies.["@playwright/test"].version')" >> $GITHUB_ENV
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+            path: ${{ matrix.platform.playwright-cache-location }}
+            key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
       - name: Install playwright browsers
         run: npx playwright install --with-deps
+        # only install if the cache was not hit
+        if: steps.playwright-cache.outputs.cache-hit != 'true'        
 
+      # e2e tests
       - run: BASE_URL=https://jsonschemalint.com npx playwright test --project chromium
 
       - name: Publish E2E Test Report
         uses: mikepenz/action-junit-report@v5
         if: success() || failure() # always run even if the previous step fails
         with:
-          check_name: E2E test report (${{ matrix.platform }}, ${{ matrix.node-version }})
+          check_name: E2E test report (${{ matrix.platform.name }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
           annotate_notice: true
