@@ -76,8 +76,8 @@ jobs:
             key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - run: npx playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-      - run: npx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      # webkit can't be cached
+      - run: npx playwright install webkit --with-deps
 
       # e2e tests
       - run: npm run build
