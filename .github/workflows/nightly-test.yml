@@ -39,12 +39,11 @@ jobs:
         id: playwright-cache
         with:
             path: ${{ matrix.platform.playwright-cache-location }}
-            key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-
+            key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install playwright browsers
         run: npx playwright install --with-deps
         # only install if the cache was not hit
-        if: steps.playwright-cache.outputs.cache-hit != 'true'        
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       # e2e tests
       - run: BASE_URL=https://jsonschemalint.com npx playwright test --project chromium
