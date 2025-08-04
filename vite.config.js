@@ -7,7 +7,7 @@ import Icons from 'unplugin-icons/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueDevTools(), Icons()],
+  plugins: [vue(), vueDevTools(), Icons({scale: 1, defaultStyle: 'margin-top: -5%'})],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
