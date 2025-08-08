@@ -62,7 +62,6 @@ jobs:
           check_name: Unit test report (${{ matrix.platform.name }}, ${{ matrix.node-version }})
           report_paths: 'test-results/TEST-**.xml'
           annotate_notice: true
-          include_passed: true
 
         # playwright setup
       - name: Get installed Playwright version
@@ -90,7 +89,6 @@ jobs:
           check_name: E2E test report (${{ matrix.platform.name }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
           annotate_notice: true
-          include_passed: true
   build-image:
     needs: all-tests
     runs-on: ubuntu-latest

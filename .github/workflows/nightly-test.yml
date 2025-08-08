@@ -53,4 +53,3 @@ jobs:
           check_name: E2E test report (${{ matrix.platform.name }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
           annotate_notice: true
-          include_passed: true
