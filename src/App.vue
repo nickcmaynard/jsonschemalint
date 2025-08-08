@@ -127,12 +127,12 @@ const reset = () => {
           </li>
 
           <!-- Reset button-->
-          <div class="btn-group navbar-btn me-2" role="group" aria-label="Actions">
+          <li class="nav-item btn-group navbar-btn me-2" role="group" aria-label="Actions">
             <button class="btn btn-default btn-danger" @click="reset()">
               <icon-trash />
               &nbsp;{{ $t('RESET') }}
             </button>
-          </div>
+          </li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
