@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
-    "@iconify-json/bi": "^1.2.4",
+    "@iconify-json/bi": "^1.2.6",
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.54.2",
     "@vitejs/plugin-vue": "^6.0.1",
