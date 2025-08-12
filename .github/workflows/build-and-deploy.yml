@@ -115,7 +115,8 @@ jobs:
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ steps.sha.outputs.SHORT_SHA }}
         containerfiles: |
           ./Containerfile
-        platforms: linux/amd64,linux/arm64
+        # platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64
         context: .
 
     - name: Push to GHCR
