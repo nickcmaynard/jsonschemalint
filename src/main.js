@@ -5,6 +5,8 @@ import './scss/styles.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+import { configure as gtag } from 'vue-gtag'
+
 import App from './App.vue'
 import router from './router'
 
@@ -17,6 +19,15 @@ const i18n = createI18n({
   },
 })
 
+// Configure (basic) Google Analytics
+gtag({
+  tagId: "G-DDTLHNR87X",
+  pageTracker: {
+    router,
+  }
+})
+
+// Start the app up
 const app = createApp(App)
 
 app.use(i18n)
