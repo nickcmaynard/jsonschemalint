@@ -25,4 +25,7 @@ FROM docker.io/nginx:latest@sha256:33e0bbc7ca9ecf108140af6288c7c9d1ecc77548cbfd3
 # Copy the built files from the builder stage to the nginx html directory
 COPY --from=builder /opt/app-root/src/dist/ /usr/share/nginx/html/
 
+# Updated nginx configuration
+COPY container-src/nginx-conf.d/default.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 8080
