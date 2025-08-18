@@ -52,18 +52,21 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        userAgent: `Playwright ${devices['Desktop Chrome'].userAgent}`,
       },
     },
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        userAgent: `Playwright ${devices['Desktop Firefox'].userAgent}`,
       },
     },
     {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        userAgent: `Playwright ${devices['Desktop Safari'].userAgent}`,
       },
     },
 
