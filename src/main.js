@@ -26,9 +26,8 @@ app.use(i18n)
 app.use(createPinia())
 
 app.use(VueUmamiPlugin({
-    websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
-    router,
-    allowLocalhost: true,
+  websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
+  router,
 }));
 app.use(router)
 
