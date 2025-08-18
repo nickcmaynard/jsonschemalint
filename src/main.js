@@ -25,11 +25,11 @@ const app = createApp(App)
 app.use(i18n)
 app.use(createPinia())
 
-app.use(VueUmamiPlugin, {
+app.use(VueUmamiPlugin({
     websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
     router,
     allowLocalhost: true,
-});
+}));
 app.use(router)
 
 app.mount('#app')
