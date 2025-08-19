@@ -101,14 +101,14 @@ const reset = () => {
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto">
           <!-- About -->
           <li class="nav-item me-2">
             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#aboutModel">{{ $t('ABOUT') }}</a>
           </li>
 
           <!-- Samples dropdown -->
-          <li class="nav-item dropdown me-2">
+          <li class="nav-item dropdown me-2 mb-2 mb-lg-0">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <icon-journals />
               &nbsp;{{ $t('SAMPLES') }}
@@ -127,7 +127,7 @@ const reset = () => {
           </li>
 
           <!-- Reset button-->
-          <li class="nav-item btn-group navbar-btn me-2" role="group" aria-label="Actions">
+          <li class="nav-item me-0 mb-2 mb-lg-0" role="group" aria-label="Actions">
             <button class="btn btn-default btn-danger" @click="reset()">
               <icon-trash />
               &nbsp;{{ $t('RESET') }}
@@ -135,7 +135,8 @@ const reset = () => {
           </li>
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
+        <!-- Mode selectors -->
+        <ul class="nav navbar-nav navbar-right mb-2 mb-lg-0">
           <div class="btn-group" role="group" aria-label="Mode selection">
             <div class="btn-group" role="group" aria-label="Markup selection">
               <!-- Markup language dropdown -->
