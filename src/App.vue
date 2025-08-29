@@ -15,6 +15,9 @@ import { useEventEmit } from 'mitt-vue'
 import AboutContent from '@/components/AboutContent.vue'
 
 import { useConfigStore } from '@/stores/config'
+
+import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
+
 const configStore = useConfigStore()
 
 const samples = {
@@ -68,10 +71,12 @@ const setSpec = (spec) => {
 }
 const loadSample = async (sample) => {
   console.debug('App.loadSample(): Loading sample:', sample)
+  trackUmamiEvent('loadSample', { ref: sample.ref });
   useEventEmit('load-sample', { ref: sample.ref })
 }
 const reset = () => {
   console.debug('App.reset(): Reset')
+  trackUmamiEvent('reset');
   useEventEmit('reset')
 }
 </script>

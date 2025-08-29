@@ -1,10 +1,5 @@
 'use strict'
 
-// Ajv
-// import * as Ajv from 'ajv/dist/ajv.js'
-// import * as Ajv2019 from 'ajv/dist/2019.js'
-// import * as Ajv2020 from 'ajv/dist/2020.js'
-
 /**
  * Asynchronous builder for Validator.
  * @param {string} schemaUrl - The schema URL to use.

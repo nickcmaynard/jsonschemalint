@@ -8,6 +8,8 @@ import { debounce, isEqual } from 'lodash-es'
 
 import IconFormat from '~icons/bi/list-nested'
 
+import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
+
 // Config
 import { useConfigStore } from '@/stores/config'
 const configStore = useConfigStore()
@@ -75,10 +77,12 @@ const getValidator = async () => {
 }
 const validateSchema = async function (schemaObject) {
   console.debug('Validating schema', schemaObject)
+  trackUmamiEvent('validateSchema');
   return (await getValidator()).validateSchema(schemaObject)
 }
 const validateDocument = async function (schemaObject, documentObject) {
   console.debug('Validating document')
+  trackUmamiEvent('validateDocument');
   return (await getValidator()).validate(schemaObject, documentObject)
 }
 
