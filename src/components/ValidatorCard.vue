@@ -32,6 +32,7 @@ const getMarkupService = async () => {
 // Format the document using the current markup service
 function format() {
   console.debug('ValidatorCard.format()')
+  trackUmamiEvent(`format${props.mode === 'schema' ? 'Schema' : 'Document'}`)
   getMarkupService()
     .then((service) =>
       service
@@ -77,12 +78,12 @@ const getValidator = async () => {
 }
 const validateSchema = async function (schemaObject) {
   console.debug('Validating schema', schemaObject)
-  trackUmamiEvent('validateSchema');
+  trackUmamiEvent('validateSchema')
   return (await getValidator()).validateSchema(schemaObject)
 }
 const validateDocument = async function (schemaObject, documentObject) {
   console.debug('Validating document')
-  trackUmamiEvent('validateDocument');
+  trackUmamiEvent('validateDocument')
   return (await getValidator()).validate(schemaObject, documentObject)
 }
 

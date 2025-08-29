@@ -71,12 +71,12 @@ const setSpec = (spec) => {
 }
 const loadSample = async (sample) => {
   console.debug('App.loadSample(): Loading sample:', sample)
-  trackUmamiEvent('loadSample', { ref: sample.ref });
+  trackUmamiEvent('loadSample', { ref: sample.ref })
   useEventEmit('load-sample', { ref: sample.ref })
 }
 const reset = () => {
   console.debug('App.reset(): Reset')
-  trackUmamiEvent('reset');
+  trackUmamiEvent('reset')
   useEventEmit('reset')
 }
 </script>
