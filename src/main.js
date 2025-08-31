@@ -33,7 +33,12 @@ if (await window.navigator.userAgent.startsWith('Playwright')) {
   console.debug('Using Umami plugin for analytics')
   app.use(VueUmamiPlugin({
     websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
+    scriptSrc: './umami/script.js',
     router,
+    allowLocalhost: true,
+    extraDataAttributes: { 
+      'data-host-url': './umami',
+    },
   }));
 }
 
