@@ -44,7 +44,7 @@
     "prettier": "3.6.2",
     "sass": "^1.91.0",
     "unplugin-icons": "^22.2.0",
-    "vite": "^7.1.3",
+    "vite": "^7.1.4",
     "vite-plugin-vue-devtools": "^8.0.1",
     "vitest": "^3.2.4"
   }
