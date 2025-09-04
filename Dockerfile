@@ -26,6 +26,9 @@ FROM docker.io/nginx:latest@sha256:33e0bbc7ca9ecf108140af6288c7c9d1ecc77548cbfd3
 COPY --from=builder /opt/app-root/src/dist/ /usr/share/nginx/html/
 
 # Updated nginx configuration
-COPY container-src/nginx-conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY container-src/nginx-templates/default.conf.template /etc/nginx/templates/default.conf.template
+
+# Ensure NGINX uses resolvers set in /etc/resolv.conf
+ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1
 
 EXPOSE 8080

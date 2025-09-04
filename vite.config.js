@@ -29,4 +29,20 @@ export default defineConfig({
         },
      },
   },
+  server: {
+    proxy: {
+      '^/umami/(script|stats).js$': {
+        target: 'https://eu.umami.is',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/umami/, '')
+      },
+      '^/umami/api/send$': {
+        target: 'https://eu.umami.is',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/umami/, '')
+      }
+    },
+  }
 })
