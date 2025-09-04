@@ -5,7 +5,7 @@ import './scss/styles.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import { VueUmamiPlugin } from '@jaseeey/vue-umami-plugin';
+import { VueUmamiPlugin } from '@jaseeey/vue-umami-plugin'
 
 import App from './App.vue'
 import router from './router'
@@ -31,15 +31,17 @@ if (await window.navigator.userAgent.startsWith('Playwright')) {
 } else {
   // Otherwise, use the Umami plugin
   console.debug('Using Umami plugin for analytics')
-  app.use(VueUmamiPlugin({
-    websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
-    scriptSrc: './umami/script.js',
-    router,
-    allowLocalhost: true,
-    extraDataAttributes: { 
-      'data-host-url': './umami',
-    },
-  }));
+  app.use(
+    VueUmamiPlugin({
+      websiteID: '0f99bd3d-f459-4e78-8b6e-6b179c5d876a',
+      scriptSrc: './umami/script.js',
+      router,
+      allowLocalhost: true,
+      extraDataAttributes: {
+        'data-host-url': './umami',
+      },
+    }),
+  )
 }
 
 app.use(router)
