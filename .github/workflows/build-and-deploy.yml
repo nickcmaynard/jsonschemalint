@@ -3,13 +3,15 @@ name: Build container image
 # Controls when the workflow will run
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *' # Runs daily at 3 AM UTC
   push:
     branches:
       - 'master'
     tags:
       - 'v*.*.*'
   pull_request:
-    branches: 
+    branches:
       - 'master'
 
 env:
@@ -17,7 +19,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 # permissions are needed if pushing to ghcr.io
-permissions: 
+permissions:
   contents: read
   packages: write
   checks: write
@@ -26,7 +28,7 @@ permissions:
 jobs:
   all-tests:
     strategy:
-      matrix: 
+      matrix:
         platform:
           - { name: ubuntu-latest, playwright-cache-location: ~/.cache/ms-playwright }
           # Disabled macos and windows.  Browsers should be identical, and we only build docker images for linux.
@@ -71,8 +73,8 @@ jobs:
         uses: actions/cache@v4
         id: playwright-cache
         with:
-            path: ${{ matrix.platform.playwright-cache-location }}
-            key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          path: ${{ matrix.platform.playwright-cache-location }}
+          key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - run: npx playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       # webkit can't be cached
@@ -93,37 +95,37 @@ jobs:
     needs: all-tests
     runs-on: ubuntu-latest
     steps:
-    # Get the repository's code
-    - name: Checkout
-      uses: actions/checkout@v5
+        # Get the repository's code
+      - name: Checkout
+        uses: actions/checkout@v5
 
-    - name: Compute short SHA
-      id: sha
-      run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_OUTPUT
+      - name: Compute short SHA
+        id: sha
+        run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_OUTPUT
 
-    - name: Install qemu dependency
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y qemu-user-static
+      - name: Install qemu dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static
 
-    - name: Build
-      id: build-image
-      uses: redhat-actions/buildah-build@v2
-      with:
-        tags: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ steps.sha.outputs.SHORT_SHA }}
-        containerfiles: |
-          ./Dockerfile
-        # platforms: linux/amd64,linux/arm64
-        platforms: linux/amd64
-        context: .
+      - name: Build
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ steps.sha.outputs.SHORT_SHA }}
+          containerfiles: |
+            ./Dockerfile
+          # platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+          context: .
 
-    - name: Push to GHCR
-      id: push-to-ghcr
-      uses: redhat-actions/push-to-registry@v2
-      if: github.event_name != 'pull_request'
-      with:
-        tags: ${{ steps.build-image.outputs.tags }}
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push to GHCR
+        id: push-to-ghcr
+        uses: redhat-actions/push-to-registry@v2
+        if: github.event_name != 'pull_request'
+        with:
+          tags: ${{ steps.build-image.outputs.tags }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
