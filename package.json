@@ -42,7 +42,7 @@
     "globals": "^16.4.0",
     "jsdom": "^27.0.0",
     "prettier": "3.6.2",
-    "sass": "^1.92.1",
+    "sass": "^1.93.0",
     "unplugin-icons": "^22.3.0",
     "vite": "^7.1.6",
     "vite-plugin-vue-devtools": "^8.0.2",
