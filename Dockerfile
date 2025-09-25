@@ -9,12 +9,16 @@ COPY vite.config.js .
 COPY package*.json .
 COPY README.md .
 
-
-# install run deps & dev deps
-RUN npm ci \
+# Use safe-chain wrapper for npm to mitigate supply chain attacks
+RUN npm install -g @aikidosec/safe-chain \
     && rm -fr .cache .npm
 
-RUN npm run build
+# From now on we use aikido-npm directly instead of npm as the wrapper scripts don't work in this Dockerfile environment
+# install run deps & dev deps
+RUN aikido-npm ci \
+    && rm -fr .cache .npm
+
+RUN aikido-npm run build
 
 # Actual production image
 # Use a minimal image for production
