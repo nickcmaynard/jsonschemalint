@@ -34,7 +34,7 @@ COPY container-src/nginx-templates/default.conf.template /etc/nginx/templates/de
 
 # Adjust permissions on the conf.d directory so our template can be used
 USER 0 # Switch to root to change permissions
-RUN chgrp -R www-data /etc/nginx/conf.d
+RUN chgrp -R 101 /etc/nginx/conf.d
 USER 101:101 # Switch back to www-data
 
 # Ensure NGINX uses resolvers set in /etc/resolv.conf
