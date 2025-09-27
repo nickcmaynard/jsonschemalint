@@ -32,9 +32,12 @@ COPY --from=builder /opt/app-root/src/dist/ /usr/share/nginx/html/
 # Updated nginx configuration
 COPY container-src/nginx-templates/default.conf.template /etc/nginx/templates/default.conf.template
 
+# Adjust permissions on the conf.d directory so our template can be used
+USER 0 # Switch to root to change permissions
+RUN chgrp -R www-data /etc/nginx/conf.d
+USER 101:101 # Switch back to www-data
+
 # Ensure NGINX uses resolvers set in /etc/resolv.conf
 ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1
 
 EXPOSE 8080
-
-USER 33:33
