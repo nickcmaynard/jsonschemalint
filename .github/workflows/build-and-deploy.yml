@@ -103,7 +103,7 @@ jobs:
     steps:
       - name: Set current date as env variable
         id: set-date
-        run: echo ""::set-output name=date::$(date -Iseconds)"
+        run: echo "::set-output name=date::$(date -Iseconds)"
 
         # Get the repository's code
       - name: Checkout
