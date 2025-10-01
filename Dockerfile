@@ -43,3 +43,15 @@ USER 101:101
 ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1
 
 EXPOSE 8080
+
+LABEL org.opencontainers.image.title="jsonschemalint"
+LABEL org.opencontainers.image.description="Web interface for jsonschemalint.com - a JSON Schema linter"
+LABEL org.opencontainers.image.authors="Nick Maynard"
+LABEL org.opencontainers.image.url="https://jsonschemalint.com"
+LABEL org.opencontainers.image.source="https://github.com/nickmaynard/jsonschemalint"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name="docker.io/nginxinc/nginx-unprivileged:latest"
+LABEL org.opencontainers.image.revision=""
+LABEL org.opencontainers.image.version=""
+LABEL org.opencontainers.image.created=""
+LABEL maintainer="Nick Maynard"
