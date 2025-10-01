@@ -103,7 +103,7 @@ jobs:
     steps:
       - name: Set current date as env variable
         id: set-date
-        run: echo "NOW=$(date -Iseconds)"
+        run: echo ""::set-output name=date::$(date -Iseconds)"
 
         # Get the repository's code
       - name: Checkout
@@ -126,8 +126,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ steps.sha.outputs.SHORT_SHA }}
           labels: |
-            org.opencontainers.image.revision="${{ github.sha }}"
-            org.opencontainers.image.created="${{ steps.set-date.outputs.NOW }}"
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.set-date.outputs.date }}
           containerfiles: |
             ./Dockerfile
           # platforms: linux/amd64,linux/arm64
