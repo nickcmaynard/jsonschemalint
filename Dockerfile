@@ -24,7 +24,7 @@ RUN aikido-npm run build
 # Use a minimal image for production
 # Specific SHA256 so dependabot can update it
 # See https://github.com/lucacome/docker-image-update-checker/issues/71
-FROM docker.io/nginxinc/nginx-unprivileged:latest@sha256:6eb1d841743d6f4f48104a025f696942bd6f331b847f69f1dd925ae299f53a62 as production
+FROM docker.io/nginxinc/nginx-unprivileged:latest@sha256:ff72f15feb23f77191325c122f70c791204c45b1e91a3e200bbf986b4cd8ba96 as production
 
 # Copy the built files from the builder stage to the nginx html directory
 COPY --from=builder /opt/app-root/src/dist/ /usr/share/nginx/html/
