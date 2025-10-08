@@ -23,5 +23,8 @@ HealthStartupSuccess=1
 HealthStartupTimeout=5s
 Notify=healthy
 
+[Service]
+Restart=always
+
 [Install]
 WantedBy=default.target
