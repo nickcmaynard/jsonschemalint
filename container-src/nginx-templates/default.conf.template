@@ -22,12 +22,12 @@ server {
     # Proxy Umami requests to Umami's servers
     resolver ${NGINX_LOCAL_RESOLVERS} valid=300s;
 
-    set $umami_script_url https://eu.umami.is/script.js; # Here
-    set $umami_event_url https://eu.umami.is/api/send;  # Here
+    set $umami_script_url https://cloud.umami.is/script.js; # Here
+    set $umami_event_url https://cloud.umami.is/api/send;  # Here
 
     location = /umami/script.js {
         proxy_pass $umami_script_url;
-        proxy_set_header Host eu.umami.is;  # Here
+        proxy_set_header Host cloud.umami.is;  # Here
         proxy_ssl_server_name on;
         proxy_ssl_session_reuse on;
         # proxy_ssl_verify on; # disabled as requires certificate, too
@@ -40,7 +40,7 @@ server {
 
     location = /umami/api/send {
         proxy_pass $umami_event_url;
-        proxy_set_header Host eu.umami.is;  # Here
+        proxy_set_header Host cloud.umami.is;  # Here
         proxy_ssl_server_name on;
         proxy_ssl_session_reuse on;
         # proxy_ssl_verify on; # disabled as requires certificate, too
