@@ -28,7 +28,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
+    "@eslint/js": "^9.39.1",
     "@iconify-json/bi": "^1.2.6",
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.56.1",
