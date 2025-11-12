@@ -40,7 +40,7 @@
     "eslint-plugin-playwright": "^2.3.0",
     "eslint-plugin-vue": "~10.5.1",
     "globals": "^16.5.0",
-    "jsdom": "^27.1.0",
+    "jsdom": "^27.2.0",
     "prettier": "3.6.2",
     "sass": "^1.94.0",
     "unplugin-icons": "^22.5.0",
