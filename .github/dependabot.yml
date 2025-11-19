@@ -18,6 +18,10 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      all-docker:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
