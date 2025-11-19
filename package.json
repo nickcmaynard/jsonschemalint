@@ -32,7 +32,7 @@
     "@iconify-json/bi": "^1.2.6",
     "@pinia/testing": "^1.0.3",
     "@playwright/test": "^1.56.1",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue": "^6.0.2",
     "@vitest/eslint-plugin": "^1.4.3",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/test-utils": "^2.4.6",
