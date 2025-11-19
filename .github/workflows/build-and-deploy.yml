@@ -97,6 +97,19 @@ jobs:
           check_name: E2E test report (${{ matrix.platform.name }}, ${{ matrix.node-version }})
           report_paths: playwright-report/TEST-**.xml
           annotate_notice: true
+  test-results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Cross-platform tests composite result
+    needs: [all-tests]
+    steps:
+      - run: |
+          result="${{ needs.build.result }}"
+          if [[ $result == "success" || $result == "skipped" ]]; then
+            exit 0
+          else
+            exit 1
+          fi
   build-image:
     needs: all-tests
     runs-on: ubuntu-latest
