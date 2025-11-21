@@ -55,7 +55,7 @@ jobs:
           npm i -g @aikidosec/safe-chain
           safe-chain setup-ci
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # deps
       - run: npm ci
@@ -120,7 +120,7 @@ jobs:
 
         # Get the repository's code
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Compute short SHA
         id: sha
