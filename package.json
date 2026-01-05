@@ -33,7 +33,7 @@
     "@pinia/testing": "^1.0.3",
     "@playwright/test": "^1.57.0",
     "@vitejs/plugin-vue": "^6.0.3",
-    "@vitest/eslint-plugin": "^1.6.4",
+    "@vitest/eslint-plugin": "^1.6.5",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.2",
