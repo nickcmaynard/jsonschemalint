@@ -1,4 +1,4 @@
-FROM docker.io/node:25@sha256:c7afcee8493fc98aaa1fb5c5b9ed396ed98ffe596921feba4cae0c6a63c8cfeb as builder
+FROM docker.io/node:25@sha256:e6b32434aba48dcb8730d56de2df3d137de213f1f527a922a6bf7b2853a24e86 as builder
 
 WORKDIR /opt/app-root/src/
 
