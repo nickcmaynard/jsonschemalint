@@ -8,7 +8,8 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily" # this is the maximum frequency permitted by GitHub
+      interval: "cron"
+      cronjob: "0 6 * * 1,4" # every Monday and Thursday morning
     cooldown:
       semver-major-days: 14
       semver-minor-days: 3
@@ -21,7 +22,8 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "cron"
+      cronjob: "0 6 * * 1,4" # every Monday and Thursday morning
     groups:
       all-docker:
         patterns:
@@ -29,4 +31,5 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "cron"
+      cronjob: "0 6 * * 1,4" # every Monday and Thursday morning
