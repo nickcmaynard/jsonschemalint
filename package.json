@@ -22,7 +22,7 @@
     "lodash-es": "^4.17.23",
     "mitt-vue": "^2.1.4",
     "pinia": "^3.0.4",
-    "vue": "^3.5.30",
+    "vue": "^3.5.31",
     "vue-i18n": "^11.3.0",
     "vue-router": "^5.0.4",
     "yaml": "^2.8.3"
@@ -40,12 +40,12 @@
     "eslint-plugin-playwright": "^2.10.1",
     "eslint-plugin-vue": "~10.8.0",
     "globals": "^17.4.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "prettier": "3.8.1",
     "sass": "^1.98.0",
     "unplugin-icons": "^23.0.1",
-    "vite": "^7.3.1",
+    "vite": "^8.0.0",
     "vite-plugin-vue-devtools": "^8.1.1",
-    "vitest": "^4.1.1"
+    "vitest": "^4.1.2"
   }
 }
