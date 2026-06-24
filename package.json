@@ -23,7 +23,7 @@
     "mitt-vue": "^2.1.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",
-    "vue-i18n": "^11.4.5",
+    "vue-i18n": "^11.4.6",
     "vue-router": "^5.1.0",
     "yaml": "^2.9.0"
   },
@@ -31,7 +31,7 @@
     "@eslint/js": "^10.0.1",
     "@iconify-json/bi": "^1.2.7",
     "@pinia/testing": "^1.0.3",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.61.0",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/eslint-plugin": "^1.6.20",
     "@vue/eslint-config-prettier": "^10.2.0",
