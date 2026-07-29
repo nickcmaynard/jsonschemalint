@@ -149,7 +149,7 @@ jobs:
 
       - name: Push to GHCR
         id: push-to-ghcr
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         if: github.event_name != 'pull_request'
         with:
           tags: ${{ steps.build-image.outputs.tags }}
