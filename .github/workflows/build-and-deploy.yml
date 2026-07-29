@@ -133,7 +133,7 @@ jobs:
 
       - name: Build
         id: build-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
