@@ -25,6 +25,7 @@ describe('Gist utility', () => {
 
     const body = JSON.parse(fetchMock.mock.calls[0][1].body)
     expect(body.public).toBe(true)
+    expect(body.description).toMatch(/^jsonschemalint-\d{4}-\d{2}-\d{2}T/)
     expect(body.files.schema.content).toBe('{"type":"object"}')
     expect(body.files.document.content).toBe('{}')
   })

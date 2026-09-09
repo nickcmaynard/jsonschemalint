@@ -36,7 +36,7 @@ export const savePublicGist = async ({ schema, document, token }) => {
       Accept: 'application/vnd.github+json',
     },
     body: JSON.stringify({
-      description: `jsonschemalint.com ${new Date().toISOString()}`,
+      description: `jsonschemalint-${new Date().toISOString()}`,
       public: true,
       files: {
         schema: { content: schema },
