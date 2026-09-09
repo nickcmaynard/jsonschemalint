@@ -47,7 +47,7 @@ watch(currentSpec, (spec) => {
 
 // Synchronize the route query with the models
 const updateGistQueryParam = (gistId) => {
-  router.replace({ query: { ...route.query, [GIST_QUERY_PARAM]: gistId || undefined } })
+  return router.replace({ query: { ...route.query, [GIST_QUERY_PARAM]: gistId || undefined } })
 }
 
 const clearGistSnapshot = () => {
@@ -208,7 +208,7 @@ const saveGist = async () => {
       deviceAuth.value = undefined
     })
 
-    updateGistQueryParam(gistId)
+    await updateGistQueryParam(gistId)
     gistSnapshot.value = {
       id: gistId,
       schema: schemaModel.value,
