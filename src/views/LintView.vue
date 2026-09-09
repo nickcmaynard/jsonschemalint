@@ -1,5 +1,8 @@
 <script setup>
 import ValidatorCard from '@/components/ValidatorCard.vue'
+import DeviceAuthContent from '@/components/DeviceAuthContent.vue'
+
+import { Modal } from 'bootstrap'
 
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
@@ -7,7 +10,7 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 
 import { useConfigStore } from '@/stores/config'
-import { GistFormatError, retrieveGist, savePublicGist } from '@/utilities/Gist'
+import { DeviceFlowError, GistFormatError, retrieveGist, saveGistWithAuth } from '@/utilities/Gist'
 const configStore = useConfigStore()
 const { currentMarkup, currentSpec } = storeToRefs(configStore)
 
@@ -19,13 +22,16 @@ import { useEventListener } from 'mitt-vue'
 import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin'
 
 const GIST_QUERY_PARAM = 'gist'
-const GIST_TOKEN_STORAGE_KEY = 'jsonschemalint.github.gist.token'
-const GIST_TOKEN_SETUP_URL = 'https://github.com/settings/tokens/new?description=jsonschemalint.com&scopes=gist'
 
 const schemaModel = ref()
 const documentModel = ref()
 const gistSnapshot = ref()
 const gistAlert = ref()
+const deviceAuth = ref()
+const deviceAuthModalEl = ref(null)
+
+let cancelGistTokenFetch = () => {}
+let deviceAuthModal
 
 console.debug('LintView setup()', route.params)
 
@@ -39,15 +45,9 @@ watch(currentSpec, (spec) => {
   router.push({ path: `/version/${spec}/markup/${configStore.currentMarkup}` })
 })
 
-// Synchronize localStorage with the models
+// Synchronize the route query with the models
 const updateGistQueryParam = (gistId) => {
-  const url = new URL(window.location.href)
-  if (gistId) {
-    url.searchParams.set(GIST_QUERY_PARAM, gistId)
-  } else {
-    url.searchParams.delete(GIST_QUERY_PARAM)
-  }
-  window.history.replaceState(window.history.state, '', url.toString())
+  router.replace({ query: { ...route.query, [GIST_QUERY_PARAM]: gistId || undefined } })
 }
 
 const clearGistSnapshot = () => {
@@ -94,8 +94,20 @@ onMounted(() => {
   localStorage.getItem('document') && (documentModel.value = localStorage.getItem('document'))
   localStorage.getItem('schema') && (schemaModel.value = localStorage.getItem('schema'))
 
-  const gistId = new URL(window.location.href).searchParams.get(GIST_QUERY_PARAM)
-  gistId && loadGist(gistId)
+  route.query[GIST_QUERY_PARAM] && loadGist(route.query[GIST_QUERY_PARAM])
+
+  deviceAuthModal = Modal.getOrCreateInstance(deviceAuthModalEl.value)
+  // Any dismissal (backdrop click, ESC, or the Cancel button) should stop the pending auth
+  deviceAuthModalEl.value.addEventListener('hide.bs.modal', cancelGistAuth)
+})
+
+// Show/hide the auth modal as the device flow starts and finishes
+watch(deviceAuth, (value) => {
+  if (value) {
+    deviceAuthModal?.show()
+  } else {
+    deviceAuthModal?.hide()
+  }
 })
 
 // React to route changes
@@ -147,31 +159,16 @@ useEventListener('load-sample', async (sample) => {
     })
 })
 
-const getStoredGistToken = () => localStorage.getItem(GIST_TOKEN_STORAGE_KEY)?.trim()
-
-const fetchGistToken = async () => {
-  const existing = getStoredGistToken()
-  if (existing) {
-    return existing
-  }
-
-  window.open(GIST_TOKEN_SETUP_URL, '_blank', 'noopener,noreferrer')
-  const submittedToken = window.prompt(
-    'Paste a GitHub Personal Access Token (classic) with gist scope to save as your own public gist.',
-    '',
-  )
-
-  if (!submittedToken?.trim()) {
-    throw new Error('GitHub authentication is required to save a gist.')
-  }
-
-  localStorage.setItem(GIST_TOKEN_STORAGE_KEY, submittedToken.trim())
-  return submittedToken.trim()
+const cancelGistAuth = () => {
+  cancelGistTokenFetch()
 }
 
 const buildErrorMessage = (error, fallbackTid) => {
   if (error instanceof GistFormatError) {
     return t('ERROR_GIST_FORMAT')
+  }
+  if (error instanceof DeviceFlowError) {
+    return error.message
   }
   return error?.message || t(fallbackTid)
 }
@@ -201,8 +198,15 @@ const saveGist = async () => {
   }
 
   try {
-    const token = await fetchGistToken()
-    const gistId = await savePublicGist({ schema: schemaModel.value, document: documentModel.value, token })
+    const { promise, cancel } = saveGistWithAuth({
+      schema: schemaModel.value,
+      document: documentModel.value,
+      onDeviceCode: (auth) => (deviceAuth.value = auth),
+    })
+    cancelGistTokenFetch = cancel
+    const gistId = await promise.finally(() => {
+      deviceAuth.value = undefined
+    })
 
     updateGistQueryParam(gistId)
     gistSnapshot.value = {
@@ -219,14 +223,10 @@ const saveGist = async () => {
     trackUmamiEvent('saveGist', { gistId })
   } catch (error) {
     console.error(error)
-    const errorMessage = buildErrorMessage(error, 'ERROR_GIST_SAVING')
-    if (/bad credentials|401|403/i.test(errorMessage)) {
-      localStorage.removeItem(GIST_TOKEN_STORAGE_KEY)
-    }
     gistAlert.value = {
       className: 'alert-danger',
       title: t('ERROR_GIST_SAVING'),
-      message: errorMessage,
+      message: buildErrorMessage(error, 'ERROR_GIST_SAVING'),
     }
   }
 }
@@ -235,12 +235,28 @@ useEventListener('save-gist', saveGist)
 </script>
 
 <template>
+  <div class="modal" ref="deviceAuthModalEl" tabindex="-1" aria-labelledby="deviceAuthModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deviceAuthModalLabel">{{ $t('GIST_AUTH_TITLE') }}</h5>
+        </div>
+        <div class="modal-body" v-if="deviceAuth">
+          <DeviceAuthContent :device-auth="deviceAuth" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ $t('GIST_AUTH_CANCEL') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div v-if="gistAlert" class="row g-3">
     <div class="col-12">
       <div class="alert mb-0" :class="gistAlert.className">
         <strong>{{ gistAlert.title }}</strong>
         <span v-if="gistAlert.message">: {{ gistAlert.message }} </span>
-        <a v-if="gistAlert.href" :href="gistAlert.href" target="_blank" rel="noreferrer">{{ gistAlert.href }}</a>
+        <a v-if="gistAlert.href" :href="gistAlert.href" target="_blank" rel="noreferrer">&nbsp;{{ gistAlert.href }}</a>
       </div>
     </div>
   </div>

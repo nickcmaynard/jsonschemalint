@@ -42,6 +42,18 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/umami/, '')
+      },
+      '^/github-oauth/device/code$': {
+        target: 'https://github.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: () => '/login/device/code',
+      },
+      '^/github-oauth/access_token$': {
+        target: 'https://github.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: () => '/login/oauth/access_token',
       }
     },
   }
