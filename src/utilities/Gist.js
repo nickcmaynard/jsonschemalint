@@ -24,6 +24,14 @@ export class DeviceFlowError extends Error {
   }
 }
 
+class GistApiError extends Error {
+  constructor(message, status) {
+    super(message)
+    this.name = 'GistApiError'
+    this.status = status
+  }
+}
+
 const postJson = async (url, body) => {
   const response = await fetch(url, {
     method: 'POST',
@@ -155,14 +163,12 @@ const savePublicGist = async ({ schema, document, token }) => {
   })
 
   if (!response.ok) {
-    throw new Error(await extractErrorMessage(response))
+    throw new GistApiError(await extractErrorMessage(response), response.status)
   }
 
   const payload = await response.json()
   return payload.id
 }
-
-const BAD_CREDENTIALS_PATTERN = /bad credentials|401|403/i
 
 // Full save flow: obtains a token (cached or via device flow), then creates the gist.
 // Returns { promise, cancel } so callers can offer a cancel button while device auth is pending.
@@ -174,7 +180,7 @@ export const saveGistWithAuth = ({ schema, document, onDeviceCode }) => {
       const token = await tokenPromise
       return await savePublicGist({ schema, document, token })
     } catch (error) {
-      if (BAD_CREDENTIALS_PATTERN.test(error?.message)) {
+      if (error?.status === 401 || error?.status === 403) {
         clearStoredGistToken()
       }
       throw error

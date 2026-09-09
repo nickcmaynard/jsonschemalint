@@ -190,6 +190,7 @@ describe('saveGistWithAuth', () => {
     localStorage.setItem(TOKEN_STORAGE_KEY, 'stale-token')
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: false,
+      status: 401,
       statusText: 'Unauthorized',
       json: async () => ({ message: 'Bad credentials' }),
     })
@@ -198,5 +199,35 @@ describe('saveGistWithAuth', () => {
 
     await expect(promise).rejects.toThrow('Bad credentials')
     expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toBeNull()
+  })
+
+  it('clears the cached token on a 403 response regardless of message wording', async () => {
+    localStorage.setItem(TOKEN_STORAGE_KEY, 'stale-token')
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: false,
+      status: 403,
+      statusText: 'Forbidden',
+      json: async () => ({ message: 'Resource not accessible by personal access token' }),
+    })
+
+    const { promise } = saveGistWithAuth({ schema: '{}', document: '{}' })
+
+    await expect(promise).rejects.toThrow('Resource not accessible by personal access token')
+    expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toBeNull()
+  })
+
+  it('keeps the cached token when the failure is unrelated to authorization', async () => {
+    localStorage.setItem(TOKEN_STORAGE_KEY, 'still-good-token')
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: false,
+      status: 422,
+      statusText: 'Unprocessable Entity',
+      json: async () => ({ message: 'Validation Failed' }),
+    })
+
+    const { promise } = saveGistWithAuth({ schema: '{}', document: '{}' })
+
+    await expect(promise).rejects.toThrow('Validation Failed')
+    expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toBe('still-good-token')
   })
 })
