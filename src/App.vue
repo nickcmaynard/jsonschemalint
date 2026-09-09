@@ -7,6 +7,7 @@ import { Dropdown } from 'bootstrap'
 
 import IconJournals from '~icons/bi/journals'
 import IconTrash from '~icons/bi/trash'
+import IconSave from '~icons/bi/floppy'
 import IconPencilFill from '~icons/bi/pencil-fill'
 import IconSignpostFill from '~icons/bi/signpost-fill'
 
@@ -79,6 +80,10 @@ const reset = () => {
   trackUmamiEvent('reset')
   useEventEmit('reset')
 }
+const saveGist = () => {
+  console.debug('App.saveGist(): Save gist')
+  useEventEmit('save-gist')
+}
 </script>
 
 <template>
@@ -136,6 +141,10 @@ const reset = () => {
             <button class="btn btn-default btn-danger" @click="reset()">
               <icon-trash />
               &nbsp;{{ $t('RESET') }}
+            </button>
+            <button class="btn btn-default btn-outline-secondary ms-2" @click="saveGist()">
+              <icon-save />
+              &nbsp;{{ $t('SAVE_AS_GIST') }}
             </button>
           </li>
         </ul>

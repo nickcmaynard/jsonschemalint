@@ -20,6 +20,12 @@
   "GIST_SAVED": "Saved as Gist",
   "GIST_VISIT": "Visit saved schema/document pair",
 
+  "GIST_AUTH_PROMPT": "To save a Gist, you must first <a href='{verificationUri}'>authorise JSON Schema Lint</a> to do so.  We've started the authorisation request with GitHub in a new window.  When prompted, enter the following code:",
+  "GIST_AUTH_WAITING": "This dialog will close automatically as soon when complete.",
+  "GIST_AUTH_TITLE": "Authorize GitHub",
+  "GIST_AUTH_CANCEL": "Cancel",
+  "GIST_AUTH_COPY_CODE": "Copy code",
+
   "SAMPLE_TITLES": {
     "VALID": "Sample {version} schema and valid document",
     "INVALID": "Sample {version} schema and <strong>invalid</strong> document"
