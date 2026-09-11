@@ -12,7 +12,6 @@ import IconSave from '~icons/bi/floppy'
 import IconPencilFill from '~icons/bi/pencil-fill'
 import IconSignpostFill from '~icons/bi/signpost-fill'
 import IconSliders from '~icons/bi/sliders'
-import IconInfoCircle from '~icons/bi/info-circle'
 
 import { useEventEmit } from 'mitt-vue'
 
@@ -204,7 +203,7 @@ const saveGist = () => {
 
             <div class="btn-group" role="group" aria-label="Validator options">
               <!-- Validator options dropdown -->
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="optionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="optionsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 <icon-sliders />
                 &nbsp;{{ $t('OPTIONS') }}
               </button>
@@ -212,7 +211,6 @@ const saveGist = () => {
                 <div class="mb-2">
                   <div class="d-flex align-items-center justify-content-between gap-3">
                     <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'strict'" @click="toggleTooltip('strict')">
-                      <icon-info-circle aria-hidden="true" />
                       <span>{{ $t('STRICT_MODE') }}</span>
                     </button>
                   <select id="strictMode" class="form-select w-auto" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
@@ -226,7 +224,6 @@ const saveGist = () => {
                 <div class="mb-2">
                   <div class="d-flex align-items-center justify-content-between gap-3">
                     <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'formats'" @click="toggleTooltip('formats')">
-                      <icon-info-circle aria-hidden="true" />
                       <span>{{ $t('ALLOW_UNKNOWN_FORMATS') }}</span>
                     </button>
                     <select id="allowUnknownFormats" class="form-select w-auto" :value="allowUnknownFormats" @change="setOptionFlag(1, $event.target.value)">
