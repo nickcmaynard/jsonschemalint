@@ -17,9 +17,9 @@ export async function buildValidator(schemaUrl, optionFlags) {
     opts.strict = true
   }
   if (optionFlags?.[1] === '0') {
-    opts.validateFormats = false
-  } else if (optionFlags?.[1] === '1') {
     opts.validateFormats = true
+  } else if (optionFlags?.[1] === '1') {
+    opts.validateFormats = false
   }
 
   let validator

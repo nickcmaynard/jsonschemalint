@@ -32,7 +32,7 @@ const resetOptions = () => {
   configStore.currentOptionFlags = undefined
 }
 const strictMode = computed(() => optionFlagValue(0))
-const unknownFormats = computed(() => optionFlagValue(1))
+const allowUnknownFormats = computed(() => optionFlagValue(1))
 
 const samples = {
   'draft-04': [
@@ -203,18 +203,18 @@ const saveGist = () => {
                 <icon-sliders />
                 &nbsp;{{ $t('OPTIONS') }}
               </button>
-              <div class="dropdown-menu dropdown-menu-end p-3">
-                <div class="mb-2">
-                  <label class="form-label" for="strictMode">{{ $t('STRICT_MODE') }}</label>
-                  <select id="strictMode" class="form-select" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
+              <div class="dropdown-menu dropdown-menu-end p-3 validator-options-menu">
+                <div class="mb-2 d-flex align-items-center justify-content-between gap-3" :title="$t('STRICT_MODE_HELP')">
+                  <label class="form-label mb-0" for="strictMode">{{ $t('STRICT_MODE') }}</label>
+                  <select id="strictMode" class="form-select w-auto" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
                     <option value="_">{{ $t('DEFAULT') }}</option>
                     <option value="0">{{ $t('OFF') }}</option>
                     <option value="1">{{ $t('ON') }}</option>
                   </select>
                 </div>
-                <div class="mb-2">
-                  <label class="form-label" for="unknownFormats">{{ $t('UNKNOWN_FORMATS') }}</label>
-                  <select id="unknownFormats" class="form-select" :value="unknownFormats" @change="setOptionFlag(1, $event.target.value)">
+                <div class="mb-2 d-flex align-items-center justify-content-between gap-3" :title="$t('ALLOW_UNKNOWN_FORMATS_HELP')">
+                  <label class="form-label mb-0" for="allowUnknownFormats">{{ $t('ALLOW_UNKNOWN_FORMATS') }}</label>
+                  <select id="allowUnknownFormats" class="form-select w-auto" :value="allowUnknownFormats" @change="setOptionFlag(1, $event.target.value)">
                     <option value="_">{{ $t('DEFAULT') }}</option>
                     <option value="0">{{ $t('OFF') }}</option>
                     <option value="1">{{ $t('ON') }}</option>
@@ -234,4 +234,8 @@ const saveGist = () => {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.validator-options-menu {
+  min-width: 24rem;
+}
+</style>

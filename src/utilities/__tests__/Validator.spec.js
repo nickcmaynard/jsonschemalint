@@ -65,8 +65,8 @@ describe('Validator', () => {
     expect(validator.validate({ type: 'object', 'x-custom': true }, {})).toBe(true)
   })
 
-  it('should ignore unknown formats when format validation is disabled', async () => {
-    const validator = await buildValidator(draft2020Url, '_0')
+  it('should allow unknown formats when format validation is enabled', async () => {
+    const validator = await buildValidator(draft2020Url, '_1')
     expect(validator.validate({ type: 'string', format: 'float' }, 'value')).toBe(true)
   })
 })
