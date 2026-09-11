@@ -31,8 +31,8 @@ describe('Validator.vue', () => {
   })
 
   it.each([
+    ['primary', 'primary'],
     ['invalid', 'danger'],
-    ['warning', 'warning'],
     ['valid', 'success'],
   ])('uses the %s color state for the title panel', async (state, color) => {
     const wrapper = shallowMount(Validator)
@@ -44,7 +44,7 @@ describe('Validator.vue', () => {
     expect(wrapper.find('.card-header').classes()).toContain(`bg-${color}`)
   })
 
-  it('uses the danger state when JSON parsing fails', async () => {
+  it('uses the primary state when JSON parsing fails', async () => {
     const configStore = useConfigStore()
     configStore.currentMarkup = 'json'
     configStore.currentSpec = 'draft-07'
@@ -57,7 +57,7 @@ describe('Validator.vue', () => {
 
     await wrapper.vm.computeMessages()
 
-    expect(wrapper.find('.validator-card').classes()).toContain('border-danger')
-    expect(wrapper.find('.card-header').classes()).toContain('bg-danger')
+    expect(wrapper.find('.validator-card').classes()).toContain('border-primary')
+    expect(wrapper.find('.card-header').classes()).toContain('bg-primary')
   })
 })
