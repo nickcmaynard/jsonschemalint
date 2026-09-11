@@ -212,7 +212,7 @@ const saveGist = () => {
                       <span>{{ $t(option.label) }}</span>
                     </button>
                     <select :id="option.name" class="form-select w-auto" :value="optionFlagValue(option)" @change="setOptionFlag(option, $event.target.value)">
-                      <option v-for="value in option.values" :key="value.value" :value="value.value">{{ $t(value.label) }}</option>
+                      <option v-for="value in option.values" :key="value.value" :value="value.value">{{ $t(value.label, value.labelParams) }}</option>
                     </select>
                   </div>
                   <div v-if="activeTooltip === option.name" class="option-tooltip" role="tooltip">{{ $t(option.help) }}</div>

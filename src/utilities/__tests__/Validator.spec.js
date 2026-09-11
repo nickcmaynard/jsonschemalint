@@ -60,6 +60,8 @@ describe('Validator', () => {
     console.error = origError
   })
 
+  // Each row exercises one serialized strict-mode state and records whether
+  // Ajv should accept a schema containing an unknown keyword.
   for (const [label, optionFlags, accepts] of [
     ['default', undefined, false],
     ['off', '0_', true],
@@ -78,6 +80,8 @@ describe('Validator', () => {
     })
   }
 
+  // The second flag has inverted semantics: enabling "allow unknown formats"
+  // disables Ajv's format validation, while its default remains strict.
   for (const [label, optionFlags, accepts] of [
     ['default', undefined, false],
     ['off', '_0', false],
