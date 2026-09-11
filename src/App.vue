@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { pickBy } from 'lodash-es'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 import { Dropdown } from 'bootstrap'
@@ -16,6 +16,7 @@ import IconSliders from '~icons/bi/sliders'
 import { useEventEmit } from 'mitt-vue'
 
 import AboutContent from '@/components/AboutContent.vue'
+import { validatorOptions } from '@/config/options'
 
 import { useConfigStore } from '@/stores/config'
 
@@ -26,18 +27,15 @@ const activeTooltip = ref()
 const toggleTooltip = (option) => {
   activeTooltip.value = activeTooltip.value === option ? undefined : option
 }
-const optionFlagValue = (index) => configStore.currentOptionFlags?.[index] ?? '_'
-const setOptionFlag = (index, value) => {
-  const flags = (configStore.currentOptionFlags ?? '__').padEnd(2, '_').split('')
-  flags[index] = value
+const optionFlagValue = (option) => configStore.currentOptionFlags?.[option.position] ?? option.values[0].value
+const setOptionFlag = (option, value) => {
+  const flags = (configStore.currentOptionFlags ?? '').padEnd(validatorOptions.length, '_').split('')
+  flags[option.position] = value
   configStore.currentOptionFlags = flags.join('')
 }
 const resetOptions = () => {
   configStore.currentOptionFlags = undefined
 }
-const strictMode = computed(() => optionFlagValue(0))
-const allowUnknownFormats = computed(() => optionFlagValue(1))
-
 const samples = {
   'draft-04': [
     {
@@ -208,31 +206,16 @@ const saveGist = () => {
                 &nbsp;{{ $t('OPTIONS') }}
               </button>
               <div class="dropdown-menu dropdown-menu-end p-3 validator-options-menu">
-                <div class="mb-2">
+                <div v-for="option in validatorOptions" :key="option.name" class="mb-2">
                   <div class="d-flex align-items-center justify-content-between gap-3">
-                    <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'strict'" @click="toggleTooltip('strict')">
-                      <span>{{ $t('STRICT_MODE') }}</span>
+                    <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === option.name" @click="toggleTooltip(option.name)">
+                      <span>{{ $t(option.label) }}</span>
                     </button>
-                  <select id="strictMode" class="form-select w-auto" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
-                    <option value="_">{{ $t('DEFAULT') }}</option>
-                    <option value="0">{{ $t('OFF') }}</option>
-                    <option value="1">{{ $t('ON') }}</option>
-                  </select>
-                  </div>
-                  <div v-if="activeTooltip === 'strict'" class="option-tooltip" role="tooltip">{{ $t('STRICT_MODE_HELP') }}</div>
-                </div>
-                <div class="mb-2">
-                  <div class="d-flex align-items-center justify-content-between gap-3">
-                    <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'formats'" @click="toggleTooltip('formats')">
-                      <span>{{ $t('ALLOW_UNKNOWN_FORMATS') }}</span>
-                    </button>
-                    <select id="allowUnknownFormats" class="form-select w-auto" :value="allowUnknownFormats" @change="setOptionFlag(1, $event.target.value)">
-                      <option value="_">{{ $t('DEFAULT') }}</option>
-                      <option value="0">{{ $t('OFF') }}</option>
-                      <option value="1">{{ $t('ON') }}</option>
+                    <select :id="option.name" class="form-select w-auto" :value="optionFlagValue(option)" @change="setOptionFlag(option, $event.target.value)">
+                      <option v-for="value in option.values" :key="value.value" :value="value.value">{{ $t(value.label) }}</option>
                     </select>
                   </div>
-                  <div v-if="activeTooltip === 'formats'" class="option-tooltip" role="tooltip">{{ $t('ALLOW_UNKNOWN_FORMATS_HELP') }}</div>
+                  <div v-if="activeTooltip === option.name" class="option-tooltip" role="tooltip">{{ $t(option.help) }}</div>
                 </div>
                 <button type="button" class="btn btn-outline-secondary w-100" @click="resetOptions">{{ $t('RESET_OPTIONS') }}</button>
               </div>
