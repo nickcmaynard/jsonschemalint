@@ -60,13 +60,39 @@ describe('Validator', () => {
     console.error = origError
   })
 
-  it('should allow unknown keywords when strict mode is disabled', async () => {
-    const validator = await buildValidator(draft2020Url, '0_')
-    expect(validator.validate({ type: 'object', 'x-custom': true }, {})).toBe(true)
-  })
+  for (const [label, optionFlags, accepts] of [
+    ['default', undefined, false],
+    ['off', '0_', true],
+    ['on', '1_', false],
+  ]) {
+    it(`should ${accepts ? 'allow' : 'reject'} unknown keywords when strict mode is ${label}`, async () => {
+      const validator = await buildValidator(draft2020Url, optionFlags)
+      const schema = { type: 'object', 'x-custom': true }
+      let validationSucceeded = true
+      try {
+        validator.validate(schema, {})
+      } catch {
+        validationSucceeded = false
+      }
+      expect(validationSucceeded).toBe(accepts)
+    })
+  }
 
-  it('should allow unknown formats when format validation is enabled', async () => {
-    const validator = await buildValidator(draft2020Url, '_1')
-    expect(validator.validate({ type: 'string', format: 'float' }, 'value')).toBe(true)
-  })
+  for (const [label, optionFlags, accepts] of [
+    ['default', undefined, false],
+    ['off', '_0', false],
+    ['on', '_1', true],
+  ]) {
+    it(`should ${accepts ? 'allow' : 'reject'} unknown formats when allowing unknown formats is ${label}`, async () => {
+      const validator = await buildValidator(draft2020Url, optionFlags)
+      const schema = { type: 'string', format: 'float' }
+      let validationSucceeded = true
+      try {
+        validator.validate(schema, 'value')
+      } catch {
+        validationSucceeded = false
+      }
+      expect(validationSucceeded).toBe(accepts)
+    })
+  }
 })
