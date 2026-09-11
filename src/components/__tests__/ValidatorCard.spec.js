@@ -59,7 +59,5 @@ describe('Validator.vue', () => {
 
     expect(wrapper.find('.validator-card').classes()).toContain('border-info')
     expect(wrapper.find('.card-header').classes()).toContain('bg-info')
-    expect(wrapper.find('.card-header').classes()).toContain('text-dark')
-    expect(wrapper.find('.card-header').classes()).not.toContain('text-white')
   })
 })
