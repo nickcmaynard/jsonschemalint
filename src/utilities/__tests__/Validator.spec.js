@@ -59,4 +59,14 @@ describe('Validator', () => {
     await expect(() => buildValidator(unsupportedUrl)).rejects.toThrow(`Unsupported schema URL: ${unsupportedUrl}`)
     console.error = origError
   })
+
+  it('should allow unknown keywords when strict mode is disabled', async () => {
+    const validator = await buildValidator(draft2020Url, '0_')
+    expect(validator.validate({ type: 'object', 'x-custom': true }, {})).toBe(true)
+  })
+
+  it('should ignore unknown formats when format validation is disabled', async () => {
+    const validator = await buildValidator(draft2020Url, '_0')
+    expect(validator.validate({ type: 'string', format: 'float' }, 'value')).toBe(true)
+  })
 })

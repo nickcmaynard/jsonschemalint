@@ -13,7 +13,12 @@ const router = createRouter({
     },
     {
       // Standard behaviour
-      path: '/version/:version/markup/:markupLanguage/options/:optionFlags?',
+      path: '/version/:version/markup/:markupLanguage/options/:optionFlags',
+      component: LintView,
+    },
+    {
+      // Standard behaviour without option flags
+      path: '/version/:version/markup/:markupLanguage',
       component: LintView,
     },
     {
