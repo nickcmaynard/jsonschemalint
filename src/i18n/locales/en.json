@@ -11,6 +11,8 @@
   "ALLOW_UNKNOWN_FORMATS": "Allow unknown formats",
   "ALLOW_UNKNOWN_FORMATS_HELP": "Controls whether formats not recognized by the validator are accepted.",
   "DEFAULT": "Default",
+  "DEFAULT_ON": "Default (On)",
+  "DEFAULT_OFF": "Default (Off)",
   "OFF": "Off",
   "ON": "On",
   "RESET_OPTIONS": "Reset options",
