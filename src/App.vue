@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { pickBy } from 'lodash-es'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 import { Dropdown } from 'bootstrap'
@@ -12,6 +12,7 @@ import IconSave from '~icons/bi/floppy'
 import IconPencilFill from '~icons/bi/pencil-fill'
 import IconSignpostFill from '~icons/bi/signpost-fill'
 import IconSliders from '~icons/bi/sliders'
+import IconInfoCircle from '~icons/bi/info-circle'
 
 import { useEventEmit } from 'mitt-vue'
 
@@ -22,6 +23,10 @@ import { useConfigStore } from '@/stores/config'
 import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
 
 const configStore = useConfigStore()
+const activeTooltip = ref()
+const toggleTooltip = (option) => {
+  activeTooltip.value = activeTooltip.value === option ? undefined : option
+}
 const optionFlagValue = (index) => configStore.currentOptionFlags?.[index] ?? '_'
 const setOptionFlag = (index, value) => {
   const flags = (configStore.currentOptionFlags ?? '__').padEnd(2, '_').split('')
@@ -204,21 +209,33 @@ const saveGist = () => {
                 &nbsp;{{ $t('OPTIONS') }}
               </button>
               <div class="dropdown-menu dropdown-menu-end p-3 validator-options-menu">
-                <div class="mb-2 d-flex align-items-center justify-content-between gap-3" :title="$t('STRICT_MODE_HELP')">
-                  <label class="form-label mb-0" for="strictMode">{{ $t('STRICT_MODE') }}</label>
+                <div class="mb-2">
+                  <div class="d-flex align-items-center justify-content-between gap-3">
+                    <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'strict'" @click="toggleTooltip('strict')">
+                      <icon-info-circle aria-hidden="true" />
+                      <span>{{ $t('STRICT_MODE') }}</span>
+                    </button>
                   <select id="strictMode" class="form-select w-auto" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
                     <option value="_">{{ $t('DEFAULT') }}</option>
                     <option value="0">{{ $t('OFF') }}</option>
                     <option value="1">{{ $t('ON') }}</option>
                   </select>
+                  </div>
+                  <div v-if="activeTooltip === 'strict'" class="option-tooltip" role="tooltip">{{ $t('STRICT_MODE_HELP') }}</div>
                 </div>
-                <div class="mb-2 d-flex align-items-center justify-content-between gap-3" :title="$t('ALLOW_UNKNOWN_FORMATS_HELP')">
-                  <label class="form-label mb-0" for="allowUnknownFormats">{{ $t('ALLOW_UNKNOWN_FORMATS') }}</label>
-                  <select id="allowUnknownFormats" class="form-select w-auto" :value="allowUnknownFormats" @change="setOptionFlag(1, $event.target.value)">
-                    <option value="_">{{ $t('DEFAULT') }}</option>
-                    <option value="0">{{ $t('OFF') }}</option>
-                    <option value="1">{{ $t('ON') }}</option>
-                  </select>
+                <div class="mb-2">
+                  <div class="d-flex align-items-center justify-content-between gap-3">
+                    <button type="button" class="btn btn-link p-0 option-label" :aria-expanded="activeTooltip === 'formats'" @click="toggleTooltip('formats')">
+                      <icon-info-circle aria-hidden="true" />
+                      <span>{{ $t('ALLOW_UNKNOWN_FORMATS') }}</span>
+                    </button>
+                    <select id="allowUnknownFormats" class="form-select w-auto" :value="allowUnknownFormats" @change="setOptionFlag(1, $event.target.value)">
+                      <option value="_">{{ $t('DEFAULT') }}</option>
+                      <option value="0">{{ $t('OFF') }}</option>
+                      <option value="1">{{ $t('ON') }}</option>
+                    </select>
+                  </div>
+                  <div v-if="activeTooltip === 'formats'" class="option-tooltip" role="tooltip">{{ $t('ALLOW_UNKNOWN_FORMATS_HELP') }}</div>
                 </div>
                 <button type="button" class="btn btn-outline-secondary w-100" @click="resetOptions">{{ $t('RESET_OPTIONS') }}</button>
               </div>
@@ -237,5 +254,22 @@ const saveGist = () => {
 <style scoped>
 .validator-options-menu {
   min-width: 24rem;
+}
+
+.option-label {
+  color: var(--bs-body-color);
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2rem;
+}
+
+.option-label:hover,
+.option-label:focus {
+  color: var(--bs-primary);
+}
+
+.option-tooltip {
+  color: var(--bs-secondary-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 </style>
