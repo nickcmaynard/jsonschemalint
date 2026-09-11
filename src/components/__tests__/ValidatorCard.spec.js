@@ -31,7 +31,7 @@ describe('Validator.vue', () => {
   })
 
   it.each([
-    ['primary', 'info'],
+    ['error', 'info'],
     ['invalid', 'danger'],
     ['valid', 'success'],
   ])('uses the %s color state for the title panel', async (state, color) => {
@@ -44,7 +44,7 @@ describe('Validator.vue', () => {
     expect(wrapper.find('.card-header').classes()).toContain(`bg-${color}`)
   })
 
-  it('uses the primary state when JSON parsing fails', async () => {
+  it('uses the error state when JSON parsing fails', async () => {
     const configStore = useConfigStore()
     configStore.currentMarkup = 'json'
     configStore.currentSpec = 'draft-07'

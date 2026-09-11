@@ -101,7 +101,7 @@ const computeMessages = async () => {
       console.error('Error parsing document:', errors)
       console.info(errors.message)
       messages.value = errors || []
-      validationState.value = 'primary'
+      validationState.value = 'error'
       return
   }
 
@@ -177,8 +177,8 @@ watch(documentModel, async (value, oldValue) => {
 </script>
 
 <template>
-  <div class="card validator-card" :class="{ 'border-info': validationState === 'primary', 'border-danger': validationState === 'invalid', 'border-success': validationState === 'valid' }">
-    <div class="card-header d-flex justify-content-between align-items-center" :class="{ 'bg-info': validationState === 'primary', 'bg-danger': validationState === 'invalid', 'bg-success': validationState === 'valid', 'text-dark': validationState === 'primary', 'text-white': validationState !== 'primary' }">
+  <div class="card validator-card" :class="{ 'border-info': validationState === 'error', 'border-danger': validationState === 'invalid', 'border-success': validationState === 'valid' }">
+    <div class="card-header d-flex justify-content-between align-items-center" :class="{ 'bg-info': validationState === 'error', 'bg-danger': validationState === 'invalid', 'bg-success': validationState === 'valid', 'text-dark': validationState === 'error', 'text-white': validationState !== 'error' }">
       <span>
         <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON')
         }}{{ mode === 'schema' ? ', ' + (configStore.specs[currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON')) : '' }}
