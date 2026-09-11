@@ -90,48 +90,45 @@ const validateDocument = async function (schemaObject, documentObject) {
 // Compute messages based on the document
 const computeMessages = async () => {
   console.debug(`ValidatorCard[${props.mode}]: computeMessages()`)
-  return getMarkupService()
-    .then((service) => {
-      return Promise.all([
-        //
+  const service = await getMarkupService()
+  let documentObject, schemaObject
+  try {
+      ;[documentObject, schemaObject] = await Promise.all([
         service.parse(documentModel.value, props.mode),
         props.mode === 'document' ? service.parse(schemaModel.value, 'schema') : undefined,
       ])
-        .then((res) => {
-          const documentObject = res[0],
-            schemaObject = res[1]
-          if (props.mode === 'schema') {
-            // Set configstore from $schema if specified
-            if (documentObject?.$schema) {
-              console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${documentObject.$schema}`)
-              configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
-            }
-            configStore.specDefinesSchema = !!documentObject?.$schema;
-          }
-          return props.mode === 'schema' ? validateSchema(documentObject) : validateDocument(schemaObject, documentObject)
-        })
-        .then((result) => {
-          console.debug('Validation result:', result)
-          messages.value = [
-            {
-              message_tid: props.mode === 'schema' ? 'SCHEMA_VALID_MESSAGE' : 'DOCUMENT_VALID_MESSAGE',
-              message_params: { name: currentSpec },
-            },
-          ]
-          validationState.value = 'valid'
-        })
-        .catch((errors) => {
-          console.error('Error validating document:', errors)
-          messages.value = errors || []
-          validationState.value = 'warning'
-        })
-    })
-    .catch((errors) => {
+  } catch (errors) {
       console.error('Error parsing document:', errors)
       console.info(errors.message)
       messages.value = errors || []
       validationState.value = 'invalid'
-    })
+      return
+  }
+
+  if (props.mode === 'schema') {
+      // Set configstore from $schema if specified
+      if (documentObject?.$schema) {
+        console.debug(`ValidatorCard[${props.mode}]: Setting current spec from schema: ${documentObject.$schema}`)
+        configStore.currentSpec = Object.keys(configStore.specs).find((spec) => configStore.specs[spec].schema === documentObject.$schema) || configStore.currentSpec // Fallback to current spec if not found
+      }
+      configStore.specDefinesSchema = !!documentObject?.$schema
+  }
+
+  try {
+      const result = props.mode === 'schema' ? await validateSchema(documentObject) : await validateDocument(schemaObject, documentObject)
+      console.debug('Validation result:', result)
+      messages.value = [
+        {
+          message_tid: props.mode === 'schema' ? 'SCHEMA_VALID_MESSAGE' : 'DOCUMENT_VALID_MESSAGE',
+          message_params: { name: currentSpec },
+        },
+      ]
+      validationState.value = 'valid'
+  } catch (errors) {
+      console.error('Error validating document:', errors)
+      messages.value = errors || []
+      validationState.value = 'warning'
+  }
 }
 
 // Reactions to changes
