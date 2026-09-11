@@ -47,7 +47,7 @@ function format() {
 }
 
 // reactive state
-const valid = ref()
+const validationState = ref('invalid')
 const messages = ref([])
 // const localDocumentObject = ref()
 // const localSchemaObject = ref()
@@ -118,14 +118,19 @@ const computeMessages = async () => {
               message_params: { name: currentSpec },
             },
           ]
-          valid.value = true
+          validationState.value = 'valid'
+        })
+        .catch((errors) => {
+          console.error('Error validating document:', errors)
+          messages.value = errors || []
+          validationState.value = 'warning'
         })
     })
     .catch((errors) => {
       console.error('Error parsing document:', errors)
       console.info(errors.message)
       messages.value = errors || []
-      valid.value = false
+      validationState.value = 'invalid'
     })
 }
 
@@ -175,8 +180,8 @@ watch(documentModel, async (value, oldValue) => {
 </script>
 
 <template>
-  <div class="card validator-card" :class="{ 'border-danger': !valid }">
-    <div class="card-header d-flex justify-content-between align-items-center text-white" :class="{ 'bg-danger': !valid, 'bg-success': valid }">
+  <div class="card validator-card" :class="{ 'border-danger': validationState === 'invalid', 'border-warning': validationState === 'warning', 'border-success': validationState === 'valid' }">
+    <div class="card-header d-flex justify-content-between align-items-center text-white" :class="{ 'bg-danger': validationState === 'invalid', 'bg-warning': validationState === 'warning', 'bg-success': validationState === 'valid' }">
       <span>
         <strong>{{ $t(mode === 'schema' ? 'SCHEMA' : 'DOCUMENT') }}</strong> :: {{ configStore.markups[currentMarkup]?.title ?? $t('ERROR_INVALID_MARKUP_BUTTON')
         }}{{ mode === 'schema' ? ', ' + (configStore.specs[currentSpec]?.name ?? $t('ERROR_INVALID_VERSION_BUTTON')) : '' }}

@@ -23,5 +23,17 @@ describe('Validator.vue', () => {
     expect(wrapper.element.tagName).toBe('DIV')
   })
 
-  // TODO: Add more tests for specific functionalities
+  it.each([
+    ['invalid', 'danger'],
+    ['warning', 'warning'],
+    ['valid', 'success'],
+  ])('uses the %s color state for the title panel', async (state, color) => {
+    const wrapper = shallowMount(Validator)
+
+    wrapper.vm.validationState = state
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('.validator-card').classes()).toContain(`border-${color}`)
+    expect(wrapper.find('.card-header').classes()).toContain(`bg-${color}`)
+  })
 })
