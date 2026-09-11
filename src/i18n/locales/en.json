@@ -10,7 +10,7 @@
   "STRICT_MODE_HELP": "Controls whether the validator rejects unknown keywords and other strict-mode issues.",
   "ALLOW_UNKNOWN_FORMATS": "Allow unknown formats",
   "ALLOW_UNKNOWN_FORMATS_HELP": "Controls whether formats not recognized by the validator are accepted.",
-  "DEFAULT": "Default ({behavior})",
+  "DEFAULT": "Default ({defaultBehaviour})",
   "OFF": "Off",
   "ON": "On",
   "RESET_OPTIONS": "Reset options",

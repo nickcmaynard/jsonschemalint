@@ -8,7 +8,7 @@ export const validatorOptions = [
     help: 'STRICT_MODE_HELP',
     values: [
       // Store the translation key so the displayed default follows the active locale.
-      { value: '_', label: 'DEFAULT', labelParams: { behavior: 'ON' } },
+      { value: '_', label: 'DEFAULT', labelParams: { defaultBehaviour: 'ON' } },
       { value: '0', label: 'OFF' },
       { value: '1', label: 'ON' },
     ],
@@ -20,7 +20,7 @@ export const validatorOptions = [
     help: 'ALLOW_UNKNOWN_FORMATS_HELP',
     values: [
       // Store the translation key so the displayed default follows the active locale.
-      { value: '_', label: 'DEFAULT', labelParams: { behavior: 'OFF' } },
+      { value: '_', label: 'DEFAULT', labelParams: { defaultBehaviour: 'OFF' } },
       { value: '0', label: 'OFF' },
       { value: '1', label: 'ON' },
     ],
