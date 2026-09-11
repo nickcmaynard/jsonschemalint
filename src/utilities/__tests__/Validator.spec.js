@@ -59,4 +59,44 @@ describe('Validator', () => {
     await expect(() => buildValidator(unsupportedUrl)).rejects.toThrow(`Unsupported schema URL: ${unsupportedUrl}`)
     console.error = origError
   })
+
+  // Each row exercises one serialized strict-mode state and records whether
+  // Ajv should accept a schema containing an unknown keyword.
+  for (const [label, optionFlags, accepts] of [
+    ['default', undefined, false],
+    ['off', '0_', true],
+    ['on', '1_', false],
+  ]) {
+    it(`should ${accepts ? 'allow' : 'reject'} unknown keywords when strict mode is ${label}`, async () => {
+      const validator = await buildValidator(draft2020Url, optionFlags)
+      const schema = { type: 'object', 'x-custom': true }
+      let validationSucceeded = true
+      try {
+        validator.validate(schema, {})
+      } catch {
+        validationSucceeded = false
+      }
+      expect(validationSucceeded).toBe(accepts)
+    })
+  }
+
+  // The second flag has inverted semantics: enabling "allow unknown formats"
+  // disables Ajv's format validation, while its default remains strict.
+  for (const [label, optionFlags, accepts] of [
+    ['default', undefined, false],
+    ['off', '_0', false],
+    ['on', '_1', true],
+  ]) {
+    it(`should ${accepts ? 'allow' : 'reject'} unknown formats when allowing unknown formats is ${label}`, async () => {
+      const validator = await buildValidator(draft2020Url, optionFlags)
+      const schema = { type: 'string', format: 'float' }
+      let validationSucceeded = true
+      try {
+        validator.validate(schema, 'value')
+      } catch {
+        validationSucceeded = false
+      }
+      expect(validationSucceeded).toBe(accepts)
+    })
+  }
 })

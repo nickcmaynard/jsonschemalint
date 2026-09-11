@@ -1,15 +1,28 @@
 'use strict'
 
+import { getOptionFlag } from '@/config/options'
+
 /**
  * Asynchronous builder for Validator.
  * @param {string} schemaUrl - The schema URL to use.
+ * @param {string} optionFlags - Serialized validator option values.
  * @returns {Promise<Validator>}
  */
-export async function buildValidator(schemaUrl) {
+export async function buildValidator(schemaUrl, optionFlags) {
   const opts = {
     verbose: true,
     allErrors: true,
     addUsedSchema: false, // Don't cache schemas
+  }
+  if (getOptionFlag(optionFlags, 'strictMode') === '0') {
+    opts.strict = false
+  } else if (getOptionFlag(optionFlags, 'strictMode') === '1') {
+    opts.strict = true
+  }
+  if (getOptionFlag(optionFlags, 'allowUnknownFormats') === '0') {
+    opts.validateFormats = true
+  } else if (getOptionFlag(optionFlags, 'allowUnknownFormats') === '1') {
+    opts.validateFormats = false
   }
 
   let validator

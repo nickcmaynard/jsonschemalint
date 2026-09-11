@@ -12,7 +12,7 @@ import { useI18n } from 'vue-i18n'
 import { useConfigStore } from '@/stores/config'
 import { DeviceFlowError, GistFormatError, retrieveGist, saveGistWithAuth } from '@/utilities/Gist'
 const configStore = useConfigStore()
-const { currentMarkup, currentSpec } = storeToRefs(configStore)
+const { currentMarkup, currentSpec, currentOptionFlags } = storeToRefs(configStore)
 
 const route = useRoute()
 const router = useRouter()
@@ -22,6 +22,9 @@ import { useEventListener } from 'mitt-vue'
 import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin'
 
 const GIST_QUERY_PARAM = 'gist'
+
+const routePath = (spec, markup, optionFlags) =>
+  `/version/${spec}/markup/${markup}${optionFlags ? `/options/${optionFlags}` : ''}`
 
 const schemaModel = ref()
 const documentModel = ref()
@@ -38,11 +41,15 @@ console.debug('LintView setup()', route.params)
 // React to store changes
 watch(currentMarkup, (markup) => {
   console.debug(`LintView: watch(currentMarkup) fired`, markup)
-  router.push({ path: `/version/${configStore.currentSpec}/markup/${markup}` })
+  router.push({ path: routePath(configStore.currentSpec, markup, configStore.currentOptionFlags) })
 })
 watch(currentSpec, (spec) => {
   console.debug(`LintView: watch(currentSpec) fired`, spec)
-  router.push({ path: `/version/${spec}/markup/${configStore.currentMarkup}` })
+  router.push({ path: routePath(spec, configStore.currentMarkup, configStore.currentOptionFlags) })
+})
+watch(currentOptionFlags, (optionFlags) => {
+  console.debug(`LintView: watch(currentOptionFlags) fired`, optionFlags)
+  router.push({ path: routePath(configStore.currentSpec, configStore.currentMarkup, optionFlags) })
 })
 
 // Synchronize the route query with the models
@@ -124,6 +131,14 @@ watch(
   (spec) => {
     console.debug('LintView: Setting spec to:', spec)
     configStore.currentSpec = spec
+  },
+  { immediate: true },
+)
+watch(
+  () => route.params.optionFlags,
+  (optionFlags) => {
+    console.debug('LintView: Setting option flags to:', optionFlags)
+    configStore.currentOptionFlags = optionFlags
   },
   { immediate: true },
 )

@@ -14,13 +14,13 @@ import IconSignpostFill from '~icons/bi/signpost-fill'
 import { useEventEmit } from 'mitt-vue'
 
 import AboutContent from '@/components/AboutContent.vue'
+import ValidatorOptionsDropdown from '@/components/ValidatorOptionsDropdown.vue'
 
 import { useConfigStore } from '@/stores/config'
 
 import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
 
 const configStore = useConfigStore()
-
 const samples = {
   'draft-04': [
     {
@@ -183,6 +183,8 @@ const saveGist = () => {
                 </li>
               </ul>
             </div>
+
+            <ValidatorOptionsDropdown />
           </div>
         </ul>
       </div>
@@ -194,4 +196,3 @@ const saveGist = () => {
   </main>
 </template>
 
-<style scoped></style>
