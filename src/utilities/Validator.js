@@ -5,11 +5,21 @@
  * @param {string} schemaUrl - The schema URL to use.
  * @returns {Promise<Validator>}
  */
-export async function buildValidator(schemaUrl) {
+export async function buildValidator(schemaUrl, optionFlags) {
   const opts = {
     verbose: true,
     allErrors: true,
     addUsedSchema: false, // Don't cache schemas
+  }
+  if (optionFlags?.[0] === '0') {
+    opts.strict = false
+  } else if (optionFlags?.[0] === '1') {
+    opts.strict = true
+  }
+  if (optionFlags?.[1] === '0') {
+    opts.validateFormats = false
+  } else if (optionFlags?.[1] === '1') {
+    opts.validateFormats = true
   }
 
   let validator

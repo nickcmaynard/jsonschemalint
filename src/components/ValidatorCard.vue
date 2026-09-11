@@ -13,7 +13,7 @@ import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
 // Config
 import { useConfigStore } from '@/stores/config'
 const configStore = useConfigStore()
-const { currentMarkup, currentSpec } = storeToRefs(configStore)
+const { currentMarkup, currentSpec, currentOptionFlags } = storeToRefs(configStore)
 
 // Get the current markup service
 const getMarkupService = async () => {
@@ -74,7 +74,7 @@ const getValidator = async () => {
     console.warn('No schema reference found for current spec:', configStore.currentSpec)
     return null
   }
-  return await buildValidator(configStore.specs[configStore.currentSpec].schema)
+  return await buildValidator(configStore.specs[configStore.currentSpec].schema, configStore.currentOptionFlags)
 }
 const validateSchema = async function (schemaObject) {
   console.debug('Validating schema', schemaObject)
@@ -147,6 +147,10 @@ watch(currentMarkup, () => {
 })
 watch(currentSpec, () => {
   console.debug(`ValidatorCard[${props.mode}]: watch(currentSpec) fired`)
+  debouncedComputeMessages()
+})
+watch(currentOptionFlags, () => {
+  console.debug(`ValidatorCard[${props.mode}]: watch(currentOptionFlags) fired`)
   debouncedComputeMessages()
 })
 watch(schemaModel, () => {

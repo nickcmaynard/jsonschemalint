@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { pickBy } from 'lodash-es'
+import { computed } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 import { Dropdown } from 'bootstrap'
@@ -10,6 +11,7 @@ import IconTrash from '~icons/bi/trash'
 import IconSave from '~icons/bi/floppy'
 import IconPencilFill from '~icons/bi/pencil-fill'
 import IconSignpostFill from '~icons/bi/signpost-fill'
+import IconSliders from '~icons/bi/sliders'
 
 import { useEventEmit } from 'mitt-vue'
 
@@ -20,6 +22,17 @@ import { useConfigStore } from '@/stores/config'
 import { trackUmamiEvent } from '@jaseeey/vue-umami-plugin';
 
 const configStore = useConfigStore()
+const optionFlagValue = (index) => configStore.currentOptionFlags?.[index] ?? '_'
+const setOptionFlag = (index, value) => {
+  const flags = (configStore.currentOptionFlags ?? '__').padEnd(2, '_').split('')
+  flags[index] = value
+  configStore.currentOptionFlags = flags.join('')
+}
+const resetOptions = () => {
+  configStore.currentOptionFlags = undefined
+}
+const strictMode = computed(() => optionFlagValue(0))
+const unknownFormats = computed(() => optionFlagValue(1))
 
 const samples = {
   'draft-04': [
@@ -182,6 +195,33 @@ const saveGist = () => {
                   <a class="dropdown-item" @click="setSpec(key)">{{ value.label || value.name }}</a>
                 </li>
               </ul>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Validator options">
+              <!-- Validator options dropdown -->
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="optionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <icon-sliders />
+                &nbsp;{{ $t('OPTIONS') }}
+              </button>
+              <div class="dropdown-menu dropdown-menu-end p-3">
+                <div class="mb-2">
+                  <label class="form-label" for="strictMode">{{ $t('STRICT_MODE') }}</label>
+                  <select id="strictMode" class="form-select" :value="strictMode" @change="setOptionFlag(0, $event.target.value)">
+                    <option value="_">{{ $t('DEFAULT') }}</option>
+                    <option value="0">{{ $t('OFF') }}</option>
+                    <option value="1">{{ $t('ON') }}</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label" for="unknownFormats">{{ $t('UNKNOWN_FORMATS') }}</label>
+                  <select id="unknownFormats" class="form-select" :value="unknownFormats" @change="setOptionFlag(1, $event.target.value)">
+                    <option value="_">{{ $t('DEFAULT') }}</option>
+                    <option value="0">{{ $t('OFF') }}</option>
+                    <option value="1">{{ $t('ON') }}</option>
+                  </select>
+                </div>
+                <button type="button" class="btn btn-outline-secondary w-100" @click="resetOptions">{{ $t('RESET_OPTIONS') }}</button>
+              </div>
             </div>
           </div>
         </ul>
