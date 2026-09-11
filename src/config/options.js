@@ -26,3 +26,6 @@ export const validatorOptions = [
     ],
   },
 ]
+
+// Utility function to retrieve the flag value for a given option name from the serialized option flags.
+export const getOptionFlag = (optionFlags, name) => optionFlags?.[validatorOptions.find((option) => option.name === name)?.position]
