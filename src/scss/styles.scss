@@ -1,3 +1,7 @@
+// Custom Bootstrap theme colors
+$info: #0d6efd;
+$primary: #6610f2;
+
 /* Experiments with removing parts of Bootstrap only saved ~10KB, so we are keeping the full Bootstrap */
 @import '~bootstrap/scss/bootstrap';
 
