@@ -1,6 +1,8 @@
 # JSON Schema Lint
 
-[![Build container image](https://github.com/nickcmaynard/jsonschemalint/workflows/Build%20container%20image/badge.svg)](https://github.com/nickcmaynard/jsonschemalint/actions?query=workflow%3A%22Build+container+image%22)
+[![Build container image](https://github.com/nickcmaynard/jsonschemalint/actions/workflows/build-and-deploy.yml/badge.svg?branch=master)](https://github.com/nickcmaynard/jsonschemalint/actions/workflows/build-and-deploy.yml)
+
+[![Test deployed website](https://github.com/nickcmaynard/jsonschemalint/actions/workflows/nightly-test.yml/badge.svg?branch=master)](https://github.com/nickcmaynard/jsonschemalint/actions/workflows/nightly-test.yml)
 
 ## Setup
 
