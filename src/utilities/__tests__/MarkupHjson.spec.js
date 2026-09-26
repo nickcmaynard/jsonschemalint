@@ -47,13 +47,13 @@ describe('MarkupHjson', () => {
     it('should reject with error for invalid JSON', async () => {
       const invalidJson = '{]'
       const result = MarkupHjson.parse(invalidJson, 'foo')
-      expect(result).rejects.toEqual([{ message_tid: 'ERROR_INVALID_HJSON', message_params: { doctype: 'FOO' } }])
+      await expect(result).rejects.toEqual([{ message_tid: 'ERROR_INVALID_HJSON', message_params: { doctype: 'FOO' } }])
     })
 
     it('should assume a default doctype of "document" if not provided', async () => {
       const invalidJson = '{]'
       const result = MarkupHjson.parse(invalidJson)
-      expect(result).rejects.toEqual([{ message_tid: 'ERROR_INVALID_HJSON', message_params: { doctype: 'DOCUMENT' } }])
+      await expect(result).rejects.toEqual([{ message_tid: 'ERROR_INVALID_HJSON', message_params: { doctype: 'DOCUMENT' } }])
     })
   })
 })

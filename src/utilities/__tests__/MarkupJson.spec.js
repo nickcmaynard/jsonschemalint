@@ -37,17 +37,17 @@ describe('MarkupJson', () => {
 
     it('should reject with error for invalid JSON', async () => {
       const invalidJson = '{"a":1,}'
-      expect(MarkupJson.parse(invalidJson, 'foo')).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'FOO' } }])
+      await expect(MarkupJson.parse(invalidJson, 'foo')).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'FOO' } }])
     })
 
     it('should reject with error for non-JSON string', async () => {
       const invalidJson = 'not a json'
-      expect(MarkupJson.parse(invalidJson, 'foo')).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'FOO' } }])
+      await expect(MarkupJson.parse(invalidJson, 'foo')).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'FOO' } }])
     })
 
     it('should assume a default doctype of "document" if not provided', async () => {
       const invalidJson = 'not a json'
-      expect(MarkupJson.parse(invalidJson)).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'DOCUMENT' } }])
+      await expect(MarkupJson.parse(invalidJson)).rejects.toEqual([{ message_tid: 'ERROR_INVALID_JSON', message_params: { doctype: 'DOCUMENT' } }])
     })
   })
 })
