@@ -13,7 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@jaseeey/vue-umami-plugin": "^1.6.0",
+    "@jaseeey/vue-umami-plugin": "^1.6.1",
     "@popperjs/core": "^2.11.8",
     "ajv": "^8.20.0",
     "ajv-draft-04": "^1.0.0",
@@ -22,8 +22,8 @@
     "lodash-es": "^4.18.1",
     "mitt-vue": "^2.1.4",
     "pinia": "^4.0.3",
-    "vue": "^3.5.42",
-    "vue-i18n": "^11.4.10",
+    "vue": "^3.5.43",
+    "vue-i18n": "^11.4.12",
     "vue-router": "^5.3.1",
     "yaml": "^2.9.1"
   },
@@ -35,17 +35,17 @@
     "@vitejs/plugin-vue": "^6.0.9",
     "@vitest/eslint-plugin": "^1.6.27",
     "@vue/eslint-config-prettier": "^10.2.0",
-    "@vue/test-utils": "^2.5.0",
-    "eslint": "^10.10.0",
-    "eslint-plugin-playwright": "^2.11.0",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-playwright": "^2.12.0",
     "eslint-plugin-vue": "~10.11.0",
     "globals": "^17.12.0",
-    "jsdom": "^30.0.1",
-    "prettier": "3.9.6",
+    "jsdom": "^30.1.0",
+    "prettier": "3.9.8",
     "sass": "^1.104.1",
     "unplugin-icons": "^23.0.1",
     "vite": "^8.3.0",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   }
 }
