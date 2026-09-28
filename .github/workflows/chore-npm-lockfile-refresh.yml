@@ -1,0 +1,81 @@
+name: Refresh npm lockfile
+
+on:
+  schedule:
+    # 06:00 UTC on the first day of every month
+    - cron: "0 6 1 * *"
+
+  # Allow manual runs from the Actions UI
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    name: Refresh npm dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          package-manager-cache: false
+
+      - name: Refresh package-lock.json
+        run: npm update --package-lock-only
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # Nothing to do if npm didn't change the lockfile.
+          if git diff --quiet -- package-lock.json; then
+            echo "package-lock.json is already up to date."
+            exit 0
+          fi
+
+          BRANCH="maintenance/npm-lockfile-refresh"
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B "$BRANCH"
+          git add package-lock.json
+          git commit -m "chore: refresh npm lockfile"
+
+          # Replace the previous month's refresh branch, if present.
+          git push --force origin "$BRANCH"
+
+          # Reuse the existing PR if there is one.
+          if gh pr view "$BRANCH" >/dev/null 2>&1; then
+            echo "Existing pull request updated."
+          else
+            gh pr create \
+              --base "${{ github.event.repository.default_branch }}" \
+              --head "$BRANCH" \
+              --title "chore: refresh npm lockfile" \
+              --body "$(cat <<'EOF'
+          Monthly npm dependency refresh.
+
+          Runs:
+
+          \`\`\`
+          npm update --package-lock-only
+          \`\`\`
+
+          This updates direct and transitive dependencies to versions
+          permitted by the existing semver constraints in \`package.json\`.
+
+          No dependency constraints in \`package.json\` are changed.
+          EOF
+          )"
+          fi
