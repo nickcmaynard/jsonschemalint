@@ -41,9 +41,9 @@
     "eslint-plugin-vue": "~10.11.0",
     "globals": "^17.12.0",
     "jsdom": "^30.1.0",
-    "prettier": "3.9.8",
+    "prettier": "3.9.9",
     "sass": "^1.104.1",
-    "unplugin-icons": "^23.0.1",
+    "unplugin-icons": "^24.0.0",
     "vite": "^8.3.0",
     "vite-plugin-vue-devtools": "^8.2.1",
     "vitest": "^5.0.0"
