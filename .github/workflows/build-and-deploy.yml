@@ -80,7 +80,7 @@ jobs:
         id: playwright-cache
         with:
           path: ${{ matrix.platform.playwright-cache-location }}
-          key: ${{ matrix.platform.name }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          key: ${{ matrix.platform.name }}-${{ env.ImageOS }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - run: npx playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       # webkit can't be cached
@@ -129,7 +129,7 @@ jobs:
       - name: Install qemu dependency
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-user-static
+          sudo apt-get install -y qemu-user
 
       - name: Build
         id: build-image
